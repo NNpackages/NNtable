@@ -1,0 +1,158 @@
+# Continuous integration steps
+steps:
+# Fetch package version
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch
+- script: |
+    export pkgName=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
+    export pkgVers=$(sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
+    echo "##vso[task.setvariable variable=pkgVers]$pkgVers"
+    echo "##vso[task.setvariable variable=pkgName]$pkgName"
+  displayName: "Fetch and set package version as variables"
+
+
+
+# Show some debugging info, pipeline and environmental variables
+- script: |
+    echo "whoami"; whoami
+    echo "pwd"; pwd
+    echo "ls"; ls
+    echo Pipeline Variable: sauce=$(sauce)
+    echo Pipeline Variable: Build.Repository.Name=$(Build.Repository.Name)
+    echo Pipeline Variable: imageName=$(imageName)
+    echo Pipeline Variable: pkgName=$(pkgName)
+    echo Pipeline Variable: pkgVers=$(pkgVers)
+    echo Environment Variable: pkgVers=$(pkgVers)
+    echo Environment Variable: PKGVERS=$PKGVERS
+    echo Environment Variable: SAUCE=$SAUCE
+  displayName: 'Check environment'
+
+# Create R environment
+- script: |
+    source /etc/profile.d/biostat.sh
+    echo "R_LIBS=../library/%V" >> .Renviron
+    echo "R_LIBS_USER=../library/%V" >> .Renviron
+    echo "ON_DEVOPS=TRUE" >> .Renviron
+    for version in $(cat /opt/sce-r/input/RVersions)
+      do
+      tid=$(aws ssm get-parameter --name /versions/rspm/$version/transaction-id --query Parameter.Value --output text 2>/dev/null || echo -n "")
+      if [ "$tid" != "" ]; then
+        varname=biostat_approved_$(echo "$version" | tr '.' '_')
+        echo "$varname=$tid" >> .Renviron
+      fi
+    done
+    cat .Renviron
+    mkdir -p ../library/$(R_VERSION)
+    ls ../library/$(R_VERSION)
+  displayName: 'Creating R environment'
+
+# Installing the package from the tarball and needed dependencies
+- script: |
+    echo installing dependencies
+    /opt/R/$(R_VERSION)/bin/Rscript -e 'if (!requireNamespace("remotes")) install.packages("remotes")'
+    /opt/R/$(R_VERSION)/bin/Rscript -e 'if (!requireNamespace("devtools")) install.packages("devtools")'
+    /opt/R/$(R_VERSION)/bin/Rscript -e 'remotes::install_deps(dependencies = TRUE, upgrade = "always")'
+  displayName: 'Installing dependencies'
+
+# Build tarball
+- script: |
+    echo Running the R CMD build on $(pkgName)
+    /opt/R/$(R_VERSION)/bin/R CMD build .
+  displayName: 'Building package tarball (R CMD build)'
+
+# Check tarball
+# skip examples as they are run later
+# skip manual as no LaTeX is present
+# skip examples as they depend on P-drive
+- script: |
+    echo Running R CMD check on $(pkgName)
+    /opt/R/$(R_VERSION)/bin/R CMD check -l ../library/$(R_VERSION) *.tar.gz --no-examples --no-tests --no-manual
+  displayName: 'Checking the package tarball (R CMD check)'
+
+# Scan check-log for errors
+- script: |
+    echo Checking the R CMD check log in $(pkgName).Rcheck/00check.log
+    echo `grep "Status:" $(pkgName).Rcheck/00check.log`
+    COND=`grep "Status: OK" $(pkgName).Rcheck/00check.log | wc -l`
+    if [ $COND -eq 0 ]; then
+      raise error "00check.log status is not 'OK'"
+    fi
+  displayName: 'Checking the R CMD check log for no notes, warnings, and errors'
+
+# Install package
+- script: |
+    echo Running R CMD INSTALL on $(pkgName)
+    /opt/R/$(R_VERSION)/bin/R CMD INSTALL -l ../library/$(R_VERSION) *.tar.gz
+  displayName: 'Intalling the package tarball (R CMD INSTALL)'
+
+# Run unit tests (again) and presenting
+# Some tests are skipped as they depend on P, skipping is defined in the
+# indiviual tests
+- script: |
+    echo Running $(pkgName) unit tests
+    if [ -d "tests/testthat" ]; then
+      /opt/R/$(R_VERSION)/bin/R -e "options(testthat.output_file = 'test-out.xml');testthat::test_dir('tests/testthat', reporter = 'junit')"
+    fi
+  displayName: 'Running unit tests'
+
+# Publish test results
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: "**/test-*.xml"
+    testRunTitle: 'R runner'
+
+- script: |
+    echo Running code coverage $(pkgName)
+    if [ -d "tests/testthat" ]; then
+      /opt/R/$(R_VERSION)/bin/R -e "cov <- covr::azure()"
+    fi
+  displayName: 'Run code coverage'
+
+- task: DotNetCoreInstaller@1
+  displayName: 'install dotnet core'
+  inputs:
+    packageType: sdk
+    version: 2.2.203
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: 'coverage.xml'
+  displayName: 'Publish code coverage'
+
+- script: |
+    echo Build home page for $(pkgName)
+    if [ -f "_pkgdown.yml" ]; then
+      /opt/R/$(R_VERSION)/bin/R -e "pkgdown::build_site()"
+    fi
+  displayName: 'Build home page'
+
+# Publish (rename) package tarball
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)'
+    contents: |
+      *.tar.gz
+      docs/**
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Copy Files to ArtifactStagingDirectory'
+
+# Publish everything in ArtifactStating Dir for release pipeline
+# The artifactName should match the vstsFeedPackgePublish
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: $(Build.ArtifactStagingDirectory)
+    artifactName: '$(Build.BuildId)_content'
+  displayName: 'Publish Artifact'
+
+# clean up
+- script: |
+    ls
+    pwd
+    rm *.tar.gz
+  displayName: 'Clean up workspace'
+  workingDirectory: $(Build.SourcesDirectory)
+
+

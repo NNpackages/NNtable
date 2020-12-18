@@ -1,0 +1,15 @@
+
+navbar:
+  type: inverse
+  right:
+    - icon: "fab fa-r-project fa-lg"
+      text: "at Biostat"
+      href: http://10.59.86.7
+
+  links:
+  - text: RSPM production
+    href: https://rspm.bifrost-prd.corp.aws.novonordisk.com/client/#/repos/2/packages/NNtable
+
+  - text: Source code
+    href: https://novonordiskit.visualstudio.com/BOS/_git/NNtable
+

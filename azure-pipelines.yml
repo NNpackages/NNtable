@@ -1,0 +1,75 @@
+jobs:
+
+- job: production
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/master')
+  displayName: 'Build production branch'
+
+  strategy:
+    matrix:
+      R_4.0.1:
+        R_VERSION: '4.0.1'
+      R_4.0.2:
+        R_VERSION: '4.0.2'
+    maxParallel: 1
+
+  pool:
+    name: Biostat_test
+    demands: Agent.Name -equals Biostat_test-prd
+    timeoutInMinutes: 0
+
+  variables:
+    imageName: 'R:$(Build.BuildId)'
+    repoName: '$(Build.Repository.Name)'
+
+  steps:
+    - template: build-template.yml
+
+
+- job: validation
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/val')
+  displayName: 'Build validation branch'
+
+  strategy:
+    matrix:
+      R_4.0.1:
+        R_VERSION: '4.0.1'
+      R_4.0.2:
+        R_VERSION: '4.0.2'
+    maxParallel: 1
+
+  pool:
+    name: Biostat_test
+    demands: Agent.Name -equals Biostat_test-val
+    timeoutInMinutes: 0
+
+  variables:
+    imageName: 'R:$(Build.BuildId)'
+    repoName: '$(Build.Repository.Name)'
+
+  steps:
+    - template: build-template.yml
+
+
+- job: development
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/dev')
+  displayName: 'Build development branch'
+
+  strategy:
+    matrix:
+      R_4.0.1:
+        R_VERSION: '4.0.1'
+      R_4.0.2:
+        R_VERSION: '4.0.2'
+    maxParallel: 1
+
+  pool:
+    name: Biostat_test
+    demands: Agent.Name -equals Biostat_test-dev
+    timeoutInMinutes: 0
+
+  variables:
+    imageName: 'R:$(Build.BuildId)'
+    repoName: '$(Build.Repository.Name)'
+
+  steps:
+    - template: build-template.yml

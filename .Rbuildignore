@@ -1,0 +1,20 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+
+# Styling file
+setImgSrc.js
+
+# Ignore makeEOT output files (if run in the package root)
+sec*_*
+
+# Ignore YAML files
+\.yml
+
+# Don't include .Rprofile
+^\.Rprofile$
+
+^Makefile$
+^codecov\.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
