@@ -1,7 +1,7 @@
 # NNtable <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
-[![Build Status](https://novonordiskit.visualstudio.com/BOS/_apis/build/status/NNtable?branchName=master)](https://novonordiskit.visualstudio.com/BOS/_build/latest?definitionId=replace_id&branchName=master)
+[![Build Status](https://novonordiskit.visualstudio.com/BOS/_apis/build/status/NNtable?branchName=master)](https://novonordiskit.visualstudio.com/BOS/_build/latest?definitionId=1152&branchName=master)
 <!-- badges: end -->
 
 

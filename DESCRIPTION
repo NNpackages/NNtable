@@ -11,7 +11,22 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Depends: R (>= 3.5.0)
 Suggests: 
     testthat,
     covr,
     pkgdown
+Imports: 
+    Matrix,
+    data.table,
+    dplyr,
+    glue,
+    methods,
+    rlang,
+    stringi,
+    stringr,
+    tidyr,
+    xfun,
+    purrr,
+    tibble,
+    magrittr

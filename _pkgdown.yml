@@ -6,6 +6,7 @@ navbar:
       text: "at Biostat"
       href: http://10.59.86.7
 
+home:
   links:
   - text: RSPM production
     href: https://rspm.bifrost-prd.corp.aws.novonordisk.com/client/#/repos/2/packages/NNtable
