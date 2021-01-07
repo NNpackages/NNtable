@@ -5,8 +5,12 @@ steps:
 - script: |
     export pkgName=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
     export pkgVers=$(sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
+    shortName2=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
+    shortName2=${shortName2:2}
+    export shortName=${shortName2}
     echo "##vso[task.setvariable variable=pkgVers]$pkgVers"
     echo "##vso[task.setvariable variable=pkgName]$pkgName"
+    echo "##vso[task.setvariable variable=shortName]$shortName"
   displayName: "Fetch and set package version as variables"
 
 
@@ -16,14 +20,13 @@ steps:
     echo "whoami"; whoami
     echo "pwd"; pwd
     echo "ls"; ls
-    echo Pipeline Variable: sauce=$(sauce)
     echo Pipeline Variable: Build.Repository.Name=$(Build.Repository.Name)
     echo Pipeline Variable: imageName=$(imageName)
     echo Pipeline Variable: pkgName=$(pkgName)
+    echo Pipeline Variable: shortName=$(shortName)
     echo Pipeline Variable: pkgVers=$(pkgVers)
     echo Environment Variable: pkgVers=$(pkgVers)
     echo Environment Variable: PKGVERS=$PKGVERS
-    echo Environment Variable: SAUCE=$SAUCE
   displayName: 'Check environment'
 
 # Create R environment
@@ -53,10 +56,21 @@ steps:
     /opt/R/$(R_VERSION)/bin/Rscript -e 'remotes::install_deps(dependencies = TRUE, upgrade = "always")'
   displayName: 'Installing dependencies'
 
+
+# Create new README file
+- script: |
+    echo Making README for $(pkgName) compatible with pkgdown and RSPM
+    sed "1,/^<\\/p>/d" README.md > index.md;sed -i '1i # <span style=\"color:#033572\">NN</span>$(shortName) <img src=\"man/figures/logo.png\" align=\"right\" alt=\"\" width=\"120\" />' index.md
+    rm README.md
+    cp index.md README.md
+    cat README.md
+  displayName: 'Building new index and README)'
+
 # Build tarball
 - script: |
     echo Running the R CMD build on $(pkgName)
-    /opt/R/$(R_VERSION)/bin/R CMD build .
+    export HOME=$(Agent.BuildDirectory)
+    /opt/R/$(R_VERSION)/bin/Rscript -e 'devtools::build( ".",  ".")'
   displayName: 'Building package tarball (R CMD build)'
 
 # Check tarball
@@ -65,7 +79,8 @@ steps:
 # skip examples as they depend on P-drive
 - script: |
     echo Running R CMD check on $(pkgName)
-    /opt/R/$(R_VERSION)/bin/R CMD check -l ../library/$(R_VERSION) *.tar.gz --no-examples --no-tests --no-manual
+    export HOME=$(Agent.BuildDirectory)
+    /opt/R/$(R_VERSION)/bin/R CMD check -l ../library/$(R_VERSION) *.tar.gz --no-examples --no-tests --no-manual --no-build-vignettes
   displayName: 'Checking the package tarball (R CMD check)'
 
 # Scan check-log for errors
@@ -88,6 +103,7 @@ steps:
 # Some tests are skipped as they depend on P, skipping is defined in the
 # indiviual tests
 - script: |
+    export HOME=$(Agent.BuildDirectory)
     echo Running $(pkgName) unit tests
     if [ -d "tests/testthat" ]; then
       /opt/R/$(R_VERSION)/bin/R -e "options(testthat.output_file = 'test-out.xml');testthat::test_dir('tests/testthat', reporter = 'junit')"
@@ -124,6 +140,7 @@ steps:
 
 - script: |
     echo Build home page for $(pkgName)
+    export HOME=$(Agent.BuildDirectory)
     if [ -f "_pkgdown.yml" ]; then
       /opt/R/$(R_VERSION)/bin/R -e "pkgdown::build_site()"
     fi

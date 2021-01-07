@@ -1,12 +1,15 @@
 Package: NNtable
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: A Grammer for the Layout of Tables  
+Version: 0.0.0.9001
 Authors@R: 
     person(given = "SFFL (Steffen Falgreen Larsen)",
            role = c("aut", "cre"),
            email = "sffl@novonordisk.com")
-Description: What the package does (one paragraph).
+Description: The philosophy behind NNtable is to separate the derivation of statistics and the layout of an output table. All layout specic derivations are supposed to be handled by the NNTable functionality.
 License: Novo Nordisk (C)
+URL: http://10.59.86.7/NNpackages/NNtable,
+    https://novonordiskit.visualstudio.com/BOS/_git/NNtable
+BugReports: https://novonordiskit.visualstudio.com/BOS/_boards/board/t/NNtable/Stories
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
