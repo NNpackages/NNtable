@@ -1,4 +1,4 @@
 library("testthat")
-library("NNR")
+library("NNtable")
 
-test_check("NNR")
+test_check("NNtable")
