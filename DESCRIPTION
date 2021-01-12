@@ -1,6 +1,6 @@
 Package: NNtable
 Title: A Grammer for the Layout of Tables  
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: 
     person(given = "SFFL (Steffen Falgreen Larsen)",
            role = c("aut", "cre"),
@@ -20,7 +20,11 @@ Suggests:
     covr,
     pkgdown,
     labelled,
-    forcats
+    forcats,
+    knitr,
+    NNR,
+    NNBiostat,
+    NNtraining
 Imports: 
     Matrix,
     data.table,
@@ -35,3 +39,4 @@ Imports:
     purrr,
     tibble,
     magrittr
+VignetteBuilder: knitr

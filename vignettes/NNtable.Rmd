@@ -1,0 +1,94 @@
+---
+title: "nnaccess"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{nnaccess}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Setup training data base
+In case you have not already setup a training database please run
+```{r, results='hide'}
+NNtraining::createTrainingDB()
+```
+
+
+## Load required packages
+
+Load the NNR and NNBiostat packages, which will load a number of packages often used 
+
+```{r setup, results='hide'}
+library(NNR)
+library(NNBiostat)
+```
+
+## Get trial access 
+
+We get access to trial 0001 in our training data by the following:
+
+```{r}
+(db <- nnaccess("0001", root = "~/training"))
+```
+
+Usually we would not supply the root argument as the default is projstat.
+
+## Load data
+
+### Read adsl 
+The available datasets can be read by the following command type
+```{r}
+adsl <- db$adam("adsl")
+```
+
+We can filter the data
+```{r}
+adsl_f <- adsl %>% filter(FASFL == "Y") 
+```
+
+And summarise
+```{r}
+summary <- adsl_f %>% 
+  group_by(AGEGR1, RACE, GEOGR1, TRT30P, SEX) %>% 
+  summarise(N = n(), .groups = "drop")
+```
+
+
+We can create a table 
+
+```{r, results='hold', comment=""}
+summary %>% 
+  NNTable("Age group" = "AGEGR1", Race = "RACE", "GEOGR1", "TRT30P", "SEX", "N") %>% 
+  addGroupedColumns("GEOGR1", "Age group") %>% 
+  addTransWide(TRT30P = list("SEX" = "N")) %>% 
+  addFilling(N = 0) %>% 
+  addUnderScore()
+```
+And alter the appearance
+
+```{r}
+table_out <- summary %>%  
+  NNTable("Age group" = "AGEGR1", Race = "RACE", "GEOGR1", "TRT30P", "SEX", "N") %>% 
+  addGroupedColumns("GEOGR1", "Race") %>% 
+  addTransWide("Age group" = list("SEX" = list(TRT30P = "N"))) %>% 
+  addFilling(N = 0) %>% 
+  addUnderScore()
+
+table_out
+```
+
+
+Save the output together with xml file
+```{r}
+sys_foot <- db$exportOutput(table_out, "NNTable_ex1")
+
+sys_foot
+```
+
