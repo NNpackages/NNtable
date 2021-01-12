@@ -7,4 +7,5 @@ suppressPackageStartupMessages({
   library("dplyr")
   library("tidyr")
   library("data.table")
+  library("NNtable")
 })
