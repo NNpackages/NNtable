@@ -8,4 +8,6 @@ suppressPackageStartupMessages({
   library("tidyr")
   library("data.table")
   library("NNtable")
+  library("forcats")
+  library("labelled")
 })

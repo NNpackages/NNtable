@@ -18,7 +18,9 @@ Depends: R (>= 3.5.0)
 Suggests: 
     testthat,
     covr,
-    pkgdown
+    pkgdown,
+    labelled,
+    forcats
 Imports: 
     Matrix,
     data.table,
