@@ -1,0 +1,20 @@
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+AEBODSYS                                     AEDECOD                        TRTA    N     (%)    E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+Blood and lymphatic system disorders         Anaemia                        I287    2   (0.01)   2
+Blood and lymphatic system disorders         Anaemia                        IGlar   1   (0.00)   1
+Blood and lymphatic system disorders         Leukocytosis                   IGlar   1   (0.00)   1
+Cardiac disorders                            Coronary artery disease        I287    1   (0.00)   1
+Cardiac disorders                            Dilatation atrial              IGlar   1   (0.00)   1
+Cardiac disorders                            Supraventricular tachycardia   I287    1   (0.00)   1
+Cardiac disorders                            Tachycardia                    IGlar   1   (0.00)   1
+Congenital, familial and genetic disorders   Thyroglossal cyst              I287    1   (0.00)   1
+Ear and labyrinth disorders                  Ear discomfort                 IGlar   1   (0.00)   1
+Ear and labyrinth disorders                  Ear pain                       I287    1   (0.00)   1
+Ear and labyrinth disorders                  Eustachian tube dysfunction    IGlar   1   (0.00)   1
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+

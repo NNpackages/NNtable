@@ -1,0 +1,27 @@
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+PARAM                                             TRTP          Called var         SUM            
+————————————————————————————————————————————————————————————————————————————————————————————————————
+Anti-insulin 287 antibody level (% B/T)           I287          N                   69            
+Anti-insulin 287 antibody level (% B/T)           I287          Mean (SD)            2.30 ( 1.82) 
+Anti-insulin 287 antibody level (% B/T)           I287          Min ; Max            1.10 ;  14.19
+Anti-insulin 287 antibody titre (no unit)         I287          N                   69            
+Anti-insulin 287 antibody titre (no unit)         I287          Mean (SD)           33.42 (80.16) 
+Anti-insulin 287 antibody titre (no unit)         I287          Min ; Max            0.00 ; 336.00
+Anti-insulin 287 antibody level (% B/T)           IGlar         N                   57            
+Anti-insulin 287 antibody level (% B/T)           IGlar         Mean (SD)            3.28 ( 9.83) 
+Anti-insulin 287 antibody level (% B/T)           IGlar         Min ; Max            1.10 ;  92.49
+Anti-insulin 287 antibody titre (no unit)         IGlar         N                   57            
+Anti-insulin 287 antibody titre (no unit)         IGlar         Mean (SD)           37.54 (88.95) 
+Anti-insulin 287 antibody titre (no unit)         IGlar         Min ; Max            0.00 ; 336.00
+Anti-insulin 287 antibody level (% B/T)           Total         N                  126            
+Anti-insulin 287 antibody level (% B/T)           Total         Mean (SD)            2.75 ( 6.81) 
+Anti-insulin 287 antibody level (% B/T)           Total         Min ; Max            1.10 ;  92.49
+Anti-insulin 287 antibody titre (no unit)         Total         N                  126            
+Anti-insulin 287 antibody titre (no unit)         Total         Mean (SD)           35.32 (84.30) 
+Anti-insulin 287 antibody titre (no unit)         Total         Min ; Max            0.00 ; 336.00
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+

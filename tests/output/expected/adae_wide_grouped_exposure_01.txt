@@ -1,0 +1,239 @@
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+AEBODSYS                                                            AEDECOD                                 TRTA     N     (%)   E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+Number of subjects                                                                                          I287  130             
+Total exposure (years)                                                                                      I287   63.68          
+Number of subjects                                                                                          IGlar 117             
+Total exposure (years)                                                                                      IGlar  56.45          
+Blood and lymphatic system disorders                                Anaemia                                 I287    2    (0.01)  2
+Blood and lymphatic system disorders                                Anaemia                                 IGlar   1    (0.00)  1
+Blood and lymphatic system disorders                                Leukocytosis                            IGlar   1    (0.00)  1
+Cardiac disorders                                                   Coronary artery disease                 I287    1    (0.00)  1
+Cardiac disorders                                                   Dilatation atrial                       IGlar   1    (0.00)  1
+Cardiac disorders                                                   Supraventricular tachycardia            I287    1    (0.00)  1
+Cardiac disorders                                                   Tachycardia                             IGlar   1    (0.00)  1
+Congenital, familial and genetic disorders                          Thyroglossal cyst                       I287    1    (0.00)  1
+Ear and labyrinth disorders                                         Ear discomfort                          IGlar   1    (0.00)  1
+Ear and labyrinth disorders                                         Ear pain                                I287    1    (0.00)  1
+Ear and labyrinth disorders                                         Eustachian tube dysfunction             IGlar   1    (0.00)  1
+Ear and labyrinth disorders                                         Vertigo                                 I287    2    (0.01)  2
+Ear and labyrinth disorders                                         Vertigo                                 IGlar   1    (0.00)  1
+Eye disorders                                                       Age-related macular degeneration        IGlar   1    (0.00)  1
+Eye disorders                                                       Amblyopia                               IGlar   1    (0.00)  1
+Eye disorders                                                       Cataract                                IGlar   6    (0.02)  6
+Eye disorders                                                       Cataract nuclear                        IGlar   1    (0.00)  1
+Eye disorders                                                       Diabetic retinal oedema                 I287    1    (0.00)  1
+Eye disorders                                                       Diabetic retinopathy                    I287    2    (0.01)  2
+Eye disorders                                                       Diabetic retinopathy                    IGlar   4    (0.01)  4
+Eye disorders                                                       Dry age-related macular degeneration    IGlar   1    (0.00)  1
+Eye disorders                                                       Glaucoma                                I287    1    (0.00)  1
+Eye disorders                                                       Macular degeneration                    IGlar   1    (0.00)  1
+Eye disorders                                                       Presbyopia                              IGlar   1    (0.00)  1
+Gastrointestinal disorders                                          Abdominal discomfort                    IGlar   1    (0.00)  1
+Gastrointestinal disorders                                          Abdominal pain                          IGlar   3    (0.01)  3
+Gastrointestinal disorders                                          Abdominal pain upper                    I287    1    (0.00)  4
+Gastrointestinal disorders                                          Aphthous ulcer                          I287    1    (0.00)  1
+Gastrointestinal disorders                                          Chronic gastritis                       I287    1    (0.00)  1
+Gastrointestinal disorders                                          Constipation                            I287    1    (0.00)  1
+Gastrointestinal disorders                                          Constipation                            IGlar   2    (0.01)  2
+Gastrointestinal disorders                                          Diarrhoea                               I287    4    (0.01)  4
+Gastrointestinal disorders                                          Diarrhoea                               IGlar   4    (0.01)  4
+Gastrointestinal disorders                                          Dyspepsia                               I287    1    (0.00)  1
+Gastrointestinal disorders                                          Dyspepsia                               IGlar   1    (0.00)  2
+Gastrointestinal disorders                                          Enteritis                               I287    1    (0.00)  1
+Gastrointestinal disorders                                          Gastritis                               IGlar   1    (0.00)  1
+Gastrointestinal disorders                                          Melaena                                 IGlar   1    (0.00)  1
+Gastrointestinal disorders                                          Nausea                                  I287    2    (0.01)  2
+Gastrointestinal disorders                                          Nausea                                  IGlar   3    (0.01)  3
+Gastrointestinal disorders                                          Peptic ulcer                            I287    1    (0.00)  1
+Gastrointestinal disorders                                          Toothache                               I287    1    (0.00)  1
+Gastrointestinal disorders                                          Toothache                               IGlar   1    (0.00)  1
+Gastrointestinal disorders                                          Vomiting                                I287    2    (0.01)  2
+Gastrointestinal disorders                                          Vomiting                                IGlar   3    (0.01)  3
+General disorders and administration site conditions                Chest pain                              I287    1    (0.00)  1
+General disorders and administration site conditions                Chest pain                              IGlar   1    (0.00)  1
+General disorders and administration site conditions                Chills                                  I287    1    (0.00)  1
+General disorders and administration site conditions                Facial pain                             I287    1    (0.00)  3
+General disorders and administration site conditions                Fatigue                                 I287    2    (0.01)  2
+General disorders and administration site conditions                Gait disturbance                        I287    1    (0.00)  1
+General disorders and administration site conditions                Inflammation                            IGlar   1    (0.00)  1
+General disorders and administration site conditions                Injection site bruising                 I287    1    (0.00)  1
+General disorders and administration site conditions                Injection site erythema                 IGlar   1    (0.00) 20
+General disorders and administration site conditions                Injection site haematoma                I287    1    (0.00)  2
+General disorders and administration site conditions                Injection site haemorrhage              I287    1    (0.00)  1
+General disorders and administration site conditions                Injection site pain                     I287    1    (0.00)  1
+General disorders and administration site conditions                Injection site pain                     IGlar   1    (0.00)  1
+General disorders and administration site conditions                Injection site reaction                 I287    1    (0.00)  1
+General disorders and administration site conditions                Injection site reaction                 IGlar   2    (0.01)  4
+General disorders and administration site conditions                Medical device site discomfort          IGlar   1    (0.00)  2
+General disorders and administration site conditions                Pyrexia                                 I287    2    (0.01)  2
+General disorders and administration site conditions                Pyrexia                                 IGlar   1    (0.00)  1
+Hepatobiliary disorders                                             Biliary colic                           IGlar   1    (0.00)  1
+Hepatobiliary disorders                                             Hepatosplenomegaly                      IGlar   1    (0.00)  1
+Hepatobiliary disorders                                             Hypertransaminasaemia                   IGlar   1    (0.00)  1
+Immune system disorders                                             Dust allergy                            IGlar   1    (0.00)  1
+Immune system disorders                                             Seasonal allergy                        I287    1    (0.00)  1
+Infections and infestations                                         Acute sinusitis                         IGlar   1    (0.00)  1
+Infections and infestations                                         Bronchitis                              I287    2    (0.01)  2
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+AEBODSYS                                                            AEDECOD                                 TRTA     N     (%)   E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+Infections and infestations                                         Bronchitis                              IGlar   3    (0.01)  3
+Infections and infestations                                         Cellulitis                              IGlar   1    (0.00)  1
+Infections and infestations                                         Cystitis                                IGlar   3    (0.01)  3
+Infections and infestations                                         Ear infection                           IGlar   1    (0.00)  1
+Infections and infestations                                         Emphysematous pyelonephritis            IGlar   1    (0.00)  1
+Infections and infestations                                         Fungal infection                        IGlar   1    (0.00)  1
+Infections and infestations                                         Gastroenteritis                         I287    7    (0.03)  7
+Infections and infestations                                         Gastroenteritis                         IGlar   1    (0.00)  1
+Infections and infestations                                         Gastroenteritis viral                   IGlar   1    (0.00)  1
+Infections and infestations                                         Helicobacter infection                  IGlar   1    (0.00)  1
+Infections and infestations                                         Herpes simplex                          I287    1    (0.00)  2
+Infections and infestations                                         Herpes simplex                          IGlar   1    (0.00)  1
+Infections and infestations                                         Influenza                               IGlar   3    (0.01)  4
+Infections and infestations                                         Labyrinthitis                           IGlar   1    (0.00)  1
+Infections and infestations                                         Laryngitis                              I287    1    (0.00)  1
+Infections and infestations                                         Laryngitis                              IGlar   1    (0.00)  1
+Infections and infestations                                         Mastoiditis                             I287    1    (0.00)  1
+Infections and infestations                                         Nasopharyngitis                         I287   10    (0.04) 13
+Infections and infestations                                         Nasopharyngitis                         IGlar  10    (0.04) 11
+Infections and infestations                                         Onychomycosis                           I287    1    (0.00)  1
+Infections and infestations                                         Oral herpes                             I287    1    (0.00)  1
+Infections and infestations                                         Paronychia                              I287    2    (0.01)  2
+Infections and infestations                                         Pharyngitis                             I287    3    (0.01)  3
+Infections and infestations                                         Pharyngitis                             IGlar   1    (0.00)  3
+Infections and infestations                                         Pharyngitis streptococcal               I287    1    (0.00)  1
+Infections and infestations                                         Pneumonia                               I287    1    (0.00)  1
+Infections and infestations                                         Respiratory tract infection             I287    1    (0.00)  1
+Infections and infestations                                         Respiratory tract infection viral       IGlar   1    (0.00)  1
+Infections and infestations                                         Rhinitis                                I287    3    (0.01)  4
+Infections and infestations                                         Rhinitis                                IGlar   2    (0.01)  2
+Infections and infestations                                         Sinusitis                               I287    2    (0.01)  3
+Infections and infestations                                         Sinusitis                               IGlar   1    (0.00)  1
+Infections and infestations                                         Skin infection                          I287    1    (0.00)  1
+Infections and infestations                                         Tinea pedis                             I287    1    (0.00)  1
+Infections and infestations                                         Tooth infection                         IGlar   1    (0.00)  1
+Infections and infestations                                         Tracheitis                              IGlar   1    (0.00)  1
+Infections and infestations                                         Upper respiratory tract infection       I287    7    (0.03)  9
+Infections and infestations                                         Upper respiratory tract infection       IGlar   6    (0.02)  6
+Infections and infestations                                         Urinary tract infection                 IGlar   1    (0.00)  1
+Infections and infestations                                         Viral infection                         I287    1    (0.00)  1
+Infections and infestations                                         Viral infection                         IGlar   1    (0.00)  1
+Infections and infestations                                         Viral upper respiratory tract infection I287    1    (0.00)  1
+Injury, poisoning and procedural complications                      Back injury                             IGlar   1    (0.00)  1
+Injury, poisoning and procedural complications                      Bone contusion                          I287    1    (0.00)  1
+Injury, poisoning and procedural complications                      Concussion                              IGlar   1    (0.00)  1
+Injury, poisoning and procedural complications                      Contusion                               IGlar   1    (0.00)  1
+Injury, poisoning and procedural complications                      Device dispensing error                 I287    3    (0.01)  3
+Injury, poisoning and procedural complications                      Device dispensing error                 IGlar   4    (0.01)  4
+Injury, poisoning and procedural complications                      Fall                                    IGlar   2    (0.01)  2
+Injury, poisoning and procedural complications                      Joint injury                            IGlar   1    (0.00)  1
+Injury, poisoning and procedural complications                      Limb injury                             IGlar   1    (0.00)  1
+Injury, poisoning and procedural complications                      Lower limb fracture                     I287    1    (0.00)  1
+Injury, poisoning and procedural complications                      Muscle strain                           I287    1    (0.00)  1
+Injury, poisoning and procedural complications                      Muscle strain                           IGlar   1    (0.00)  1
+Injury, poisoning and procedural complications                      Procedural pain                         I287    1    (0.00)  1
+Injury, poisoning and procedural complications                      Radius fracture                         I287    1    (0.00)  1
+Injury, poisoning and procedural complications                      Rib fracture                            IGlar   1    (0.00)  1
+Injury, poisoning and procedural complications                      Skin abrasion                           I287    1    (0.00)  1
+Investigations                                                      Blood pressure increased                IGlar   1    (0.00)  1
+Investigations                                                      Body temperature increased              IGlar   1    (0.00)  1
+Investigations                                                      Coagulation time shortened              I287    1    (0.00)  3
+Investigations                                                      Heart rate increased                    IGlar   1    (0.00)  3
+Investigations                                                      Insulin C-peptide decreased             IGlar   2    (0.01)  2
+Investigations                                                      Platelet count decreased                IGlar   1    (0.00)  1
+Investigations                                                      Weight increased                        I287    1    (0.00)  1
+Investigations                                                      Weight increased                        IGlar   1    (0.00)  1
+Metabolism and nutrition disorders                                  Decreased appetite                      IGlar   1    (0.00)  1
+Metabolism and nutrition disorders                                  Dyslipidaemia                           I287    2    (0.01)  2
+Metabolism and nutrition disorders                                  Dyslipidaemia                           IGlar   2    (0.01)  2
+Metabolism and nutrition disorders                                  Hypomagnesaemia                         IGlar   1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Arthralgia                              I287    1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Arthralgia                              IGlar   5    (0.02)  7
+Musculoskeletal and connective tissue disorders                     Back pain                               I287    3    (0.01)  4
+Musculoskeletal and connective tissue disorders                     Back pain                               IGlar   3    (0.01)  3
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+AEBODSYS                                                            AEDECOD                                 TRTA     N     (%)   E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+Musculoskeletal and connective tissue disorders                     Bursitis                                I287    1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Intervertebral disc degeneration        I287    1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Intervertebral disc protrusion          I287    1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Muscle spasms                           I287    1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Muscle spasms                           IGlar   1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Muscular weakness                       IGlar   1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Musculoskeletal pain                    IGlar   1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Myalgia                                 I287    1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Myalgia                                 IGlar   1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Osteoarthritis                          IGlar   2    (0.01)  3
+Musculoskeletal and connective tissue disorders                     Pain in extremity                       I287    4    (0.01)  4
+Musculoskeletal and connective tissue disorders                     Pain in extremity                       IGlar   1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Plantar fasciitis                       IGlar   1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Spinal osteoarthritis                   IGlar   1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Spinal pain                             IGlar   1    (0.00)  1
+Musculoskeletal and connective tissue disorders                     Vertebral osteophyte                    I287    1    (0.00)  1
+Neoplasms benign, malignant and unspecified (incl cysts and polyps) Colon adenoma                           I287    1    (0.00)  2
+Neoplasms benign, malignant and unspecified (incl cysts and polyps) Lipoma                                  I287    1    (0.00)  1
+Neoplasms benign, malignant and unspecified (incl cysts and polyps) Melanocytic naevus                      IGlar   1    (0.00)  1
+Nervous system disorders                                            Cerebrovascular disorder                I287    1    (0.00)  1
+Nervous system disorders                                            Dizziness                               I287    1    (0.00)  1
+Nervous system disorders                                            Dizziness                               IGlar   2    (0.01)  2
+Nervous system disorders                                            Headache                                I287   12    (0.04) 24
+Nervous system disorders                                            Headache                                IGlar   7    (0.03) 12
+Nervous system disorders                                            Hypoaesthesia                           IGlar   1    (0.00)  1
+Nervous system disorders                                            Neuralgia                               IGlar   1    (0.00)  1
+Product issues                                                      Device battery issue                    I287    1    (0.00)  1
+Psychiatric disorders                                               Anxiety                                 I287    1    (0.00)  1
+Psychiatric disorders                                               Anxiety                                 IGlar   1    (0.00)  1
+Psychiatric disorders                                               Depression                              IGlar   1    (0.00)  1
+Psychiatric disorders                                               Nervousness                             IGlar   1    (0.00)  1
+Psychiatric disorders                                               Sleep disorder                          I287    1    (0.00)  1
+Renal and urinary disorders                                         Acute kidney injury                     IGlar   1    (0.00)  1
+Renal and urinary disorders                                         Azotaemia                               IGlar   1    (0.00)  1
+Renal and urinary disorders                                         Hydronephrosis                          IGlar   1    (0.00)  1
+Reproductive system and breast disorders                            Benign prostatic hyperplasia            I287    1    (0.00)  1
+Reproductive system and breast disorders                            Cervical dysplasia                      I287    1    (0.00)  1
+Reproductive system and breast disorders                            Erectile dysfunction                    I287    1    (0.00)  1
+Reproductive system and breast disorders                            Metrorrhagia                            I287    1    (0.00)  1
+Respiratory, thoracic and mediastinal disorders                     Cough                                   I287    5    (0.02)  6
+Respiratory, thoracic and mediastinal disorders                     Cough                                   IGlar   2    (0.01)  3
+Respiratory, thoracic and mediastinal disorders                     Nasal congestion                        IGlar   1    (0.00)  1
+Respiratory, thoracic and mediastinal disorders                     Oropharyngeal pain                      I287    1    (0.00)  1
+Respiratory, thoracic and mediastinal disorders                     Oropharyngeal pain                      IGlar   1    (0.00)  1
+Respiratory, thoracic and mediastinal disorders                     Rhinitis allergic                       I287    1    (0.00)  1
+Respiratory, thoracic and mediastinal disorders                     Rhinorrhoea                             I287    2    (0.01)  2
+Skin and subcutaneous tissue disorders                              Dermatitis contact                      I287    1    (0.00)  1
+Skin and subcutaneous tissue disorders                              Eczema                                  I287    1    (0.00)  1
+Skin and subcutaneous tissue disorders                              Erythema                                I287    2    (0.01)  2
+Skin and subcutaneous tissue disorders                              Erythema                                IGlar   1    (0.00)  1
+Skin and subcutaneous tissue disorders                              Hyperkeratosis                          I287    1    (0.00)  1
+Skin and subcutaneous tissue disorders                              Miliaria                                IGlar   1    (0.00)  1
+Skin and subcutaneous tissue disorders                              Night sweats                            IGlar   1    (0.00)  1
+Skin and subcutaneous tissue disorders                              Petechiae                               IGlar   1    (0.00)  1
+Skin and subcutaneous tissue disorders                              Rash                                    I287    2    (0.01)  2
+Skin and subcutaneous tissue disorders                              Skin hypertrophy                        I287    1    (0.00)  1
+Vascular disorders                                                  Angiopathy                              I287    1    (0.00)  1
+Vascular disorders                                                  Aortic arteriosclerosis                 IGlar   1    (0.00)  1
+Vascular disorders                                                  Aortic disorder                         IGlar   1    (0.00)  1
+Vascular disorders                                                  Aortic stenosis                         IGlar   1    (0.00)  1
+Vascular disorders                                                  Haematoma                               IGlar   1    (0.00)  1
+Vascular disorders                                                  Hypertension                            IGlar   4    (0.01)  4
+Vascular disorders                                                  Hypertensive angiopathy                 I287    1    (0.00)  1
+Vascular disorders                                                  Hypotension                             I287    1    (0.00)  1
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+

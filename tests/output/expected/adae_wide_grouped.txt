@@ -1,0 +1,289 @@
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                             I287                        IGlar     
+                                                        N     P      E               N     P      E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                                                                   
+                                                                                                   
+Blood and lymphatic system disorders
+  Anaemia                                               2    0.0     2               1    0.0     1
+  Leukocytosis                                          0                            1    0.0     1
+                                                                                                   
+                                                                                                   
+Cardiac disorders
+  Coronary artery disease                               1    0.0     1               0             
+  Dilatation atrial                                     0                            1    0.0     1
+  Supraventricular tachycardia                          1    0.0     1               0             
+  Tachycardia                                           0                            1    0.0     1
+                                                                                                   
+                                                                                                   
+Congenital, familial and genetic disorders
+  Thyroglossal cyst                                     1    0.0     1               0             
+                                                                                                   
+                                                                                                   
+Ear and labyrinth disorders
+  Ear discomfort                                        0                            1    0.0     1
+  Ear pain                                              1    0.0     1               0             
+  Eustachian tube dysfunction                           0                            1    0.0     1
+  Vertigo                                               2    0.0     2               1    0.0     1
+                                                                                                   
+                                                                                                   
+Eye disorders
+  Age-related macular degeneration                      0                            1    0.0     1
+  Amblyopia                                             0                            1    0.0     1
+  Cataract                                              0                            6    0.0     6
+  Cataract nuclear                                      0                            1    0.0     1
+  Diabetic retinal oedema                               1    0.0     1               0             
+  Diabetic retinopathy                                  2    0.0     2               4    0.0     4
+  Dry age-related macular degeneration                  0                            1    0.0     1
+  Glaucoma                                              1    0.0     1               0             
+  Macular degeneration                                  0                            1    0.0     1
+  Presbyopia                                            0                            1    0.0     1
+                                                                                                   
+                                                                                                   
+Gastrointestinal disorders
+  Abdominal discomfort                                  0                            1    0.0     1
+  Abdominal pain                                        0                            3    0.0     3
+  Abdominal pain upper                                  1    0.0     4               0             
+  Aphthous ulcer                                        1    0.0     1               0             
+  Chronic gastritis                                     1    0.0     1               0             
+  Constipation                                          1    0.0     1               2    0.0     2
+  Diarrhoea                                             4    0.0     4               4    0.0     4
+  Dyspepsia                                             1    0.0     1               1    0.0     2
+  Enteritis                                             1    0.0     1               0             
+  Gastritis                                             0                            1    0.0     1
+  Melaena                                               0                            1    0.0     1
+  Nausea                                                2    0.0     2               3    0.0     3
+  Peptic ulcer                                          1    0.0     1               0             
+  Toothache                                             1    0.0     1               1    0.0     1
+  Vomiting                                              2    0.0     2               3    0.0     3
+                                                                                                   
+                                                                                                   
+General disorders and administration site conditions
+  Chest pain                                            1    0.0     1               1    0.0     1
+  Chills                                                1    0.0     1               0             
+  Facial pain                                           1    0.0     3               0             
+  Fatigue                                               2    0.0     2               0             
+  Gait disturbance                                      1    0.0     1               0             
+  Inflammation                                          0                            1    0.0     1
+  Injection site bruising                               1    0.0     1               0             
+  Injection site erythema                               0                            1    0.0    20
+  Injection site haematoma                              1    0.0     2               0             
+  Injection site haemorrhage                            1    0.0     1               0             
+  Injection site pain                                   1    0.0     1               1    0.0     1
+  Injection site reaction                               1    0.0     1               2    0.0     4
+  Medical device site discomfort                        0                            1    0.0     2
+  Pyrexia                                               2    0.0     2               1    0.0     1
+                                                                                                   
+                                                                                                   
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                             I287                        IGlar     
+                                                        N     P      E               N     P      E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                                                                   
+                                                                                                   
+Hepatobiliary disorders
+  Biliary colic                                         0                            1    0.0     1
+  Hepatosplenomegaly                                    0                            1    0.0     1
+  Hypertransaminasaemia                                 0                            1    0.0     1
+                                                                                                   
+                                                                                                   
+Immune system disorders
+  Dust allergy                                          0                            1    0.0     1
+  Seasonal allergy                                      1    0.0     1               0             
+                                                                                                   
+                                                                                                   
+Infections and infestations
+  Acute sinusitis                                       0                            1    0.0     1
+  Bronchitis                                            2    0.0     2               3    0.0     3
+  Cellulitis                                            0                            1    0.0     1
+  Cystitis                                              0                            3    0.0     3
+  Ear infection                                         0                            1    0.0     1
+  Emphysematous pyelonephritis                          0                            1    0.0     1
+  Fungal infection                                      0                            1    0.0     1
+  Gastroenteritis                                       7    0.0     7               1    0.0     1
+  Gastroenteritis viral                                 0                            1    0.0     1
+  Helicobacter infection                                0                            1    0.0     1
+  Herpes simplex                                        1    0.0     2               1    0.0     1
+  Influenza                                             0                            3    0.0     4
+  Labyrinthitis                                         0                            1    0.0     1
+  Laryngitis                                            1    0.0     1               1    0.0     1
+  Mastoiditis                                           1    0.0     1               0             
+  Nasopharyngitis                                      10    0.0    13              10    0.0    11
+  Onychomycosis                                         1    0.0     1               0             
+  Oral herpes                                           1    0.0     1               0             
+  Paronychia                                            2    0.0     2               0             
+  Pharyngitis                                           3    0.0     3               1    0.0     3
+  Pharyngitis streptococcal                             1    0.0     1               0             
+  Pneumonia                                             1    0.0     1               0             
+  Respiratory tract infection                           1    0.0     1               0             
+  Respiratory tract infection viral                     0                            1    0.0     1
+  Rhinitis                                              3    0.0     4               2    0.0     2
+  Sinusitis                                             2    0.0     3               1    0.0     1
+  Skin infection                                        1    0.0     1               0             
+  Tinea pedis                                           1    0.0     1               0             
+  Tooth infection                                       0                            1    0.0     1
+  Tracheitis                                            0                            1    0.0     1
+  Upper respiratory tract infection                     7    0.0     9               6    0.0     6
+  Urinary tract infection                               0                            1    0.0     1
+  Viral infection                                       1    0.0     1               1    0.0     1
+  Viral upper respiratory tract infection               1    0.0     1               0             
+                                                                                                   
+                                                                                                   
+Injury, poisoning and procedural complications
+  Back injury                                           0                            1    0.0     1
+  Bone contusion                                        1    0.0     1               0             
+  Concussion                                            0                            1    0.0     1
+  Contusion                                             0                            1    0.0     1
+  Device dispensing error                               3    0.0     3               4    0.0     4
+  Fall                                                  0                            2    0.0     2
+  Joint injury                                          0                            1    0.0     1
+  Limb injury                                           0                            1    0.0     1
+  Lower limb fracture                                   1    0.0     1               0             
+  Muscle strain                                         1    0.0     1               1    0.0     1
+  Procedural pain                                       1    0.0     1               0             
+  Radius fracture                                       1    0.0     1               0             
+  Rib fracture                                          0                            1    0.0     1
+  Skin abrasion                                         1    0.0     1               0             
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                             I287                        IGlar     
+                                                        N     P      E               N     P      E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                                                                   
+                                                                                                   
+Investigations
+  Blood pressure increased                              0                            1    0.0     1
+  Body temperature increased                            0                            1    0.0     1
+  Coagulation time shortened                            1    0.0     3               0             
+  Heart rate increased                                  0                            1    0.0     3
+  Insulin C-peptide decreased                           0                            2    0.0     2
+  Platelet count decreased                              0                            1    0.0     1
+  Weight increased                                      1    0.0     1               1    0.0     1
+                                                                                                   
+                                                                                                   
+Metabolism and nutrition disorders
+  Decreased appetite                                    0                            1    0.0     1
+  Dyslipidaemia                                         2    0.0     2               2    0.0     2
+  Hypomagnesaemia                                       0                            1    0.0     1
+                                                                                                   
+                                                                                                   
+Musculoskeletal and connective tissue disorders
+  Arthralgia                                            1    0.0     1               5    0.0     7
+  Back pain                                             3    0.0     4               3    0.0     3
+  Bursitis                                              1    0.0     1               0             
+  Intervertebral disc degeneration                      1    0.0     1               0             
+  Intervertebral disc protrusion                        1    0.0     1               0             
+  Muscle spasms                                         1    0.0     1               1    0.0     1
+  Muscular weakness                                     0                            1    0.0     1
+  Musculoskeletal pain                                  0                            1    0.0     1
+  Myalgia                                               1    0.0     1               1    0.0     1
+  Osteoarthritis                                        0                            2    0.0     3
+  Pain in extremity                                     4    0.0     4               1    0.0     1
+  Plantar fasciitis                                     0                            1    0.0     1
+  Spinal osteoarthritis                                 0                            1    0.0     1
+  Spinal pain                                           0                            1    0.0     1
+  Vertebral osteophyte                                  1    0.0     1               0             
+                                                                                                   
+                                                                                                   
+Neoplasms benign, malignant and unspecified (incl cysts and polyps)
+  Colon adenoma                                         1    0.0     2               0             
+  Lipoma                                                1    0.0     1               0             
+  Melanocytic naevus                                    0                            1    0.0     1
+                                                                                                   
+                                                                                                   
+Nervous system disorders
+  Cerebrovascular disorder                              1    0.0     1               0             
+  Dizziness                                             1    0.0     1               2    0.0     2
+  Headache                                             12    0.0    24               7    0.0    12
+  Hypoaesthesia                                         0                            1    0.0     1
+  Neuralgia                                             0                            1    0.0     1
+                                                                                                   
+                                                                                                   
+Product issues
+  Device battery issue                                  1    0.0     1               0             
+                                                                                                   
+                                                                                                   
+Psychiatric disorders
+  Anxiety                                               1    0.0     1               1    0.0     1
+  Depression                                            0                            1    0.0     1
+  Nervousness                                           0                            1    0.0     1
+  Sleep disorder                                        1    0.0     1               0             
+                                                                                                   
+                                                                                                   
+Renal and urinary disorders
+  Acute kidney injury                                   0                            1    0.0     1
+  Azotaemia                                             0                            1    0.0     1
+  Hydronephrosis                                        0                            1    0.0     1
+                                                                                                   
+                                                                                                   
+Reproductive system and breast disorders
+  Benign prostatic hyperplasia                          1    0.0     1               0             
+  Cervical dysplasia                                    1    0.0     1               0             
+  Erectile dysfunction                                  1    0.0     1               0             
+  Metrorrhagia                                          1    0.0     1               0             
+                                                                                                   
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                             I287                        IGlar     
+                                                        N     P      E               N     P      E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                                                                   
+Respiratory, thoracic and mediastinal disorders
+  Cough                                                 5    0.0     6               2    0.0     3
+  Nasal congestion                                      0                            1    0.0     1
+  Oropharyngeal pain                                    1    0.0     1               1    0.0     1
+  Rhinitis allergic                                     1    0.0     1               0             
+  Rhinorrhoea                                           2    0.0     2               0             
+                                                                                                   
+                                                                                                   
+Skin and subcutaneous tissue disorders
+  Dermatitis contact                                    1    0.0     1               0             
+  Eczema                                                1    0.0     1               0             
+  Erythema                                              2    0.0     2               1    0.0     1
+  Hyperkeratosis                                        1    0.0     1               0             
+  Miliaria                                              0                            1    0.0     1
+  Night sweats                                          0                            1    0.0     1
+  Petechiae                                             0                            1    0.0     1
+  Rash                                                  2    0.0     2               0             
+  Skin hypertrophy                                      1    0.0     1               0             
+                                                                                                   
+                                                                                                   
+Vascular disorders
+  Angiopathy                                            1    0.0     1               0             
+  Aortic arteriosclerosis                               0                            1    0.0     1
+  Aortic disorder                                       0                            1    0.0     1
+  Aortic stenosis                                       0                            1    0.0     1
+  Haematoma                                             0                            1    0.0     1
+  Hypertension                                          0                            4    0.0     4
+  Hypertensive angiopathy                               1    0.0     1               0             
+  Hypotension                                           1    0.0     1               0             
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+

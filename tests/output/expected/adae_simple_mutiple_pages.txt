@@ -1,0 +1,100 @@
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+AEBODSYS                                                               TRTA      N      P       E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+Blood and lymphatic system disorders                                   I287      2    0.007     2
+Blood and lymphatic system disorders                                   IGlar     1    0.004     2
+Cardiac disorders                                                      I287      2    0.007     2
+Cardiac disorders                                                      IGlar     2    0.007     2
+Congenital, familial and genetic disorders                             I287      1    0.004     1
+Ear and labyrinth disorders                                            I287      3    0.011     3
+Ear and labyrinth disorders                                            IGlar     3    0.011     3
+Eye disorders                                                          I287      3    0.011     4
+Eye disorders                                                          IGlar    14    0.052    16
+Gastrointestinal disorders                                             I287     12    0.044    19
+Gastrointestinal disorders                                             IGlar    15    0.055    21
+General disorders and administration site conditions                   I287      9    0.033    16
+General disorders and administration site conditions                   IGlar     7    0.026    30
+Hepatobiliary disorders                                                IGlar     3    0.011     3
+Immune system disorders                                                I287      1    0.004     1
+Immune system disorders                                                IGlar     1    0.004     1
+Infections and infestations                                            I287     36    0.133    56
+Infections and infestations                                            IGlar    33    0.122    49
+Injury, poisoning and procedural complications                         I287      9    0.033     9
+Injury, poisoning and procedural complications                         IGlar    11    0.041    13
+Investigations                                                         I287      2    0.007     4
+Investigations                                                         IGlar     5    0.018     9
+Metabolism and nutrition disorders                                     I287      2    0.007     2
+Metabolism and nutrition disorders                                     IGlar     4    0.015     4
+Musculoskeletal and connective tissue disorders                        I287     11    0.041    15
+Musculoskeletal and connective tissue disorders                        IGlar    15    0.055    21
+Neoplasms benign, malignant and unspecified (incl cysts and polyps)    I287      2    0.007     3
+Neoplasms benign, malignant and unspecified (incl cysts and polyps)    IGlar     1    0.004     1
+Nervous system disorders                                               I287     14    0.052    26
+Nervous system disorders                                               IGlar    10    0.037    16
+Product issues                                                         I287      1    0.004     1
+Psychiatric disorders                                                  I287      2    0.007     2
+Psychiatric disorders                                                  IGlar     2    0.007     3
+Renal and urinary disorders                                            IGlar     1    0.004     3
+Reproductive system and breast disorders                               I287      4    0.015     4
+Respiratory, thoracic and mediastinal disorders                        I287      8    0.030    10
+Respiratory, thoracic and mediastinal disorders                        IGlar     4    0.015     5
+Skin and subcutaneous tissue disorders                                 I287      7    0.026     8
+Skin and subcutaneous tissue disorders                                 IGlar     4    0.015     4
+Vascular disorders                                                     I287      3    0.011     3
+Vascular disorders                                                     IGlar     7    0.026     8
+Blood and lymphatic system disorders                                   I287      2    0.007     2
+Blood and lymphatic system disorders                                   IGlar     1    0.004     2
+Cardiac disorders                                                      I287      2    0.007     2
+Cardiac disorders                                                      IGlar     2    0.007     2
+Congenital, familial and genetic disorders                             I287      1    0.004     1
+Ear and labyrinth disorders                                            I287      3    0.011     3
+Ear and labyrinth disorders                                            IGlar     3    0.011     3
+Eye disorders                                                          I287      3    0.011     4
+Eye disorders                                                          IGlar    14    0.052    16
+Gastrointestinal disorders                                             I287     12    0.044    19
+Gastrointestinal disorders                                             IGlar    15    0.055    21
+General disorders and administration site conditions                   I287      9    0.033    16
+General disorders and administration site conditions                   IGlar     7    0.026    30
+Hepatobiliary disorders                                                IGlar     3    0.011     3
+Immune system disorders                                                I287      1    0.004     1
+Immune system disorders                                                IGlar     1    0.004     1
+Infections and infestations                                            I287     36    0.133    56
+Infections and infestations                                            IGlar    33    0.122    49
+Injury, poisoning and procedural complications                         I287      9    0.033     9
+Injury, poisoning and procedural complications                         IGlar    11    0.041    13
+Investigations                                                         I287      2    0.007     4
+Investigations                                                         IGlar     5    0.018     9
+Metabolism and nutrition disorders                                     I287      2    0.007     2
+Metabolism and nutrition disorders                                     IGlar     4    0.015     4
+Musculoskeletal and connective tissue disorders                        I287     11    0.041    15
+Musculoskeletal and connective tissue disorders                        IGlar    15    0.055    21
+Neoplasms benign, malignant and unspecified (incl cysts and polyps)    I287      2    0.007     3
+Neoplasms benign, malignant and unspecified (incl cysts and polyps)    IGlar     1    0.004     1
+Nervous system disorders                                               I287     14    0.052    26
+Nervous system disorders                                               IGlar    10    0.037    16
+Product issues                                                         I287      1    0.004     1
+Psychiatric disorders                                                  I287      2    0.007     2
+Psychiatric disorders                                                  IGlar     2    0.007     3
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+AEBODSYS                                                               TRTA      N      P       E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+Renal and urinary disorders                                            IGlar     1    0.004     3
+Reproductive system and breast disorders                               I287      4    0.015     4
+Respiratory, thoracic and mediastinal disorders                        I287      8    0.030    10
+Respiratory, thoracic and mediastinal disorders                        IGlar     4    0.015     5
+Skin and subcutaneous tissue disorders                                 I287      7    0.026     8
+Skin and subcutaneous tissue disorders                                 IGlar     4    0.015     4
+Vascular disorders                                                     I287      3    0.011     3
+Vascular disorders                                                     IGlar     7    0.026     8
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+

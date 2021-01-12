@@ -1,0 +1,388 @@
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                    TRTA             N             P              E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                                                                   
+                                                                                                   
+Blood and lymphatic system disorders
+  Anaemia                                           I287             2           0.007            2
+  Anaemia                                           IGlar            1           0.004            1
+  Leukocytosis                                      IGlar            1           0.004            1
+                                                                                                   
+                                                                                                   
+Cardiac disorders
+  Coronary artery disease                           I287             1           0.004            1
+  Dilatation atrial                                 IGlar            1           0.004            1
+  Supraventricular tachycardia                      I287             1           0.004            1
+  Tachycardia                                       IGlar            1           0.004            1
+                                                                                                   
+                                                                                                   
+Congenital, familial and genetic disorders
+  Thyroglossal cyst                                 I287             1           0.004            1
+                                                                                                   
+                                                                                                   
+Ear and labyrinth disorders
+  Ear discomfort                                    IGlar            1           0.004            1
+  Ear pain                                          I287             1           0.004            1
+  Eustachian tube dysfunction                       IGlar            1           0.004            1
+  Vertigo                                           I287             2           0.007            2
+  Vertigo                                           IGlar            1           0.004            1
+                                                                                                   
+                                                                                                   
+Eye disorders
+  Age-related macular degeneration                  IGlar            1           0.004            1
+  Amblyopia                                         IGlar            1           0.004            1
+  Cataract                                          IGlar            6           0.022            6
+  Cataract nuclear                                  IGlar            1           0.004            1
+  Diabetic retinal oedema                           I287             1           0.004            1
+  Diabetic retinopathy                              I287             2           0.007            2
+  Diabetic retinopathy                              IGlar            4           0.015            4
+  Dry age-related macular degeneration              IGlar            1           0.004            1
+  Glaucoma                                          I287             1           0.004            1
+  Macular degeneration                              IGlar            1           0.004            1
+  Presbyopia                                        IGlar            1           0.004            1
+                                                                                                   
+                                                                                                   
+Gastrointestinal disorders
+  Abdominal discomfort                              IGlar            1           0.004            1
+  Abdominal pain                                    IGlar            3           0.011            3
+  Abdominal pain upper                              I287             1           0.004            4
+  Aphthous ulcer                                    I287             1           0.004            1
+  Chronic gastritis                                 I287             1           0.004            1
+  Constipation                                      I287             1           0.004            1
+  Constipation                                      IGlar            2           0.007            2
+  Diarrhoea                                         I287             4           0.015            4
+  Diarrhoea                                         IGlar            4           0.015            4
+  Dyspepsia                                         I287             1           0.004            1
+  Dyspepsia                                         IGlar            1           0.004            2
+  Enteritis                                         I287             1           0.004            1
+  Gastritis                                         IGlar            1           0.004            1
+  Melaena                                           IGlar            1           0.004            1
+  Nausea                                            I287             2           0.007            2
+  Nausea                                            IGlar            3           0.011            3
+  Peptic ulcer                                      I287             1           0.004            1
+  Toothache                                         I287             1           0.004            1
+  Toothache                                         IGlar            1           0.004            1
+  Vomiting                                          I287             2           0.007            2
+  Vomiting                                          IGlar            3           0.011            3
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                    TRTA             N             P              E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                                                                   
+                                                                                                   
+General disorders and administration site conditions
+  Chest pain                                        I287             1           0.004            1
+  Chest pain                                        IGlar            1           0.004            1
+  Chills                                            I287             1           0.004            1
+  Facial pain                                       I287             1           0.004            3
+  Fatigue                                           I287             2           0.007            2
+  Gait disturbance                                  I287             1           0.004            1
+  Inflammation                                      IGlar            1           0.004            1
+  Injection site bruising                           I287             1           0.004            1
+  Injection site erythema                           IGlar            1           0.004           20
+  Injection site haematoma                          I287             1           0.004            2
+  Injection site haemorrhage                        I287             1           0.004            1
+  Injection site pain                               I287             1           0.004            1
+  Injection site pain                               IGlar            1           0.004            1
+  Injection site reaction                           I287             1           0.004            1
+  Injection site reaction                           IGlar            2           0.007            4
+  Medical device site discomfort                    IGlar            1           0.004            2
+  Pyrexia                                           I287             2           0.007            2
+  Pyrexia                                           IGlar            1           0.004            1
+                                                                                                   
+                                                                                                   
+Hepatobiliary disorders
+  Biliary colic                                     IGlar            1           0.004            1
+  Hepatosplenomegaly                                IGlar            1           0.004            1
+  Hypertransaminasaemia                             IGlar            1           0.004            1
+                                                                                                   
+                                                                                                   
+Immune system disorders
+  Dust allergy                                      IGlar            1           0.004            1
+  Seasonal allergy                                  I287             1           0.004            1
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                    TRTA             N             P              E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                                                                   
+                                                                                                   
+Infections and infestations
+  Acute sinusitis                                   IGlar            1           0.004            1
+  Bronchitis                                        I287             2           0.007            2
+  Bronchitis                                        IGlar            3           0.011            3
+  Cellulitis                                        IGlar            1           0.004            1
+  Cystitis                                          IGlar            3           0.011            3
+  Ear infection                                     IGlar            1           0.004            1
+  Emphysematous pyelonephritis                      IGlar            1           0.004            1
+  Fungal infection                                  IGlar            1           0.004            1
+  Gastroenteritis                                   I287             7           0.026            7
+  Gastroenteritis                                   IGlar            1           0.004            1
+  Gastroenteritis viral                             IGlar            1           0.004            1
+  Helicobacter infection                            IGlar            1           0.004            1
+  Herpes simplex                                    I287             1           0.004            2
+  Herpes simplex                                    IGlar            1           0.004            1
+  Influenza                                         IGlar            3           0.011            4
+  Labyrinthitis                                     IGlar            1           0.004            1
+  Laryngitis                                        I287             1           0.004            1
+  Laryngitis                                        IGlar            1           0.004            1
+  Mastoiditis                                       I287             1           0.004            1
+  Nasopharyngitis                                   I287            10           0.037           13
+  Nasopharyngitis                                   IGlar           10           0.037           11
+  Onychomycosis                                     I287             1           0.004            1
+  Oral herpes                                       I287             1           0.004            1
+  Paronychia                                        I287             2           0.007            2
+  Pharyngitis                                       I287             3           0.011            3
+  Pharyngitis                                       IGlar            1           0.004            3
+  Pharyngitis streptococcal                         I287             1           0.004            1
+  Pneumonia                                         I287             1           0.004            1
+  Respiratory tract infection                       I287             1           0.004            1
+  Respiratory tract infection viral                 IGlar            1           0.004            1
+  Rhinitis                                          I287             3           0.011            4
+  Rhinitis                                          IGlar            2           0.007            2
+  Sinusitis                                         I287             2           0.007            3
+  Sinusitis                                         IGlar            1           0.004            1
+  Skin infection                                    I287             1           0.004            1
+  Tinea pedis                                       I287             1           0.004            1
+  Tooth infection                                   IGlar            1           0.004            1
+  Tracheitis                                        IGlar            1           0.004            1
+  Upper respiratory tract infection                 I287             7           0.026            9
+  Upper respiratory tract infection                 IGlar            6           0.022            6
+  Urinary tract infection                           IGlar            1           0.004            1
+  Viral infection                                   I287             1           0.004            1
+  Viral infection                                   IGlar            1           0.004            1
+  Viral upper respiratory tract infection           I287             1           0.004            1
+                                                                                                   
+                                                                                                   
+Injury, poisoning and procedural complications
+  Back injury                                       IGlar            1           0.004            1
+  Bone contusion                                    I287             1           0.004            1
+  Concussion                                        IGlar            1           0.004            1
+  Contusion                                         IGlar            1           0.004            1
+  Device dispensing error                           I287             3           0.011            3
+  Device dispensing error                           IGlar            4           0.015            4
+  Fall                                              IGlar            2           0.007            2
+  Joint injury                                      IGlar            1           0.004            1
+  Limb injury                                       IGlar            1           0.004            1
+  Lower limb fracture                               I287             1           0.004            1
+  Muscle strain                                     I287             1           0.004            1
+  Muscle strain                                     IGlar            1           0.004            1
+  Procedural pain                                   I287             1           0.004            1
+  Radius fracture                                   I287             1           0.004            1
+  Rib fracture                                      IGlar            1           0.004            1
+  Skin abrasion                                     I287             1           0.004            1
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                    TRTA             N             P              E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                                                                   
+                                                                                                   
+Investigations
+  Blood pressure increased                          IGlar            1           0.004            1
+  Body temperature increased                        IGlar            1           0.004            1
+  Coagulation time shortened                        I287             1           0.004            3
+  Heart rate increased                              IGlar            1           0.004            3
+  Insulin C-peptide decreased                       IGlar            2           0.007            2
+  Platelet count decreased                          IGlar            1           0.004            1
+  Weight increased                                  I287             1           0.004            1
+  Weight increased                                  IGlar            1           0.004            1
+                                                                                                   
+                                                                                                   
+Metabolism and nutrition disorders
+  Decreased appetite                                IGlar            1           0.004            1
+  Dyslipidaemia                                     I287             2           0.007            2
+  Dyslipidaemia                                     IGlar            2           0.007            2
+  Hypomagnesaemia                                   IGlar            1           0.004            1
+                                                                                                   
+                                                                                                   
+Musculoskeletal and connective tissue disorders
+  Arthralgia                                        I287             1           0.004            1
+  Arthralgia                                        IGlar            5           0.018            7
+  Back pain                                         I287             3           0.011            4
+  Back pain                                         IGlar            3           0.011            3
+  Bursitis                                          I287             1           0.004            1
+  Intervertebral disc degeneration                  I287             1           0.004            1
+  Intervertebral disc protrusion                    I287             1           0.004            1
+  Muscle spasms                                     I287             1           0.004            1
+  Muscle spasms                                     IGlar            1           0.004            1
+  Muscular weakness                                 IGlar            1           0.004            1
+  Musculoskeletal pain                              IGlar            1           0.004            1
+  Myalgia                                           I287             1           0.004            1
+  Myalgia                                           IGlar            1           0.004            1
+  Osteoarthritis                                    IGlar            2           0.007            3
+  Pain in extremity                                 I287             4           0.015            4
+  Pain in extremity                                 IGlar            1           0.004            1
+  Plantar fasciitis                                 IGlar            1           0.004            1
+  Spinal osteoarthritis                             IGlar            1           0.004            1
+  Spinal pain                                       IGlar            1           0.004            1
+  Vertebral osteophyte                              I287             1           0.004            1
+                                                                                                   
+                                                                                                   
+Neoplasms benign, malignant and unspecified (incl cysts and polyps)
+  Colon adenoma                                     I287             1           0.004            2
+  Lipoma                                            I287             1           0.004            1
+  Melanocytic naevus                                IGlar            1           0.004            1
+                                                                                                   
+                                                                                                   
+Nervous system disorders
+  Cerebrovascular disorder                          I287             1           0.004            1
+  Dizziness                                         I287             1           0.004            1
+  Dizziness                                         IGlar            2           0.007            2
+  Headache                                          I287            12           0.044           24
+  Headache                                          IGlar            7           0.026           12
+  Hypoaesthesia                                     IGlar            1           0.004            1
+  Neuralgia                                         IGlar            1           0.004            1
+                                                                                                   
+                                                                                                   
+Product issues
+  Device battery issue                              I287             1           0.004            1
+                                                                                                   
+                                                                                                   
+Psychiatric disorders
+  Anxiety                                           I287             1           0.004            1
+  Anxiety                                           IGlar            1           0.004            1
+  Depression                                        IGlar            1           0.004            1
+  Nervousness                                       IGlar            1           0.004            1
+  Sleep disorder                                    I287             1           0.004            1
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                    TRTA             N             P              E
+————————————————————————————————————————————————————————————————————————————————————————————————————
+                                                                                                   
+                                                                                                   
+Renal and urinary disorders
+  Acute kidney injury                               IGlar            1           0.004            1
+  Azotaemia                                         IGlar            1           0.004            1
+  Hydronephrosis                                    IGlar            1           0.004            1
+                                                                                                   
+                                                                                                   
+Reproductive system and breast disorders
+  Benign prostatic hyperplasia                      I287             1           0.004            1
+  Cervical dysplasia                                I287             1           0.004            1
+  Erectile dysfunction                              I287             1           0.004            1
+  Metrorrhagia                                      I287             1           0.004            1
+                                                                                                   
+                                                                                                   
+Respiratory, thoracic and mediastinal disorders
+  Cough                                             I287             5           0.018            6
+  Cough                                             IGlar            2           0.007            3
+  Nasal congestion                                  IGlar            1           0.004            1
+  Oropharyngeal pain                                I287             1           0.004            1
+  Oropharyngeal pain                                IGlar            1           0.004            1
+  Rhinitis allergic                                 I287             1           0.004            1
+  Rhinorrhoea                                       I287             2           0.007            2
+                                                                                                   
+                                                                                                   
+Skin and subcutaneous tissue disorders
+  Dermatitis contact                                I287             1           0.004            1
+  Eczema                                            I287             1           0.004            1
+  Erythema                                          I287             2           0.007            2
+  Erythema                                          IGlar            1           0.004            1
+  Hyperkeratosis                                    I287             1           0.004            1
+  Miliaria                                          IGlar            1           0.004            1
+  Night sweats                                      IGlar            1           0.004            1
+  Petechiae                                         IGlar            1           0.004            1
+  Rash                                              I287             2           0.007            2
+  Skin hypertrophy                                  I287             1           0.004            1
+                                                                                                   
+                                                                                                   
+Vascular disorders
+  Angiopathy                                        I287             1           0.004            1
+  Aortic arteriosclerosis                           IGlar            1           0.004            1
+  Aortic disorder                                   IGlar            1           0.004            1
+  Aortic stenosis                                   IGlar            1           0.004            1
+  Haematoma                                         IGlar            1           0.004            1
+  Hypertension                                      IGlar            4           0.015            4
+  Hypertensive angiopathy                           I287             1           0.004            1
+  Hypotension                                       I287             1           0.004            1
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
