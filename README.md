@@ -11,6 +11,8 @@
 
 The **R**-package **NNtable** supplies users with functions for creating tables that can be used in NN TFL. 
 
+Current webpage: [NNtable](http://10.59.86.7/NNpackages/NNtable/)
+
 ----
 ## Design Philosophy
 The philosophy behind NNtable is to separate the derivation of statistics and the layout of an output table. All layout specific derivations are supposed to be handled by the NNTable functionality. The philosophy is further explained in the figure below
@@ -26,10 +28,28 @@ An NNTable consists of several elements that are outlined by the different colou
 ![](man/figures/NNtable1.png)
 
 
-The functionality of NNtable is similar to that of ggplot2 in the sense that an NNTable object is a list of instructions that is carried out once you print the object. An NNTable object is initilised by the function `NNTable()` and it is possible to add elements to the table by using the `add...` functions.
+The functionality of NNtable is similar to that of ggplot2 in the sense that an NNTable object is a list of instructions that is carried out once you print the object. An NNTable object is initilised by the function `NNTable()` and it is possible to add elements to the table by using the `add...` functions. It is only possible to add the same type of element once, otherwise the previous addition is overwritten. 
+
+### Nested columns (column-wise)
+
+Within the NNtable functionality two types of nested columns are defined. 
+
+![](man/figures/NNtable_help_header_span.svg)
+
+A header above two columns in e.g. a list is defined in the initiation of NNTable, e.g. 
+`NNTable(data, "Headline defining the column" = c(column1, column2))` 
+Will write the text  *Headline defining the column* above the `column1` and `column2`
+
+![](man/figures/NNtable_help_addTransWide-03.svg)
+
+In case the columns are nested within the values of another column the function 
+`addTransWide()` is used, e.g. `addTransWide(SEX = list(TRTP = c(column1, column2)))`,
+will nest `column1` and `column2` under the values of `TRTP` which in turn are 
+nested under the values of `SEX`.   
+
+### Nested columns (row-wise), the Stub
 
 
-Current webpage: [NNtable](http://10.59.86.7/NNpackages/NNtable/)
 
 ----
 ## Installation 
