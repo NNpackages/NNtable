@@ -11,17 +11,22 @@
 
 The **R**-package **NNtable** supplies users with functions for creating tables that can be used in NN TFL. 
 
-The philosophy behind NNtable is to separate the derivation of statistics and the layout of an output table. All layout specific derivations are supposed to be handled by the NNTable functionality.
+----
+## Design Philosophy
+The philosophy behind NNtable is to separate the derivation of statistics and the layout of an output table. All layout specific derivations are supposed to be handled by the NNTable functionality. The philosophy is further explained in the figure below
+
+![](man/figures/NNtable_help_design.svg)
+
+
+----
+## NNTable Layout Functionality
 
 An NNTable consists of several elements that are outlined by the different coloured areas in the figure below
 
 ![](man/figures/NNtable1.png)
 
 
-The functionality of NNtable is similar to ggplot2 in the sense that it is a list of instructions that is carried out once you print the object. An NNTable object is initilised by the function `NNTable()` and it is possible to add elements to the table by using the `add...` functions.
-
-
-
+The functionality of NNtable is similar to that of ggplot2 in the sense that an NNTable object is a list of instructions that is carried out once you print the object. An NNTable object is initilised by the function `NNTable()` and it is possible to add elements to the table by using the `add...` functions.
 
 
 Current webpage: [NNtable](http://10.59.86.7/NNpackages/NNtable/)
