@@ -30,25 +30,67 @@ An NNTable consists of several elements that are outlined by the different colou
 
 The functionality of NNtable is similar to that of ggplot2 in the sense that an NNTable object is a list of instructions that is carried out once you print the object. An NNTable object is initilised by the function `NNTable()` and it is possible to add elements to the table by using the `add...` functions. It is only possible to add the same type of element once, otherwise the previous addition is overwritten. 
 
+The transformations of the layout changes introduced by the `add...` functions are performed in the following order:
+
+1. **Exposure data:** The exposure data is added to the original data in accordance with `addExposure()`
+
+2. **Filling:** The combinatorial blanks created by transposing data are occupired as determined by `addFilling()`
+
+3. **Formating:** The columns are formatted in accordance to the specification given in `addFormat()`
+
+4. **Rename:** The rename determined in the `NNTable()` call is performed
+
+5. **Concatenation:** The concatenation and formating of columns determined in the `NNTable()` call is performed, e.g. brackets around numbers or concatenating `Mean (SD)`
+
+6. **Transpose longer:** The columns defined by `addTransLong()` are created
+
+7. **Transpose wider:** The colums defined by  `addTransWide()` are created. 
+
+8. **Cell split:** The cells are split into new rows in accordance with the predetermined cell splits as determined by `addCellSplit()`. 
+
+9. **Truncation:** Them cells are split into new rows in accordance with the individual maximum width determined by `addTruncation()`
+
+10. **Stub:** The stub is created as defined by `addGroupedColumns()`
+
+11. **Ordering** The data is ordered as defined by `addOrder()`
+
+----
 ### Nested columns (column-wise)
 
-Within the NNtable functionality two types of nested columns are defined. 
+Within the NNtable functionality two types of nested columns are defined: 
+A header above existing columns or columns that are transposed from long to wide.
+
+
+A header above two existing columns in an output is defined in the initiation of NNTable, e.g. 
+`NNTable(data, "Headline defining the columns" = c(column1, column2))` 
+Will write the text  *Headline defining the columns* above the `column1` and `column2`. 
+This is exemplified in the figure below where columns `C` and `D` are nested under the pink text. 
+
 
 ![](man/figures/NNtable_help_header_span.svg)
 
-A header above two columns in e.g. a list is defined in the initiation of NNTable, e.g. 
-`NNTable(data, "Headline defining the column" = c(column1, column2))` 
-Will write the text  *Headline defining the column* above the `column1` and `column2`
+In case the columns are nested within the values of another column, the function 
+`addTransWide()` is used, e.g. `addTransWide(SEX = list(TRTP = c(column1, column2)))`,
+will nest `column1` and `column2` under the values of `TRTP` which in turn are 
+nested under the values of `SEX`. This is exemplified below where columns `C`, `D`, 
+and `E` are nested under the values of column `B`, which in turn are nested under column `A`
 
 ![](man/figures/NNtable_help_addTransWide-03.svg)
 
-In case the columns are nested within the values of another column the function 
-`addTransWide()` is used, e.g. `addTransWide(SEX = list(TRTP = c(column1, column2)))`,
-will nest `column1` and `column2` under the values of `TRTP` which in turn are 
-nested under the values of `SEX`.   
-
+----
 ### Nested columns (row-wise), the Stub
 
+The Stub of an `NNTable()` is defined by the function `addGroupedColumns()`. 
+For example `addGroupedColumns("PARAM", "AVISIT", "SUMMARY", name = "The column name")` 
+will nest the values of column `SUMMARY` under the values of column `AVISIT`, 
+which in turn is nested under the values of column `PARAM`. The name of the columns is `The column name`.
+
+This is exemplified below where columns `A`, `B`, and `C` are grouped together in the stub under a column name indicated by the pink strip. 
+In the example the first value of column `C` is empty. For a grouped column that means the row is associated with the next stub level (column `B`). 
+There are no empty values in column `B` so no rows are left over to column `A`. 
+Consequently, the values of column `A` are treated as spanning rows that are put on top of the nested rows.  
+
+![](man/figures/NNtable_help_stub.svg)
 
 
 ----
