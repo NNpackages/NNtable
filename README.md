@@ -23,13 +23,16 @@ The philosophy behind NNtable is to separate the derivation of statistics and th
 ----
 ## NNTable Layout Functionality
 
+The functionality of `NNtable` is similar to that of ggplot2 in the sense that an 
+NNTable object is a list of instructions that is carried out once you print the object. 
+An NNTable object is initilised by the function `NNTable()` and it is possible to 
+add elements to the table by using the `add...` functions. 
+
 An NNTable consists of several elements that are outlined by the different coloured areas in the figure below
 
 ![](man/figures/NNtable1.png)
 
-
-The functionality of NNtable is similar to that of ggplot2 in the sense that an NNTable object is a list of instructions that is carried out once you print the object. An NNTable object is initilised by the function `NNTable()` and it is possible to add elements to the table by using the `add...` functions. It is only possible to add the same type of element once, otherwise the previous addition is overwritten. 
-
+It is only possible to add the same type of element once, otherwise the previous addition is overwritten. 
 The transformations of the layout changes introduced by the `add...` functions are performed in the following order:
 
 1. **Exposure data:** The exposure data is added to the original data in accordance with `addExposure()`
@@ -53,6 +56,42 @@ The transformations of the layout changes introduced by the `add...` functions a
 10. **Stub:** The stub is created as defined by `addGroupedColumns()`
 
 11. **Ordering** The data is ordered as defined by `addOrder()`
+
+The execution order is always carried out in the order outlined above. Consequently, 
+the order the `add...` functions are used is disregarded. This enables the       
+possibility to slowly advance in the creation of the layout and print the table 
+in the progress to see what is needed.
+
+It should also be noted that renaming of columns within the `NNTable()` call 
+will have the consequence that the new name should be used in subsequent `add...` 
+functionality. It should like wise be noted that new columns created in a call to 
+`addTransLong()` can be used in `addTransWide()` by referring to the given name. 
+This functionality is used to create summary tables and an example can be found 
+at `addTransLong()`.
+
+----
+
+### Column rename and collapse
+
+Since we do not want to do any layout specific changes before the `NNTable()` call, 
+the function has a build in method for renaming columns as well as collapsing columns as needed. 
+
+This type of layout is specified directly within the call to `NNTable()`. Say we have columns 
+`mean`, `sd`, `min` and `max`, then we can rename by 
+`NNTable(Mean = "mean", SD = "sd", Min = "min", Max = Max)`. In this case the 
+column names becomes Mean, SD, Min, and Max.
+
+We also have the possibility to collapse by 
+`NNTable("Mean (SD)" = "mean "SD", "Min ; Max" = "min ; max")` in this case we 
+will have the column names Mean (SD) and Min ; Max, and the values will be shown 
+as formatted on the left of the equal sign. 
+
+The rename and collapse is exemplified further in the figure below. 
+Here the columns `C` and `D` represent Mean and SD and are collaped into a 
+single column called `Mean (SD)`. The column `E` represents `AGE` and is renamed 
+accordingly.  
+
+![](man/figures/NNtable_help_rename.svg)
 
 ----
 ### Nested columns (column-wise)

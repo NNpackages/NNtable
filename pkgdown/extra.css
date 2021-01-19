@@ -29,3 +29,10 @@ item.active, .list-group-item.active:hover {
   margin-right: auto;
   width: 50%;
 }
+
+
+.watch-out {
+  background-color: lightpink;
+  border: 3px solid red;
+  font-weight: bold;
+}
