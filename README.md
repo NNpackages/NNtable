@@ -87,11 +87,41 @@ will have the column names Mean (SD) and Min ; Max, and the values will be shown
 as formatted on the left of the equal sign. 
 
 The rename and collapse is exemplified further in the figure below. 
-Here the columns `C` and `D` represent Mean and SD and are collaped into a 
+Here the columns `C` and `D` represent Mean and SD and are collapsed into a 
 single column called `Mean (SD)`. The column `E` represents `AGE` and is renamed 
 accordingly.  
 
 ![](man/figures/NNtable_help_rename.svg)
+
+
+----
+### Transpose to long 
+
+In some instances it is necessary to transpose columns to long. 
+For example, say we need a summary table with, N, Mean, SD, Min and Max. 
+We would calculate the summaries using `dplyr::summarise()` resulting in a 
+different column for each summary, which we would like to appear underneath 
+each other in the final output with a column indicating what summary we see. 
+This can be done using:
+
+```r
+NNTable("N", "Mean (SD)" = "mean "SD", "Min ; Max" = "min ; max") %>% 
+  addTransLong(sum = c("N", "Mean (SD)", "Min ; Max"), var_name = "name")`
+```
+
+Note how the renamed/concatinated column names are used in the flow. 
+It is possible to combine `addTransLong()` with `addTransWide()` and/or `addGroupedColumns()`, 
+then you just need to use the variable names defined in `addTransLong()`,
+i.e. `sum` and `name` in the example.
+
+The principle is further exemplified in the figure below where the columns 
+`C`, `D`, and `E` is transposed to long. The new columns `F` and `G` represent 
+the values and column names, respectively, as indicated by the colouring. 
+These new columns can be used within `addTransWide()` and/or `addGroupedColumns()` 
+as any other column.
+
+![](man/figures/NNtable_help_addTransLong.svg)
+
 
 ----
 ### Nested columns (column-wise)
@@ -124,10 +154,13 @@ For example `addGroupedColumns("PARAM", "AVISIT", "SUMMARY", name = "The column 
 will nest the values of column `SUMMARY` under the values of column `AVISIT`, 
 which in turn is nested under the values of column `PARAM`. The name of the columns is `The column name`.
 
-This is exemplified below where columns `A`, `B`, and `C` are grouped together in the stub under a column name indicated by the pink strip. 
-In the example the first value of column `C` is empty. For a grouped column that means the row is associated with the next stub level (column `B`). 
+This is exemplified below where columns `A`, `B`, and `C` are grouped together 
+in the stub under a column name indicated by the pink strip. 
+In the example the first value of column `C` is empty. For a grouped column 
+that means the row is associated with the next stub level (column `B`). 
 There are no empty values in column `B` so no rows are left over to column `A`. 
-Consequently, the values of column `A` are treated as spanning rows that are put on top of the nested rows.  
+Consequently, the values of column `A` are treated as spanning rows that are 
+put on top of the nested rows.  
 
 ![](man/figures/NNtable_help_stub.svg)
 
