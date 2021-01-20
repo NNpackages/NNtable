@@ -58,13 +58,11 @@ The transformations of the layout changes introduced by the `add...` functions a
 11. **Ordering** The data is ordered as defined by `addOrder()`
 
 The execution order is always carried out in the order outlined above. Consequently, 
-the order the `add...` functions are used is disregarded. This enables the       
-possibility to slowly advance in the creation of the layout and print the table 
-in the progress to see what is needed.
+the order the `add...` functions are used is disregarded. This enables the possibility to slowly advance in the creation of the layout and print the table in the progress to see what is needed.
 
 It should also be noted that renaming of columns within the `NNTable()` call 
 will have the consequence that the new name should be used in subsequent `add...` 
-functionality. It should like wise be noted that new columns created in a call to 
+functionality. It should likewise be noted that new columns created in a call to 
 `addTransLong()` can be used in `addTransWide()` by referring to the given name. 
 This functionality is used to create summary tables and an example can be found 
 at `addTransLong()`.
@@ -82,7 +80,7 @@ This type of layout is specified directly within the call to `NNTable()`. Say we
 column names becomes Mean, SD, Min, and Max.
 
 We also have the possibility to collapse by 
-`NNTable("Mean (SD)" = "mean "SD", "Min ; Max" = "min ; max")` in this case we 
+`NNTable("Mean (SD)" = "mean (SD)", "Min ; Max" = "min ; max")` in this case we 
 will have the column names Mean (SD) and Min ; Max, and the values will be shown 
 as formatted on the left of the equal sign. 
 
@@ -105,11 +103,11 @@ each other in the final output with a column indicating what summary we see.
 This can be done using:
 
 ```r
-NNTable("N", "Mean (SD)" = "mean "SD", "Min ; Max" = "min ; max") %>% 
+NNTable("N", "Mean (SD)" = "mean (SD)", "Min ; Max" = "min ; max") %>% 
   addTransLong(sum = c("N", "Mean (SD)", "Min ; Max"), var_name = "name")`
 ```
 
-Note how the renamed/concatinated column names are used in the flow. 
+Note how the renamed/concatenated column names are used in the flow. 
 It is possible to combine `addTransLong()` with `addTransWide()` and/or `addGroupedColumns()`, 
 then you just need to use the variable names defined in `addTransLong()`,
 i.e. `sum` and `name` in the example.
@@ -152,7 +150,7 @@ and `E` are nested under the values of column `B`, which in turn are nested unde
 The Stub of an `NNTable()` is defined by the function `addGroupedColumns()`. 
 For example `addGroupedColumns("PARAM", "AVISIT", "SUMMARY", name = "The column name")` 
 will nest the values of column `SUMMARY` under the values of column `AVISIT`, 
-which in turn is nested under the values of column `PARAM`. The name of the columns is `The column name`.
+which in turn is nested under the values of column `PARAM`. The name of the column is `The column name`.
 
 This is exemplified below where columns `A`, `B`, and `C` are grouped together 
 in the stub under a column name indicated by the pink strip. 
