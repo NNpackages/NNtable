@@ -14,3 +14,6 @@ home:
   - text: Source code
     href: https://novonordiskit.visualstudio.com/BOS/_git/NNtable
 
+
+development:
+  mode: auto
