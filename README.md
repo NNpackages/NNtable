@@ -195,7 +195,7 @@ The following lists the requirements
 * The master branch is always deployable (i.e. as a minimum passing R CMD checks and unit tests)
 * Use git feature/bugfix branches and merge requests to the master
 * [Semantic versioning](https://semver.org/)
-    + Three digits sognify a release 
+    + Three digits signify a release 
     + Four digits are used to signify development version
 * Follow the used coding style and use Rstudio's code styling diagnostics.
 * Remember to do an R CMD check before committing.

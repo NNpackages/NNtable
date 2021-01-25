@@ -47,49 +47,35 @@ get_unlist_names_only <- function(x, current = character(0)) {
 
 #' @importFrom rlang is_empty
 `[.NNTable` <- function(x, i, j) {
-  
+
   if (!missingArg(i))
     x$data <-  dplyr::filter(x$data, !! rlang::enquo(i))
-  
+
   if (!missingArg(j)) {
     x$data <-  dplyr::select(x$data, !! rlang::enquo(j))
-    
-    
+
+
     # After removing a column the NNTable needs to be reset
     columns_list <- rapply(x$columns_attr$columns_list, intersect,
                            y =  colnames(x$data),  how = "replace")
-    
+
     columns_list <- columns_list[!sapply(columns_list, rlang::is_empty)]
-    
-    
+
+
     columns <- get_column_names(columns  = columns_list)
     columns_tree <- get_column_tree(columns  = columns_list)
-    
+
     x$data_str        <- x$data
     x$columns         <- columns
     x$columns_attr    <- list(columns_list = columns_list,
                               columns_tree = columns_tree)
-    
+
     x <- get_columns(x)
   }
-  
+
   return(x)
 }
 
-
-#' Title
-#'
-#' @param x The plot to save as png
-#'
-#' @importFrom grDevices png dev.off
-basePNGplot <- function(x) {
-  filename <- tempfile(fileext = ".png")[1]
-  grDevices::png(filename = filename)
-    x
-  dev.off()
-  system(paste("open", filename))
-  filename
-}
 
 
 get_columns <- function(.NNTable, new_data = NULL) {
@@ -98,14 +84,14 @@ get_columns <- function(.NNTable, new_data = NULL) {
     x <- .NNTable$data
   else
     x <- new_data
-  
+
   columns <- colnames(x)
-  
+
   table_form <- .NNTable$columns
-  
+
   # get the names of the columns not in x
   missing_names <- names(table_form[!table_form %in% columns])
-  
+
   if (length(missing_names)) {
 
     table_list <- lapply(table_form, function(name) if (name %in% columns) {
@@ -123,7 +109,7 @@ get_columns <- function(.NNTable, new_data = NULL) {
       # Only use the column matches corresponding to the longes matches
       if (sum(!is.na(character)) > 1)
         for (i in seq_along(character)[!is.na(character)][-1])
-          if (any(matches[i, 1] <= matches[possible[possible < i], 2] & 
+          if (any(matches[i, 1] <= matches[possible[possible < i], 2] &
                   matches[i, 2] >= matches[possible[possible < i], 1]))
             matches[i, ] <- NA
 
@@ -236,14 +222,14 @@ updatejointFormat <- function(data, format_data, dec, big.mark = "", small.mark 
   # Get the number of characters in front of the .
   x <- unlist(data[, numerics])
   x <- x[!is.na(x)]
-  
+
   if (big.mark != "") {
     num_all <- max(nchar(prettyNum(c(floor(min(x)), max(ceiling(x))), big.mark = big.mark, scientific = FALSE)))
   } else {
     num_all <- max(nchar(prettyNum(c(floor(min(x)), max(ceiling(x))), scientific = FALSE)))
   }
 
-  
+
   # Get the decimals for those missing
   x <- unlist(data[, numerics & !(colnames(data) %in% colnames(format_data))])
   missing_dec <- min(dec, decimalPlaces(x))
@@ -251,8 +237,8 @@ updatejointFormat <- function(data, format_data, dec, big.mark = "", small.mark 
   if (small.mark != "" & missing_dec > 0) {
     missing_dec <- missing_dec + floor((missing_dec - 1) / 5)
   }
-  
-  
+
+
   # Get the decimals for the specified
   spec_fmt <- unique(as.character(unlist(new_format[, setdiff(colnames(new_format), column_match)])))
   spec_fmt_max <- lapply(split_format(spec_fmt), max)
@@ -273,18 +259,18 @@ updatejointFormat <- function(data, format_data, dec, big.mark = "", small.mark 
 
 
 updateUniFormat <- function(data, format_data, dec, big.mark = "", small.mark = "") {
-  
+
   # find the numeric columns
   numerics <- sapply(data, is.numeric)
 
   missing <- setdiff(colnames(data)[numerics], colnames(format_data))
-  
+
   if (length(missing)) {
     mis_form <- as.data.frame(t(structure(rep(paste0("%.", dec, "f"), length(missing)), names = missing)))
-    
+
     if (nrow(format_data) == 1)
       format_data <- dplyr::bind_cols(format_data, mis_form)
-    else 
+    else
       format_data <- dplyr::bind_rows(format_data, mis_form)
   }
 
@@ -301,8 +287,8 @@ updateUniFormat <- function(data, format_data, dec, big.mark = "", small.mark = 
 
   new_format[, column_match] <- data[, column_match]
 
-     
-  
+
+
   if (all(is.na(fmt_order))) {
     filled_format <- as.data.frame(lapply(rbind(old_format, new_format)[,
                       setdiff(colnames(new_format), column_match), drop = FALSE], fillFormat))
@@ -311,17 +297,17 @@ updateUniFormat <- function(data, format_data, dec, big.mark = "", small.mark = 
       filled_format[-seq_len(nrow(old_format)), ]
 
     all.na <- sapply(new_format, function(x)  all(is.na(x)))
-    
+
   } else {
       if (anyNA(format_data[, column_match])) {
         na_fmt <- format_data[is.na(format_data[[column_match]]), ][1, ]
-        
-        new_format[new_format[[column_match]] %in% 
-                     setdiff(new_format[[column_match]], format_data[[column_match]]), 
+
+        new_format[new_format[[column_match]] %in%
+                     setdiff(new_format[[column_match]], format_data[[column_match]]),
                    setdiff(colnames(na_fmt), column_match)] <- na_fmt[, setdiff(colnames(na_fmt), column_match)]
-          
+
       }
-    
+
       all.na <- sapply(new_format, function(x)  all(is.na(x)))
       if (length(all.na))
       new_format[, setdiff(colnames(new_format), c(column_match, names(all.na[all.na])))] <-
@@ -331,14 +317,14 @@ updateUniFormat <- function(data, format_data, dec, big.mark = "", small.mark = 
 
   data_form <- sapply(data[, numerics, drop = FALSE], guessFormat, dec = dec, big.mark = big.mark, small.mark = small.mark)
 
-  in_format <- colnames(new_format)[colnames(new_format) %in% names(numerics)[numerics] & 
+  in_format <- colnames(new_format)[colnames(new_format) %in% names(numerics)[numerics] &
                                       !colnames(new_format) %in% names(all.na[all.na])]
 
   new_format[, in_format] <-
     as_tibble(sapply(in_format, function(name)
       adjustFormat(new_format[, name], data_form[name])))
 
-  
+
   missing <- as.data.frame(t(data_form[setdiff(names(data_form) , colnames(format_data))]))
   cbind(new_format, missing)
 }
@@ -426,105 +412,82 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
   # column names that are not concatinated are found
   first_cols <- sapply(concat$table, function(x) x[1])
   combine_first <- first_cols[names(first_cols) %in% combine]
-  
-  if (is.null(format_data)) {
-
-    # function for creating the format data from scratch
-    create_format_data <- function(x, keep = character(0)) {
-      out_format <- data.frame(matrix(ncol = length(c(unlist(concat$table), keep)),
-                                      nrow = nrow(x)),
-                               stringsAsFactors = FALSE)
-
-      
-      row.names(out_format) <- NULL
-      colnames(out_format) <- c(unlist(concat$table), keep)
-
-      out_format[, c(unlist(concat$table), keep) ] <- x[, c(unlist(concat$table), keep), with = FALSE]
-
-      joint <- combine_first[combine_first %in% names(numerics_table)[numerics_table]]
-      if (length(joint))
-        out_format[, joint] <- guessFormat(unlist(x[, joint, with = FALSE]), dec = dec, big.mark = big.mark, small.mark = small.mark)
-
-      non_joint <- setdiff(names(numerics_table)[numerics_table], joint)
-      
-      if (length(non_joint)) {
-        formats <- sapply(x[, non_joint, with = FALSE, drop = FALSE], function(x)
-          guessFormat(x, dec = min(dec, decimalPlaces(x)), big.mark = big.mark, small.mark = small.mark))
-        
-        out_format[, non_joint] <- as.data.frame(t(formats),
-                                                 stringsAsFactors = FALSE)
-      }
-      
-      return(out_format)
-    }
 
 
-    # add an ordering to ensure the same order is supplied after grouping
-    x$keep_order_xy <- seq_len(nrow(x))
+  create_format_data <- function(x, keep = character(0), cols = unlist(concat$table)) {
 
-    if (!is.null(group_by)) {
-      group <- apply(x[, group_by, drop = FALSE, with = FALSE], 1, function(x) paste(x, collapse = ""))
-      data_split <- lapply(split(x = seq_len(nrow(x)), f = group, drop = FALSE), function(line) x[line, ])
-
-      out_format <- data.table::rbindlist(lapply(data_split, create_format_data, keep = "keep_order_xy"))
-    } else {
-      out_format <- data.table::as.data.table(create_format_data(x, keep = "keep_order_xy"))
-    }
-    data.table::setorder(out_format, "keep_order_xy")
-    out_format <- out_format[, keep_order_xy := NULL]
-  } else {
-
-    create_format_data <- function(x, keep = character(0)) {
-      out_format <- data.frame(matrix(ncol = length(c(unlist(concat$table), keep)),
-                                      nrow = nrow(x)),
-                               stringsAsFactors = FALSE)
-
-      row.names(out_format) <- NULL
-      colnames(out_format) <- c(unlist(concat$table), keep)
-
-      out_format[, c(unlist(concat$table), keep) ] <- x[, c(unlist(concat$table), keep), with = FALSE]
+    out_format <- data.frame(matrix(ncol = length(c(cols, keep)),
+                                    nrow = nrow(x)),
+                             stringsAsFactors = FALSE)
 
 
-      # find the column matches as the non numeric columns in both datasets
+    row.names(out_format) <- NULL
+    colnames(out_format) <- c(cols, keep)
+
+    out_format[, c(cols, keep) ] <- x[, c(cols, keep), with = FALSE]
+
+    # find the column matches as the non numeric columns in both datasets
+    if (!is.null(format_data)) {
       column_match <- intersect(colnames(x)[!numerics], colnames(format_data))
 
-      # column names that are not concatinated are found
-      first_cols <- sapply(concat$table, function(x) x[1])
-      combine_first <- first_cols[names(first_cols) %in% combine]
+      if (length(column_match)) {
+        any_check <-
+          any(unlist(as.data.frame(x)[, column_match]) %in%
+                unlist(as.data.frame(format_data)[, column_match]))
+      } else {
+        any_check <- TRUE
+      }
+    }
 
-      joint <-  combine_first[combine_first %in% names(numerics_table)[numerics_table]]
-      if (length(joint))
-        out_format[, joint] <- 
-        updatejointFormat(data = as.data.frame(x)[, c(column_match, joint)], 
-                          format_data, dec = dec, big.mark = big.mark, small.mark = small.mark)[, joint]
+    joint <- combine_first[combine_first %in% names(numerics_table)[numerics_table]]
+    if (length(joint)) {
 
+      if (!is.null(format_data) && any_check) {
+        out_format[, joint] <-
+          updatejointFormat(data = as.data.frame(x)[, c(column_match, joint)],
+                            format_data, dec = dec, big.mark = big.mark, small.mark = small.mark)[, joint]
 
-      non_joint <- setdiff(names(numerics_table)[numerics_table], joint)
-      if (length(non_joint)) {
-        out_temp <- 
+      } else {
+        out_format[, joint] <-
+          guessFormat(unlist(x[, joint, with = FALSE]), dec = dec, big.mark = big.mark, small.mark = small.mark)
+      }
+    }
+
+    # find the non
+    non_joint <- setdiff(names(numerics_table)[numerics_table], joint)
+
+    if (length(non_joint)) {
+
+      if (!is.null(format_data) && any_check) {
+        out_temp <-
           updateUniFormat(data = as.data.frame(x)[, c(column_match, non_joint)], format_data, dec = dec,
                           big.mark = big.mark, small.mark = small.mark)#[, non_joint]
         out_format[, colnames(out_temp)] <- out_temp
-        
+      } else {
+        formats <- sapply(x[, non_joint, with = FALSE, drop = FALSE], function(x)
+          guessFormat(x, dec = min(dec, decimalPlaces(x)), big.mark = big.mark, small.mark = small.mark))
+
+        out_format[, non_joint] <- as.data.frame(t(formats),
+                                                 stringsAsFactors = FALSE)
       }
-      return(out_format)
     }
 
-    # add an ordering to ensure the same order is supplied after grouping
-    x$keep_order_xy <- seq_len(nrow(x))
-
-    if (!is.null(group_by)) {
-      group <- apply(x[, group_by, with = FALSE, drop = FALSE], 1, function(x) paste(x, collapse = ""))
-      data_split <- lapply(split(x = seq_len(nrow(x)), f = group, drop = FALSE), function(line) x[line, ])
-
-      out_format <- data.table::rbindlist(lapply(data_split, create_format_data, keep = "keep_order_xy"))
-    } else {
-      out_format <- data.table::as.data.table(create_format_data(x, keep = "keep_order_xy"))
-    }
-    data.table::setorder(out_format, "keep_order_xy")
-    out_format <- out_format[, keep_order_xy := NULL]
-
+    return(out_format)
   }
+
+  # add an ordering to ensure the same order is supplied after grouping
+  x$keep_order_xy <- seq_len(nrow(x))
+
+  if (!is.null(group_by)) {
+    group <- apply(x[, group_by, drop = FALSE, with = FALSE], 1, function(x) paste(x, collapse = ""))
+    data_split <- lapply(split(x = seq_len(nrow(x)), f = group, drop = FALSE), function(line) x[line, ])
+
+    out_format <- data.table::rbindlist(lapply(data_split, create_format_data, keep = "keep_order_xy"))
+  } else {
+    out_format <- data.table::as.data.table(create_format_data(x, keep = "keep_order_xy"))
+  }
+  data.table::setorder(out_format, "keep_order_xy")
+  out_format <- out_format[, keep_order_xy := NULL]
 
   .NNTable$NNFormat <- list(format = as.data.frame(out_format), format_data = format_data,
                            big.mark = big.mark, small.mark = big.mark, group_by = group_by)
@@ -541,9 +504,9 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
 #' @param keep.empty should completely empty comlumns be left blank
 #'
 #' @return The \code{character} \code{text} with added spaced in front
-alignCenter <- function(text, width = max(nchar(text)), 
-                        type = c("non-trimmed", "trimmed"), 
-                        fill = TRUE, 
+alignCenter <- function(text, width = max(nchar(text)),
+                        type = c("non-trimmed", "trimmed"),
+                        fill = TRUE,
                         keep.empty = TRUE) {
   textWidth <- nchar(text)
   spare <- width - textWidth
@@ -551,7 +514,7 @@ alignCenter <- function(text, width = max(nchar(text)),
 
   spaces    <- sapply(nspaces, function(n) paste(rep(" ", n), collapse = ""))
   if (fill) {
-    
+
   spaces.trail <-
     sapply(pmax(width - textWidth - nspaces, 0), function(n) paste(rep(" ", n), collapse = ""))
   } else {
@@ -563,7 +526,7 @@ alignCenter <- function(text, width = max(nchar(text)),
   if (keep.empty) {
     c.text[textWidth == 0] <- ""
   }
-  
+
   return(c.text)
 }
 
@@ -584,7 +547,7 @@ alignRight <- function(text, width = max(nchar(text)), type = c("non-trimmed", "
   if (keep.empty) {
     l.text[textWidth == 0] <- ""
   }
-  
+
   return(l.text)
 }
 
@@ -597,9 +560,9 @@ alignRight <- function(text, width = max(nchar(text)), type = c("non-trimmed", "
 #' @param keep.empty should completely empty comlumns be left blank
 #'
 #' @return The \code{character} \code{text} wtihout leading and trailing blanks
-alignLeft <- function(text, width = max(nchar(text)), 
-                      type = c("non-trimmed", "trimmed"), 
-                      sep = " ", 
+alignLeft <- function(text, width = max(nchar(text)),
+                      type = c("non-trimmed", "trimmed"),
+                      sep = " ",
                       keep.empty = TRUE) {
   textWidth <- nchar(text, keepNA = FALSE)
   nspaces   <- floor((width - textWidth))
@@ -609,7 +572,7 @@ alignLeft <- function(text, width = max(nchar(text)),
   if (keep.empty) {
     r.text[textWidth == 0] <- ""
   }
-  
+
   return(r.text)
 }
 
@@ -656,7 +619,7 @@ align <- function(x, alignment = c("left", "center", "right"),
 #'
 #' @return the horizontal line
 #' @importFrom stringi stri_unescape_unicode
-hline <- function(symbol = "horizontal", times = 141) { 
+hline <- function(symbol = "horizontal", times = 141) {
   if (symbol == "horizontal")
     symbol <- "\u2014"
   paste(rep(symbol, times), collapse = "")
@@ -666,7 +629,7 @@ hline <- function(symbol = "horizontal", times = 141) {
 decimalPlaces <- function(x) {
   if (is.null(x)) return(0)
   x <- x[!is.na(x)]
-  if (length(x) == 0) return(0) 
+  if (length(x) == 0) return(0)
   if (max(abs(x - round(x))) > .Machine$double.eps^0.5) {
     decif <- function(x) {
       ifelse(length(x) == 2, nchar(x[[2]]), 0)
@@ -680,13 +643,13 @@ decimalPlaces <- function(x) {
 guessFormat <- function(x, dec = min(3, max_dec), max_dec = decimalPlaces(x), big.mark = "", small.mark = "") {
   if (is.numeric(x)) {
     if (all(is.na(x))) return(NA)
-    
+
     x <- x[!is.na(x)]
-    
+
     if (small.mark != "" & dec > 0) {
       dec <- dec + floor((dec - 1) / 5)
     }
-    
+
     if (big.mark != "") {
       num <- max(nchar(prettyNum(c(floor(min(x)), max(ceiling(x))), big.mark = big.mark, scientific = FALSE))) + dec
     } else {
@@ -694,8 +657,8 @@ guessFormat <- function(x, dec = min(3, max_dec), max_dec = decimalPlaces(x), bi
     }
 
     if (dec > 0)
-      num <- num + 1 
-    
+      num <- num + 1
+
     return(paste0("%", num, ".", dec, "f"))
   } else {
     return("string")
@@ -737,7 +700,7 @@ Format.default <- function(x, ...) as.character(x)
 Format.numeric <- function(x, ..., format = guessFormat(x, dec = min(3, decimalPlaces(x)))) {
   y <- x
   y[!is.na(x)] <- sprintf(format[!is.na(x)], x[!is.na(x)])
-  
+
   y[is.na(y) | grepl("NA", y) ] <- ""
   y
 }

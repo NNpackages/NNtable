@@ -19,9 +19,9 @@ apply_createTree <- function(.NNTable) {
 
   if (!is.null(.NNTable$columns_to_wide$columns)) {
     wide_cols <- get_unlist_vars(.NNTable$columns_to_wide$columns)
-    
+
     int <- intersect(wide_cols, names(.NNTable$columns_attr$columns_tree))
-    
+
     if (length(wide_cols) == length(int)) {
       wide_cols <- unlist(.NNTable$columns_attr$columns_tree[wide_cols])
     } else {
@@ -31,7 +31,7 @@ apply_createTree <- function(.NNTable) {
         if (add %in% names(trans)) {
           v2 <- c(v2, unlist(.NNTable$columns_attr$columns_tree[add]))
         } else {
-          v2 <- c(v2, add)  
+          v2 <- c(v2, add)
         }
       }
       wide_cols <- v2
@@ -40,12 +40,12 @@ apply_createTree <- function(.NNTable) {
   } else{
     wide_cols <- character(0)
   }
-  
+
   unlist(.NNTable$columns_attr$columns_tree[wide_cols])
 
   tree_base_1 <- c(setdiff(names(table_cols), long_cols),
                    names(.NNTable$columns_to_long$columns))
-  tree_base_2 <- c(setdiff(tree_base_1, wide_cols), 
+  tree_base_2 <- c(setdiff(tree_base_1, wide_cols),
                    names(.NNTable$columns_to_wide$columns))
 
 
@@ -95,22 +95,22 @@ apply_createTree <- function(.NNTable) {
 }
 
 apply_create_format_data <- function(.NNTable) {
-  
+
   if (!"NNFormat" %in% names(.NNTable)) {
-    
+
     .NNTable <- Format(.NNTable)
-    
+
   } else {
 
-    .NNTable <- Format(.NNTable, 
-                       dec         = .NNTable$NNFormat$dec, 
+    .NNTable <- Format(.NNTable,
+                       dec         = .NNTable$NNFormat$dec,
                        format_data = .NNTable$NNFormat$format_data,
-                       big.mark    = .NNTable$NNFormat$big.mark, 
-                       small.mark  = .NNTable$NNFormat$small.mark, 
+                       big.mark    = .NNTable$NNFormat$big.mark,
+                       small.mark  = .NNTable$NNFormat$small.mark,
                        group_by    = .NNTable$NNFormat$group_by)
-    
+
   }
-  
+
   return(.NNTable)
 }
 
@@ -183,46 +183,51 @@ apply_filling <- function(.NNTable) {
 
   # beacuse we might have nested columns we make sure that original col names
   # are matchd to the new col names
-  missing_names <- setdiff(names(filling$columns), 
+  missing_names <- setdiff(names(filling$columns),
                            names(.NNTable$columns))
-  if (length(missing_names)) 
-    names(filling$columns)[match(missing_names, names(filling$columns))] <- 
+  if (length(missing_names))
+    names(filling$columns)[match(missing_names, names(filling$columns))] <-
       names(.NNTable$columns)[match(missing_names, .NNTable$columns)]
-  
+
   # Find columns that are not nested
   left_over <- unlist(sapply(names(.NNTable$tree$tree), function(name) {
       x <- .NNTable$tree$tree[[name]]
-      if (is.atomic(x) && length(x) == 1 && name == x) 
+      if (is.atomic(x) && length(x) == 1 && name == x)
         return(x)
     }))
-  
+
   left_over_columns <- .NNTable$columns[names(left_over)]
   #left_over_columns <- .NNTable$columns[left_over]
-  
+
   classes <- sapply(data_str, class)
 
   by_temp <- names(classes)[classes %in% c("factor", "character")]
-  
+
   sort_cols <- .NNTable$order_columns$sort_columns[
     .NNTable$order_columns$sort_columns %in% colnames(data_str)]
   stable <- unique(c(intersect(left_over_columns, by_temp), sort_cols))
-  
+
+  # The total column is added to make sure that this group will not be formatted
+  # completely alone
+  if ("NNTable_mj_order" %in% colnames(data_str))
+    stable <- c(stable, "NNTable_mj_order")
+
   if (is.null(filling$by)) {
 
     tree_columns <- sapply(.NNTable$tree$tree, get_unlist_vars)
 
-    grow_tree <- function(tree = tree_columns, 
+    grow_tree <- function(tree = tree_columns,
                           column_tree = .NNTable$columns_attr$columns_tree) {
-      
+
       for (name in names(tree)) {
         tree[[name]] <- structure(unlist(column_tree[tree[[name]]]), names = NULL)
       }
       tree
     }
-    
-    
+
+
     tree_columns <- grow_tree()
-    
+
 
     where <- sapply(tree_columns, function(x) any(names(filling$columns) %in% x))
     if (names(where[where]) %in% names(.NNTable$columns_to_wide$columns)) {
@@ -244,31 +249,31 @@ apply_filling <- function(.NNTable) {
   # to avoid getting many null columns the stable vars are pasted together and
   # replaced in the by
   stable_in_by <- intersect(stable, by)
-  
+
   data_str <- data.table::as.data.table(data_str)
-  
+
   if (length(stable_in_by)) {
-    
-    
+
+
     to_char <- intersect(stable_in_by,
                         colnames(.NNTable$data_str)[sapply(.NNTable$data_str, is.character)])
-    
+
     if (length(to_char))
-      data_str[, (to_char) := lapply(.SD, 
+      data_str[, (to_char) := lapply(.SD,
               function(x) {x[is.na(x)] <- "NA_replace_me"; x}), .SDcols = to_char]
 
     to_factor <- intersect(stable_in_by,
                           colnames(.NNTable$data_str)[sapply(.NNTable$data_str, is.factor)])
-    
+
     if (length(to_factor))
-      data_str[, (to_factor) := lapply(.SD, 
+      data_str[, (to_factor) := lapply(.SD,
                function(x) {levels(x) <- c(levels(x), "NA_replace_me"); x[is.na(x)] <- "NA_replace_me"; x}), .SDcols = to_factor]
-    
+
     data_str$stable_filling <-
       glue::glue_data(data_str, paste0("{", paste(stable_in_by, collapse = "}__#_#_#__{"), "}"))
 
     by <- c(setdiff(by, stable), "stable_filling")
-    
+
   }
 
 
@@ -280,9 +285,9 @@ apply_filling <- function(.NNTable) {
     res[]
   }
 
-  
+
   names(filling$columns) <- .NNTable$columns[names(filling$columns)]
-  
+
   if (!all(names(filling$columns) %in% colnames(data_str))) {
     rest <- setdiff(colnames(data_str),  c(.NNTable$columns, "stable_filling"))
     rest <- rest[order(nchar(rest), decreasing = TRUE)]
@@ -300,11 +305,11 @@ apply_filling <- function(.NNTable) {
     if (length(still_missing))
       warning(paste("I could not find column(s)", paste(still_missing, collapse = ", "), "when adding Filling"))
   }
-  
-  
+
+
   data_str <- completeDT(DT = data_str, cols =  by, defs = filling$columns[names(filling$columns) %in% colnames(data_str)])
 
-  
+
   if (!is.null(.NNTable$order_columns$sort_columns) &
       any(.NNTable$order_columns$sort_columns %in% colnames(data_str) &
           !.NNTable$order_columns$sort_columns %in% left_over_columns)) {
@@ -325,38 +330,38 @@ apply_filling <- function(.NNTable) {
                          col = .data$stable_filling, sep = "__#_#_#__",
                          remove = FALSE, fill = "right",
                     into = stable_in_by)
-   
+
     data_str[, c("stable_filling", stable_in_by) := a]
 
     data_str <- data_str[, "stable_filling" := NULL]
-    
+
     # replace the inserted NAs
     if (length(to_char))
-      data_str[, (to_char) := lapply(.SD, 
+      data_str[, (to_char) := lapply(.SD,
                function(x) {x[x == "NA_replace_me"] <- NA; x}), .SDcols = to_char]
-    
-    
+
+
     if (length(to_factor))
-      data_str[, (to_factor) := lapply(.SD, 
+      data_str[, (to_factor) := lapply(.SD,
                function(x) {x[x == "NA_replace_me"] <- NA; x}), .SDcols = to_factor]
-    
+
     to_num <- intersect(stable_in_by,
       colnames(.NNTable$data_str)[sapply(.NNTable$data_str, is.numeric)])
 
     if (length(to_num))
       data_str <-
         data_str[,  (to_num) := lapply(.SD, as.numeric), .SDcols = to_num]
-    
-  } 
+
+  }
 
   # convert factors back into factors in order to preserve ordering
-  classes_orig <- sapply(.NNTable$data_str[stable_in_by], class) 
+  classes_orig <- sapply(.NNTable$data_str[stable_in_by], class)
   if (any(classes_orig == "factor"))
     for (fac in names(classes_orig[classes_orig == "factor"]))
       data_str[, fac] <- factor(data_str[[fac]], levels(.NNTable$data_str[[fac]]))
-  
-  
-  
+
+
+
   .NNTable$data_str <- as.data.frame(data_str)
   return(.NNTable)
 }
@@ -386,12 +391,12 @@ apply_tranToLong <- function(.NNTable) {
   out <- data.table::melt(data, measure.vars  = columns,
                           value.name = value, variable.name = "Group")
 
-  
+
   # if remove blanks is set to TRUE blank rows are removed
   if (.NNTable$columns_to_long$remove_blank)
     out <- out[out[[value]] != "", ]
 
-  
+
   # if colums vector is named, the names are used for the group names
   group_names <- initName(columns)
   if (!is.null(names(group_names))) {
@@ -429,16 +434,16 @@ apply_tranToWide <- function(.NNTable) {
 
   # Get the call
   columns_to_wide_1 <- .NNTable$columns_to_wide$columns
-  
-  
+
+
   translate <- function(x) {
-    
+
     out <- x
     for (i in seq_along(x)) {
       if (is.recursive(x[[i]])) {
         out[[i]] <- translate(x[[i]])
       } else {
-        
+
         miss <- setdiff(x[[i]], colnames(data))
 
         if (length(miss)) {
@@ -451,13 +456,13 @@ apply_tranToWide <- function(.NNTable) {
         }
       }
     }
-    
+
     out
-  }  
-  
+  }
+
   columns_to_wide <- translate(x = columns_to_wide_1)
-  
- 
+
+
   data$totally_stable_column <- "TESTER"
 
   getListLevel <- function(x, level = 2) {
@@ -466,11 +471,11 @@ apply_tranToWide <- function(.NNTable) {
     return(x)
   }
 
-  varnames <- #gsub("#", "NNable_square", 
+  varnames <- #gsub("#", "NNable_square",
     initName(columns_to_wide)#)
-  
+
   data_out <- data
-  
+
   if (.NNTable$columns_to_wide$add_cat_space) {
     data_out$space.column.1 <- ""
     data_out$space.column.2 <- ""
@@ -488,7 +493,7 @@ apply_tranToWide <- function(.NNTable) {
     #columns_to_wide.i <- gsub("#", "NNable_square", columns_to_wide.i)
     stable.vars <- setdiff(colnames(data_out), c(names(columns_to_wide.i), varnames))
 
-    
+
     comb <- data.table::dcast(data_out,
                               formula(paste(paste0("`", stable.vars, "`", collapse = " + " ), " ~ ",
                                             paste0("`", names(columns_to_wide.i)[1], "`"), collapse = "")),
@@ -500,78 +505,78 @@ apply_tranToWide <- function(.NNTable) {
       f <- levels(data[[names(columns_to_wide.i)[1]]])
       f <- f[f %in% as.character(data[[names(columns_to_wide.i)[1]]])]
     } else {
-      f <- sort(unique(data[[names(columns_to_wide.i)[1]]]))  
+      f <- sort(unique(data[[names(columns_to_wide.i)[1]]]))
     }
-    
+
     varnames <- paste(rep(varnames, length(f)  ), rep(f, each = length(varnames)), sep = "__#__")
 
     cols <- c(stable.vars, varnames)
     data_out <- comb[, cols,  with = FALSE]
   }
 
- 
+
   data_out <- data_out[, !"totally_stable_column"]
 
   # find space columns
   if (.NNTable$columns_to_wide$.remove_empty_columns) {
     spacers.l <- grepl("^space.column.", cols)
-    
+
     acc_cols <- setdiff(cols[!spacers.l], stable.vars)
-    
+
     all_empty <-
       apply(data_out[, acc_cols, with = FALSE] == "", 2, all)
-    
+
     if (any(all_empty)) {
       acc_empty_names <- names(all_empty)[all_empty]
-      
+
       if (.NNTable$columns_to_wide$.remove_empty_level == 1) {
-        which <- match(acc_empty_names, cols) 
+        which <- match(acc_empty_names, cols)
         data_out[, (cols[unique(c(which - 1, which, which + 1))]) := NULL]
       } else {
         remove_cols <- character(0)
-        
+
         empty_col_split <- strsplit(acc_empty_names, "__#__")
-        
+
         max_depth <- max(sapply(empty_col_split, length))
-      
-        if (max_depth >= .NNTable$columns_to_wide$.remove_empty_level) { 
+
+        if (max_depth >= .NNTable$columns_to_wide$.remove_empty_level) {
           for (i in max_depth:.NNTable$columns_to_wide$.remove_empty_level) {
             uniq_level <- unique(sapply(empty_col_split, function(x) {
               paste0(x[min(i, length(x)):length(x)], collapse = "__#__")}))
-            
+
             for (level in uniq_level) {
-              
+
               cols_2 <- acc_cols[stringr::str_detect(acc_cols, stringr::fixed(paste0("__#__", level)))]
-            
-                 
+
+
               if (length(cols_2) > 0 && all(cols_2 %in% acc_empty_names)) {
                 remove_cols <- c(remove_cols, cols_2)
               }
             }
           }
-          
+
           remove_cols2 <- unique(remove_cols)
-          
-          which <- match(remove_cols2, cols) 
+
+          which <- match(remove_cols2, cols)
           data_out[, (cols[unique(c(which - 1, which, which + 1))]) := NULL]
         }
       }
-        
-      
+
+
     }
   }
-  
+
   # Remove unwanted spacers
   spacers   <- grep("^space.column.", colnames(data_out))
-  
+
   dup.spacers <- spacers[diff(spacers) == 1]
 
   if (max(spacers) == ncol(data_out))
     dup.spacers <- c(dup.spacers, ncol(data_out))
 
-  if (min(spacers) == 1) 
+  if (min(spacers) == 1)
     dup.spacers <- c(1, dup.spacers)
-  
+
   .NNTable$data_str <- as.data.frame(data_out[, (dup.spacers) := NULL])
 
 
@@ -583,67 +588,67 @@ add_order_val <- function(x, ...) {
 }
 
 add_order_val.numeric <- function(x, ..., group_var = FALSE, descending = FALSE) {
-    
+
   if (!length(x)) {
-   return(x) 
+   return(x)
   }
-  
+
   if (group_var) {
     x_u <- unique(x)
-    
+
     if (length(x_u) > 1) {
        diff <- min(diff(sort(unique(x)))) / 2
     } else {
       diff <- 0
     }
-    
+
     if (descending) {
       return(max(x) + diff)
     } else {
       return(min(x) - diff)
     }
-    
-    
+
+
   } else {
     if (descending) {
       return(max(x))
     } else {
       return(min(x))
     }
-  } 
+  }
 }
 
 add_order_val.factor  <- function(x, ..., group_var = FALSE, descending = FALSE) {
-  
+
   if (!length(x)) {
-    return(x) 
+    return(x)
   }
-  
+
   if (descending)
     return(ifelse(group_var, levels(x)[length(levels(x))], levels(x)[levels(x) %in% x]))
-  
+
   return(ifelse(group_var, (setdiff(levels(x), "NNTable_Empty"))[1], levels(x)[levels(x) %in% x]))
 }
 add_order_val.character <- function(x, ..., group_var = FALSE, descending = FALSE) {
-  
+
   if (!length(x)) {
-    return(x) 
+    return(x)
   }
-  
+
   if (descending)
     return(ifelse(group_var, paste0(max(x), "0"), max(x)))
-  
+
   ifelse(group_var, paste0("0", min(x)), min(x))
 }
 add_order_val.defeault <- function(x, ..., group_var = FALSE, descending = FALSE) {
-  
+
   if (!length(x)) {
-    return(x) 
+    return(x)
   }
-  
+
   if (descending)
     return(max(x))
-  
+
   return(min(x))
 }
 
@@ -658,51 +663,51 @@ apply_groupColumns <- function(.NNTable) {
 
   # Get the data
   data_str <- data.table::as.data.table(.NNTable$data_str)
-  
+
   # Get grouped columns
   group_cols <- .NNTable$grouped_columns$columns
   invisible <- .NNTable$grouped_columns$invisible
   current_colorder <- setdiff(colnames(data_str), group_cols)
-  
+
   # Added blanks ----
   add_blank_row <- .NNTable$grouped_columns$add_blank_row
-  
+
 
   # add_header_row ----
   add_header_row <- group_cols
-  
-  if (is.logical(.NNTable$grouped_columns$add_header_rows_invisible) && 
+
+  if (is.logical(.NNTable$grouped_columns$add_header_rows_invisible) &&
       !.NNTable$grouped_columns$add_header_rows_invisible) {
-    
+
       add_header_row <- setdiff(add_header_row, invisible)
   }
-  
+
   if (is.character(.NNTable$grouped_columns$add_header_rows_invisible)) {
-    add_header_row <- 
-      setdiff(add_header_row, 
+    add_header_row <-
+      setdiff(add_header_row,
               setdiff(invisible, .NNTable$grouped_columns$add_header_rows_invisible))
   }
-    
+
   #---
 
-  
+
   # Get the class of each column in data_str
   classes <- sapply(data_str[, group_cols, with = FALSE], class)
-  
+
   # test for adding sorting to characters, The characters are made as factors
   # because of sorting issues
   for (char in names(classes[classes == "character"])) {
-    data_str <- data_str[data_str[[char]] == "", (char) := "NNTable_Empty"] 
+    data_str <- data_str[data_str[[char]] == "", (char) := "NNTable_Empty"]
     data_str[, char] <- as.factor(data_str[[char]])
     classes[char] <-  "factor"
   }
-  
-  
+
+
   # Add the empty level to each
   for (fac in names(classes[classes == "factor"]))
     data_str[, fac] <- factor(data_str[[fac]], levels = unique(c("NNTable_Empty", "NNTable_order", " ", levels(data_str[[fac]]))))
-  
-  
+
+
   # In case of truncation the columns are added a _trunc , which needs to be accounted for
   if (!is.null(.NNTable$truncation) | !is.null(.NNTable$cell_split)) {
     names(group_cols) <- paste0(group_cols, c("", "_trunc")[(!group_cols %in% invisible) + 1])
@@ -713,49 +718,49 @@ apply_groupColumns <- function(.NNTable) {
     data_str <- cbind(data_str, data_str_add)
     names(group_cols) <- paste0(group_cols, "_trunc")
   }
-  
-  
+
+
   # Replace NA with empty
   na_cols <- unique(c(group_cols, names(group_cols)))
   data_str[, (na_cols) := lapply(.SD, function(x) {x[is.na(x)] <- " "; return(x)}), .SDcols = na_cols]
-  
+
 
   # Initiate cols -----------------------------------------------
-  
+
   # initiate grouped column
   NNTable_grouped_name <- NULL
   data_str$NNTable_grouped_name <- ""
-  
+
   # create a master group to ensure we have something left for sorting
   data_str$NNTable_master_group <- data_str[[group_cols[1]]]
   data_str$NNTable_added_group <- FALSE
   data_str$NNTable_group_level <- length(group_cols)
   data_str$NNTable_added_blank = ""
-  
+
   # Add the master col to the grouped cols
   group_cols <- c(structure("NNTable_master_group", names = "NNTable_master_group"), group_cols)
-  
+
   # The groups are added in the reverse order
   seq <- rev(seq_along(group_cols)[-1])
-  
+
   for (i in seq) {
-    
-    # Find missing category rows 
-    # rows for the parent group (i-1) where we do not have an empty level on current (i) 
+
+    # Find missing category rows
+    # rows for the parent group (i-1) where we do not have an empty level on current (i)
     missing_groups <- !data_str[, get(group_cols[i - 1])] %in%
          data_str[data_str[[group_cols[i]]] %in% c("", "NNTable_Empty"), get(group_cols[i - 1])]
-    
-    # columns which are not empty needs to assign their value to the grouped column  
+
+    # columns which are not empty needs to assign their value to the grouped column
     missing3 <- !(data_str[, get(group_cols[i])] %in% c("", "NNTable_Empty") & data_str[, get("NNTable_added_blank")]  != "Y")
-    
+
     # Create the group name for those not curently filled in on this or previous runs
     NNTable_current_fill <- missing3 & data_str$NNTable_grouped_name == "" & data_str$NNTable_group_level >= i - 1
-    
+
     if (any(NNTable_current_fill)) {
-      # calculate number of levels for indention 
+      # calculate number of levels for indention
       indents <- sum(!group_cols[seq_len(i)] %in% invisible)
-      
-      if (!group_cols[i] %in% invisible) 
+
+      if (!group_cols[i] %in% invisible)
         data_str[NNTable_current_fill,  NNTable_grouped_name :=
           paste0(paste(rep(" ", 2*(indents - 2)), collapse = ""), # 2 because of the master level and the present level
                  data_str[NNTable_current_fill, get(names(group_cols[i]))])]
@@ -765,31 +770,31 @@ apply_groupColumns <- function(.NNTable) {
     if (!group_cols[i] %in% invisible) {
       check_prev_cols <- setdiff(group_cols[seq_len(i - 1)], invisible)
       indents <- sum(!group_cols[seq_len(i)] %in% invisible)
-      
-      which_to_correct <- 
-        tidyr::unite(data_str, "new_col", !!!rlang::syms(check_prev_cols))$new_col %in% 
+
+      which_to_correct <-
+        tidyr::unite(data_str, "new_col", !!!rlang::syms(check_prev_cols))$new_col %in%
         c(paste(rep(" ", indents - 1), collapse = "_"), paste(rep("NNTable_Empty", indents - 1), collapse = "_")) & missing_groups
-  
-      data_str[which_to_correct, NNTable_grouped_name := 
-                 gsub(paste0("^", paste(rep(" ", 2*(indents - 2)), collapse = "")), "", 
+
+      data_str[which_to_correct, NNTable_grouped_name :=
+                 gsub(paste0("^", paste(rep(" ", 2*(indents - 2)), collapse = "")), "",
                       data_str$NNTable_grouped_name[which_to_correct])]
     }
-    
+
     # get the order variables
     order_vars <- setdiff(unique(setdiff(.NNTable$order_columns$sort_columns, NULL)), group_cols[seq_len(i - 1)])
-    
+
     # add order values to order columns
     by_vars <- c(unique(c(group_cols[seq_len(i - 1)], names(group_cols[seq_len(i - 1)]))))
 
-  
+
    # Add the header rows ----
-    
-    all_empty <- 
-      apply(data_str[, lapply(.SD, function(x) x == "NNTable_Empty"), .SDcols = by_vars], 1, all) 
-   
+
+    all_empty <-
+      apply(data_str[, lapply(.SD, function(x) x == "NNTable_Empty"), .SDcols = by_vars], 1, all)
+
     if (!group_cols[i] %in% add_header_row)
-      all_empty[] <- TRUE 
-      
+      all_empty[] <- TRUE
+
     #Create missing data frame with blanks except for variables used for sorting
     # for those we add 0 in front so that sorting is correct
     mis_df1 <- data_str[missing_groups & missing3 & !all_empty, lapply(.SD, add_order_val),
@@ -817,7 +822,7 @@ apply_groupColumns <- function(.NNTable) {
     mis_df_group$NNTable_added_blank = ""
     mis_df_group$NNTable_added_group <- TRUE
     mis_df_group$NNTable_group_level <- i - 1
-    
+
     #mis_df_group$NNTable_added_group <- FALSE
     # add blank intersection columns between categories
     if (group_cols[i] %in% names(add_blank_row))  {
@@ -832,7 +837,7 @@ apply_groupColumns <- function(.NNTable) {
       } else {
         req <- rep(TRUE, length(missing_groups))
       }
-      
+
       mis_df3 <- data_str[req & !all_empty & data_str[, get(group_cols[i])] != "NNTable_Empty", lapply(.SD, add_order_val),
                      by = by_vars2,
                      .SDcols = setdiff(order_vars, c(group_cols))]
@@ -867,10 +872,10 @@ apply_groupColumns <- function(.NNTable) {
     data_str$NNTable_added_group <- as.logical(data_str$NNTable_added_group)
   }
 
-  
+
   # correct the group column indicator
   data_str$NNTable_added_group[data_str$NNTable_grouped_name == ""] <- FALSE
-  
+
   # Delete rows where all actual columns are blank and added for additional columns
   # Currently also deletes splits on other group vars
   if (!is.null(.NNTable$truncation) | !is.null(.NNTable$cell_split)) {
@@ -882,7 +887,7 @@ apply_groupColumns <- function(.NNTable) {
       apply(data_str[, mget(cols), drop = FALSE], 1, function(x) all(x == "Inserted Blank" | x == ""))
 
     data_str <- data_str[!delete, ]
-    
+
     data_str <- data_str[, (split_cols2) := lapply(.SD, function(x) ifelse(x == "Inserted Blank", "", x)), .SDcols = split_cols2]
   }
 
@@ -893,7 +898,7 @@ apply_groupColumns <- function(.NNTable) {
                          names(group_cols[group_cols != "NNTable_master_group"])))
   data_str <- data.table::setcolorder(data_str, c("NNTable_grouped_name",  setdiff(current_colorder, added_vars), added_vars, "NNTable_added_group", "NNTable_group_level"))
 
-  
+
   # Return variables to characters
   .NNTable$data_str <- as.data.frame(data_str)
 
@@ -929,46 +934,46 @@ apply_format_concat <- function(.NNTable) {
   # find the numeric columns
   numerics <- sapply(.NNTable$data_str, is.numeric)
   numerics_table <- numerics[names(numerics) %in% unlist(.NNTable$concat$table)]
-  
+
   characters <-  sapply(.NNTable$data_str, is.character)
   characters_table <- characters[names(characters) %in% unlist(.NNTable$concat$table)]
-  
+
   factors <-  sapply(.NNTable$data_str, is.factor)
   factors_table <- factors[names(factors) %in% unlist(.NNTable$concat$table)]
-  
-  
+
+
   if (any(!(numerics | characters | factors))) {
     others <- !(numerics | characters | factors)
     .cols <- names(others)[others]
     data_str[, (.cols) := lapply(.SD, as.character), .SDcols =  .cols]
-               
+
     characters <-  sapply(data_str, is.character)
     characters_table <- characters[names(characters) %in% unlist(.NNTable$concat$table)]
   }
-  
+
 
   .cols <- names(numerics_table)[numerics_table]
   if (length(.cols))
     data_str[, (.cols) := lapply(.cols,
-              function(name) alignLeft(Format(data_str[[name]], 
+              function(name) alignLeft(Format(data_str[[name]],
                 format = as.character(.NNTable$NNFormat$format[, name]))))]
 
-  
+
   .char_cols <- names(characters_table)[characters_table]
   if (!is.null(.NNTable$grouped_columns$columns))
     .char_cols <- setdiff(.char_cols, .NNTable$grouped_columns$columns)
-  
+
   if (length(.char_cols))
-    data_str[, (.char_cols) := lapply(.SD,  function(x) {x[is.na(x)] <- ""; x}), 
+    data_str[, (.char_cols) := lapply(.SD,  function(x) {x[is.na(x)] <- ""; x}),
              .SDcols = .char_cols]
-  
+
   if (.NNTable$NNFormat$big.mark != "" | .NNTable$NNFormat$small.mark != "") {
     data_str[, (.cols) := lapply(.SD, prettyNum,
-                                 big.mark = .NNTable$NNFormat$big.mark, 
+                                 big.mark = .NNTable$NNFormat$big.mark,
                                  small.mark = .NNTable$NNFormat$small.mark,
                                  preserve.width = c("individual")),
              .SDcols = .cols]
-    
+
     data_str[, (.cols) := lapply(.SD, function(x) {x[grepl("NA|NaN", x)] <- ""; x}), .SDcols = .cols]
   }
 
@@ -995,7 +1000,7 @@ apply_format_concat <- function(.NNTable) {
 
   for (i in seq_along(strings)) {
     vars <- .NNTable$concat$table[names(strings)[i]][[1]]
-    
+
     data_all <- apply((data_str[, vars, with = FALSE]) == "", 1, all)
     data_str <- data_str[data_all, (names(strings)[i]) := ""]
 
@@ -1082,115 +1087,115 @@ apply_createHeader <- function(.NNTable) {
   if (!is.matrix(header.mat)) {
     header.mat <- as.matrix(t(header.mat))
   }
-  
+
   # remove header name for the long format column
   if (!is.null(.NNTable$columns_to_long) && length(.NNTable$columns_to_long)) {
-    header.mat[header.mat == .NNTable$columns_to_long$var_name ] <- 
+    header.mat[header.mat == .NNTable$columns_to_long$var_name ] <-
       .NNTable$columns_to_long$display_name
   }
-  
-  
+
+
   ### split the header matrix into more rows in accordance with split
   if (!is.null(.NNTable$cell_split)) {
-    
+
     if (.NNTable$cell_split$align %in% c("bottom", "centre")) {
-      
+
       header.mat_pre <- header.mat
-      
+
       n_new_lines <-
         matrix(sapply(gregexpr(.NNTable$cell_split$split, header.mat),
                       function(x) sum(x > 0)), nrow = nrow(header.mat), byrow = FALSE)
-  
-     
-      
+
+
+
       if (.NNTable$cell_split$align == "centre") {
         n_new_lines
         n_missing_lines <- apply(n_new_lines, 1, max) - n_new_lines
         n_left_splits <- ceiling(n_missing_lines / 2)
         n_right_splits <- n_missing_lines - n_left_splits
-        
-        left_splits <- sapply(c(Matrix::t(n_left_splits)), 
-                              function(n) paste(rep(gsub("\\\\", "", .NNTable$cell_split$split), n), 
+
+        left_splits <- sapply(c(Matrix::t(n_left_splits)),
+                              function(n) paste(rep(gsub("\\\\", "", .NNTable$cell_split$split), n),
                                                 collapse = ""))
-        
-        right_splits <- sapply(c(Matrix::t(n_right_splits)), 
-                               function(n) paste(rep(gsub("\\\\", "", .NNTable$cell_split$split), n), 
+
+        right_splits <- sapply(c(Matrix::t(n_right_splits)),
+                               function(n) paste(rep(gsub("\\\\", "", .NNTable$cell_split$split), n),
                                                  collapse = ""))
-        
+
       } else {
-        left_splits <- sapply(c(Matrix::t(apply(n_new_lines, 1, max) - n_new_lines)), 
-                              function(n) paste(rep(gsub("\\\\", "", .NNTable$cell_split$split), n), 
+        left_splits <- sapply(c(Matrix::t(apply(n_new_lines, 1, max) - n_new_lines)),
+                              function(n) paste(rep(gsub("\\\\", "", .NNTable$cell_split$split), n),
                                                 collapse = ""))
-        
+
         right_splits <- rep("", length(left_splits))
       }
-      
+
       header.mat <- data.table::as.data.table(
-        matrix(paste0(left_splits, c(Matrix::t(header.mat)), right_splits), 
+        matrix(paste0(left_splits, c(Matrix::t(header.mat)), right_splits),
                nrow = nrow(header.mat), byrow = TRUE))
-      
-      
+
+
       header.mat[header.mat_pre == ""] <- ""
-      
+
     }
-    
-    
+
+
     header.mat <- data.table::as.data.table(header.mat)
-    
+
     # header.mat[header.mat == gsub("\\\\", "", .NNTable$cell_split$split)] <- ""
-    
+
     X <- lapply(header.mat, strsplit , split = .NNTable$cell_split$split)
-    
-    repeats <- 
+
+    repeats <-
       apply(as.data.frame(lapply(X, function(x) vapply(x, length, 1L))), 1, max)
-    
+
     repeats <- rep(seq_along(repeats), repeats)
-    
+
     SetUp <- lapply(X, function(x) {
       A <- vapply(x, length, 1L)
       list(Mat = cbind(rep(seq_along(A), A), sequence(A)),
            Val = unlist(x))
     })
-  
+
     Ncol <- max(unlist(lapply(SetUp, function(y)
       y[["Mat"]][, 2]), use.names = FALSE))
-  
+
     X <- lapply(seq_along(SetUp), function(y) {
       M <- matrix("Inserted Blank", nrow = nrow(header.mat), ncol = Ncol)
       M[SetUp[[y]][["Mat"]]] <- SetUp[[y]][["Val"]]
       M
     })
-  
+
     indt <- header.mat[rep(sequence(nrow(header.mat)), each = Ncol)]
-  
+
     X <- lapply(X, function(y) as.vector(t(y)))
-    
-    split_cols <- colnames(header.mat) 
+
+    split_cols <- colnames(header.mat)
     indt[, (split_cols) := lapply(X, unlist, use.names = FALSE)][]
-    
+
     indt <- indt[!apply(indt[, split_cols, with = FALSE] == "Inserted Blank", 1, all), ]
-    
-    indt <- indt[, (split_cols) := lapply(.SD, function(x) 
+
+    indt <- indt[, (split_cols) := lapply(.SD, function(x)
       ifelse(x == "Inserted Blank", "", x)), .SDcols = split_cols]
-  
-    
+
+
     header.mat <- as.matrix(indt)
   } else {
     repeats <- seq_len(nrow(header.mat))
   }
   ###
-  
+
   if (!is.null(.NNTable$header)) {
     .NNTable$header$matrix <- header.mat
     .NNTable$header$repeats <- repeats
   } else {
     .NNTable$header <- list(matrix = header.mat, underscore = FALSE,
                             repeats = repeats)
-    
+
   }
-  
-  
-  
+
+
+
 
   return(.NNTable)
 }
@@ -1213,7 +1218,7 @@ apply_alignment <- function(.NNTable) {
   ncol <- ncol(data_str)
 
   header <- colnames(data_str)
- 
+
   alignment = c("l", rep("c", max(0, ncol - 2)), "c")[seq_len(ncol)]
 
   # give names to the alignment
@@ -1223,7 +1228,7 @@ apply_alignment <- function(.NNTable) {
 
   classes <- sapply(data, class)
   classes_str <- sapply(data_str, class)
-  
+
   # for columns that are transposed from wide to long the name column is left aligned
   # as well as combination columns
   if (!is.null(.NNTable$columns_to_long) && length((.NNTable$columns_to_long))) {
@@ -1244,34 +1249,34 @@ apply_alignment <- function(.NNTable) {
   alignment[names(classes[!classes %in% c("numeric", "integer") & names(classes) %in% header])] <- "l"
   # in case the header is not a part of the original columns we make them left aligned
   alignment[header[!header %in% names(classes) & !grepl("^sep.column.", header)]] <- "l"
-  
-  
+
+
   numerics <- names(classes[classes %in% c("numeric", "integer")])
-  
+
   # some columns are renamed which needs to be taken into account
   # names_conv <- unlist(.NNTable$concat$table[sapply(.NNTable$concat$table, length) == 1])
   # to_numeric <- names_conv[match(numerics, names_conv)]
   # alignment[names(to_numeric)[names(to_numeric) %in% header]] <- "c"
-  
+
   names_conv <- names(.NNTable$concat$table[sapply(.NNTable$concat$table, function(x) {all( x %in% numerics)})])
   alignment[names_conv[names_conv %in% header | paste0(names_conv, "_trunc") %in% header]] <- "c"
-  
+
   # columns that are really short should be centred
   small <- sapply(data_str[classes_str == "character"], function(x) max(nchar(x,  keepNA = FALSE))) <= 4
   alignment[names(small)[small]] <- "c"
-  
-  # something seems odd here 
+
+  # something seems odd here
   if (!is.null(.NNTable$columns_to_long) && length((.NNTable$columns_to_long))) {
-    
+
     # extract the variables
     vars <- initName(.NNTable$columns_to_long$columns)
-    
+
     # if all columns are numerical we centre the created column
     # this is taken out again since we want the values to be left aligned
     #if (all(vars %in% names_conv))
     #  alignment[.NNTable$columns_to_long$value_name[.NNTable$columns_to_long$value_name %in% header]] <- "c"
-    
-    
+
+
     cols <- intersect(vars, names(classes))
     if (length(cols) && !any(classes[cols] %in% c("numeric", "integer"))) {
 
@@ -1285,23 +1290,23 @@ apply_alignment <- function(.NNTable) {
       alignment[which] <- "l"
     }
   }
-  
+
   if (!is.null(.NNTable$alignment$alignment_specified)) {
 
-    
+
     if (!is.null(.NNTable$grouped_columns)) {
       list <- strsplit(gsub("NNTable_grouped_name", .NNTable$grouped_columns$name,
                             gsub("_trunc$", "", names(alignment))), "__#__")
     } else {
       list <- strsplit(gsub("_trunc$", "", names(alignment)), "__#__")
     }
-    
+
 
     l_depth <- max(sapply(list, length))
     cols <- sapply(list, function(x) rev(c(x, rep("", l_depth - length(x)))))
     if (is.matrix(cols)) {
       for (name in names(.NNTable$alignment$alignment_specified)) {
-        alignment[apply(cols == name, 2, any)] <- 
+        alignment[apply(cols == name, 2, any)] <-
           .NNTable$alignment$alignment_specified[name]
       }
     } else {
@@ -1322,103 +1327,103 @@ apply_width <- function(.NNTable, spread = TRUE) {
   # Get data
   alignment <- .NNTable$alignment$alignment
 
-  if ("NNTable_added_group" %in% colnames(.NNTable$data_str) && 
+  if ("NNTable_added_group" %in% colnames(.NNTable$data_str) &&
       .NNTable$grouped_columns$span_row) {
     NNTable_added_group <- "NNTable_added_group"
-  } else { 
+  } else {
     NNTable_added_group <- NULL
   }
   data_str <- .NNTable$data_str[, setdiff(colnames(.NNTable$data_str),
-       setdiff(c(.NNTable$remove$columns, .NNTable$remove$columns_trunc), 
+       setdiff(c(.NNTable$remove$columns, .NNTable$remove$columns_trunc),
                NNTable_added_group)), drop = FALSE]
 
   ncol <- ncol(data_str)
 
-  header <- setdiff(colnames(data_str), c(NNTable_added_group, "NNTable_group_level")) 
-  
+  header <- setdiff(colnames(data_str), c(NNTable_added_group, "NNTable_group_level"))
+
   header.mat <- .NNTable$header$matrix
 
-  # Make sure that at least one space is added between space cols 
+  # Make sure that at least one space is added between space cols
   data_str[, grep("^space.column", colnames(data_str))] <- ""
-  
+
 
   n.headers <- nrow(header.mat)
-  
-  
+
+
   #---------------------------------------------------------------------------#
   ######              Establish the width of the columns                 ######
   #---------------------------------------------------------------------------#
-  
-  
-  # get the data counts 
+
+
+  # get the data counts
   if ("NNTable_added_group" %in% colnames(data_str) && .NNTable$grouped_columns$span_row) {
     do_span <- TRUE
     to_format <- data_str$NNTable_added_group == FALSE
     count_base_1 <- rbind(apply(data_str[data_str$NNTable_added_group == FALSE,
                                          setdiff(colnames(data_str), "NNTable_added_group")], 2, nchar),
                           apply(nchar(header.mat[n.headers, , drop = FALSE]), 2, max, na.rm = TRUE))
-    
+
     data_str <- data_str[, setdiff(colnames(data_str), "NNTable_added_group")]
   } else {
     do_span <- FALSE
     to_format <- rep(TRUE, nrow(data_str))
     count_base_1 <- rbind(apply(data_str, 2, nchar, keepNA = FALSE),
-                          apply(nchar(header.mat[n.headers, , drop = FALSE]), 
+                          apply(nchar(header.mat[n.headers, , drop = FALSE]),
                                 2, max, na.rm = TRUE))
   }
-  
+
   count_base <- apply(count_base_1, 2, max)
   count_base_w1s <- count_base
   count_base_w1s[grep("space.column|sep.column", names(count_base))] <- 1
   # initialize the pre/post headers
   pre_header_spaces  <- rep("", n.headers)
   post_header_spaces <- rep("", n.headers)
-  
+
   # When more than one header is present we need to do something in order to
   # align the headers
   if (n.headers > 1) {
-    
+
     count_mat <- nchar(header.mat)
-    
-    needed_space_count <- cbind(0, count_mat[,, drop = FALSE], 0) 
-    
+
+    needed_space_count <- cbind(0, count_mat[,, drop = FALSE], 0)
+
     needed_space_count[, ] <- 0
-    
-    colnames(needed_space_count) <- 
+
+    colnames(needed_space_count) <-
       c("NNTable_pre_space", colnames(data_str), "NNTable_post_space")
-    
-    
+
+
     for (i in rev(seq_len(n.headers)[-n.headers])) {
       needed_space_count_c <- numeric(ncol(data_str) + 2)
-      
-      names(needed_space_count_c) <- 
+
+      names(needed_space_count_c) <-
         c("NNTable_pre_space", colnames(data_str), "NNTable_post_space")
-      
-      
+
+
       x <- header.mat[i ,]
       count <- rle(x)
-      
+
       to   <- cumsum(count$lengths)
-      
+
       from <- c(0, to[-length(to)]) + 1
-      
+
       count_prev <- function(from, to) {
         sum(count_base_w1s[seq(from, to)])
       }
-      
+
       prev_counts <- mapply(FUN = count_prev, from, to )
-      
-      # The added 2 is to ensure blank space between columns when two long names meet 
+
+      # The added 2 is to ensure blank space between columns when two long names meet
       needed_space <- count_mat[i, from] - prev_counts
-      
+
       needed_space_where <- needed_space > 0
-      
+
       #needed_space[needed_space_where] <- needed_space[needed_space_where] + 2
-     
+
       prev_space <- ceiling(needed_space / 2)
       post_space <- needed_space - prev_space
-     
-     
+
+
       if (any(needed_space_where)) {
         for (j in which(needed_space_where)) {
           seq <- seq(from[j], to[j])
@@ -1433,56 +1438,56 @@ apply_width <- function(.NNTable, spread = TRUE) {
           }
         }
       }
-       
+
       # for the first column we delete one needed space
       #prev_space[1] <- prev_space[1] - 1
-      
+
       needed_space_count_c[(from - 1 + 1)[needed_space_where]] <- prev_space[needed_space_where]
-      needed_space_count_c[(to   + 1 + 1)[needed_space_where]] <- 
+      needed_space_count_c[(to   + 1 + 1)[needed_space_where]] <-
         post_space[needed_space_where] + needed_space_count_c[(to   + 1 + 1)[needed_space_where]]
-      
+
       needed_space_count[i,] <- needed_space_count_c
     }
-    
+
     column.chars <- count_base + apply(needed_space_count[, -c(1, ncol(needed_space_count)), drop = FALSE], 2, max)
-      
+
     if (max(needed_space_count[, "NNTable_pre_space"]) > 0) {
       n.spcae <- max(needed_space_count[, "NNTable_pre_space"])
-      
+
       data_str <-
         cbind(data.frame(NNTable_pre_space = paste(rep(" ", n.spcae), collapse = "")), data_str)
-      
+
       # update the columns chars with the new var
-      
+
       column.chars <- c(structure(n.spcae, names = "NNTable_pre_space"), column.chars)
       alignment    <- c(structure("l", names = "NNTable_pre_space"), alignment)
       header.mat   <- cbind("", header.mat)
 
       n.spcae <- needed_space_count[, "NNTable_pre_space"]
-      
-      pre_header_spaces <- 
+
+      pre_header_spaces <-
         sapply(max(n.spcae) - n.spcae, function(n) paste(rep(" ", n), collapse = ""))
     }
-    
+
     if (max(needed_space_count[, "NNTable_post_space"]) > 0) {
       n.spcae <- max(needed_space_count[, "NNTable_post_space"])
-      data_str <- 
+      data_str <-
         cbind(data_str, data.frame(NNTable_post_space = paste(rep(" ", n.spcae), collapse = "")))
-      
+
       # update the columns chars with the new var
-      
+
       column.chars <- c(column.chars, structure(n.spcae, names = "NNTable_post_space"))
       alignment    <- c(alignment, structure("l", names = "NNTable_post_space"))
       header.mat   <- cbind(header.mat, "")
-     
-           
+
+
       n.spcae <- needed_space_count[, "NNTable_post_space"]
-      
-      post_header_spaces <- 
+
+      post_header_spaces <-
         sapply(max(n.spcae) - n.spcae, function(n) paste(rep(" ", n), collapse = ""))
     }
-  
-    
+
+
     header <- colnames(data_str)
   } else {
     column.chars <- count_base
@@ -1492,29 +1497,29 @@ apply_width <- function(.NNTable, spread = TRUE) {
   #---------------------------------------------------------------------------#
   ######              Establish the width of the table                   ######
   #---------------------------------------------------------------------------#
- 
- 
+
+
   res.chars <- .NNTable$page_size$page.width - sum(column.chars, na.rm = TRUE) #- (ncol - 1)
 
   # find the columns_to_wide spacers
   spacers <- grep("^space.column.", colnames(data_str))
   seppers <- grep("^sep.column.", colnames(data_str))
-  
-  
-  
+
+
+
   if (res.chars - (length(spacers) + length(seppers)) < 0) {
     warning("The actual columns are too wide to fit the output")
-    .NNTable$page_size$used.page.width <- (.NNTable$page_size$used.page.width - 
+    .NNTable$page_size$used.page.width <- (.NNTable$page_size$used.page.width -
       res.chars) + (length(spacers) + length(seppers))
     res.chars <- length(spacers) + length(seppers)
   }
-   
+
   if (spread) {
     # initialise width
     width <- column.chars
-   
+
     sep_width <- max(min(floor(res.chars / (length(seppers) + length(spacers))), 50), 1)
-    
+
     if (length(spacers)) {
       if (sep_width <= 3) {
         sep_width <- 1
@@ -1525,8 +1530,8 @@ apply_width <- function(.NNTable, spread = TRUE) {
       }
       width[spacers] <-  space_width
     }
-    
-    
+
+
     width[seppers] <- width[seppers] + sep_width
 
   } else {
@@ -1547,45 +1552,45 @@ apply_width <- function(.NNTable, spread = TRUE) {
   factors <- sapply(data_str, is.factor)
   for (fac in names(factors)[factors])
     data_str[, fac] <- as.character(data_str[, fac])
-  
+
   data_str[to_format,] <-
     as.data.frame(sapply(header, function(name) {
       align(x = data_str[to_format, name],
             alignment[name], width[name], keep.empty = FALSE)
     }, simplify = FALSE))
-  
+
 
   if (do_span)
     data_str[!to_format, setdiff(colnames(data_str), "NNTable_grouped_name")] <- ""
-  
+
   .NNTable$data_str[, colnames(data_str)] <- data_str
 
   if ("NNTable_pre_space" %in% colnames(data_str)) {
     .NNTable$data_str <- cbind(data_str[, "NNTable_pre_space", drop = FALSE], .NNTable$data_str )
   }
-  
+
   #---------------------------------------------------------------------------#
   ######                  header align                                   ######
   #---------------------------------------------------------------------------#
 
- 
+
   underscoreWidth <- function(x, width) {
     v <- rle(x)
     from_to <- c(0, cumsum(v$length))
-    
+
     hline_width <- width
-    
+
     # Above the adjust in accordance with needed withs
     for (i in seq_along(v$lengths)) {
       seq <- (from_to[i] + 1):from_to[i + 1]
       new_width <-
         sum(width[seq]) # + length(seq) - 1 # let the extra space count
-      
+
       needed_space <- nchar(v$values[i]) - new_width
       if (needed_space > 0) {
         prev_space <- ceiling(needed_space / 2)
         post_space <- needed_space - prev_space
-        
+
         hline_width[from_to[i]] <-
           hline_width[from_to[i]] - prev_space
         hline_width[from_to[i + 1]] <-
@@ -1596,50 +1601,50 @@ apply_width <- function(.NNTable, spread = TRUE) {
     }
     return(hline_width)
   }
-  
-  
+
+
   # create the alignment of the header
-  headAlign <- function(x, width, alignment, nrows, any_pre_p, 
+  headAlign <- function(x, width, alignment, nrows, any_pre_p,
                         pre_paste, post_paste, underscore, under_mat,
                         nested_header) {
-    
+
     #browser()
     v <- rle(x)
     from_to <- c(0, cumsum(v$length))
-    
+
     use_width <- width
     #browser()
-    # Above the adjust in accordance with needed widths  
+    # Above the adjust in accordance with needed widths
     for (i in seq_along(v$lengths)) {
       seq <- (from_to[i] + 1):from_to[i + 1]
       new_width <- sum(width[seq]) # + length(seq) - 1 # let the extra space count
-      
+
       head_space <- max(apply(under_mat[, seq, drop = FALSE], 1, sum))
-      
-      #needed_space <- nchar(v$values[i]) - new_width 
+
+      #needed_space <- nchar(v$values[i]) - new_width
       needed_space <- head_space - new_width
       if (needed_space > 0) {
         # the needed space is distributed appropriately
         if (from_to[i] == 0 | !any(nested_header[seq]) & v$length[i] == 1 & alignment[from_to[i + 1]] == "l") {
           prev_space <- 0
           post_space <- needed_space
-        } else if (is.na(from_to[i + 2]) | !any(nested_header[seq]) & v$length[i] == 1 & alignment[from_to[i + 1]] == "r") { 
+        } else if (is.na(from_to[i + 2]) | !any(nested_header[seq]) & v$length[i] == 1 & alignment[from_to[i + 1]] == "r") {
           prev_space <- needed_space
           post_space <- 0
         } else {
           prev_space <- use_width[from_to[i]] - min(under_mat[, from_to[i]])
           post_space <- needed_space - prev_space
         }
-        
+
         use_width[from_to[i]] <- use_width[from_to[i]] - prev_space
-        
+
         use_width[from_to[i + 1]] <-
           use_width[from_to[i + 1]] + needed_space
-        
-        use_width[from_to[i + 2]] <- use_width[from_to[i + 2]] - post_space   
+
+        use_width[from_to[i + 2]] <- use_width[from_to[i + 2]] - post_space
       }
     }
-    
+
     hline <- character(0)
     hline_make <- .NNTable$header$underscore && underscore && max(v$lengths[v$values != ""]) > 1
     header.text <- character(0)
@@ -1647,15 +1652,15 @@ apply_width <- function(.NNTable, spread = TRUE) {
     for (i in seq_along(v$lengths)) {
       seq <- (from_to[i] + 1):from_to[i + 1]
       new_width <- sum(use_width[seq]) # + length(seq) - 1 # let the extra space count
-       
-      
+
+
       if ((v$length[i] == 1  & nrows == 1 & i == 1) | (!any(nested_header[seq]) & v$length[i] == 1)) {
         header.text[i] <- align(x = v$values[i], alignment[from_to[i + 1]], new_width, keep.empty = FALSE)
       } else {
         header.text[i] <- align(x = v$values[i], "c", new_width, keep.empty = FALSE)
       }
       if (hline_make)
-        hline[i] <- ifelse(v$values[i] != "", #& length(seq) > 1 
+        hline[i] <- ifelse(v$values[i] != "", #& length(seq) > 1
                            hline(times = max(apply(under_mat[, seq, drop = FALSE], 1, sum))),
                            paste(rep(" ", new_width), collapse = ""))
     }
@@ -1666,48 +1671,48 @@ apply_width <- function(.NNTable, spread = TRUE) {
     )
   }
 
-  # 
+  #
   # alignment_p[setdiff(names(alignment_p), "NNTable_pre_space")[1]]
-  # 
+  #
   # nested_header <- grepl("__#__", header)
   # if (nested_header)
-    
-  under_mat <- width_mat <- 
+
+  under_mat <- width_mat <-
     matrix(rep(width, each = n.headers), nrow = n.headers, byrow = FALSE)
-  
-  
-  
+
+
+
   if (nrow(under_mat) > 1) {
     # extract the length of the underscores
     for(i in seq_len(nrow(under_mat) - 1))
       under_mat[i, ] <- underscoreWidth(x = header.mat[i, ], width =  width_mat[i, ])
-    
+
     #under_mat <- under_mat[seq_len(nrow(under_mat) - 1), ]
   }
-  
+
   alignment_p <- alignment
   underscore <- c(diff(.NNTable$header$repeats), 0) > 0
   header.mat.align <- character()
- 
-  
-   
+
+
+
   for (i in seq_len(n.headers)) {
     header.mat.align <-
       c(
-        header.mat.align, 
-        headAlign(x = header.mat[i, ], 
-                  width      = width_mat[i, ],  
+        header.mat.align,
+        headAlign(x = header.mat[i, ],
+                  width      = width_mat[i, ],
                   alignment  = alignment,
-                  nrows      = n.headers, 
+                  nrows      = n.headers,
                   any_pre_p  = any(nchar(pre_header_spaces)),
-                  pre_paste  = pre_header_spaces[i],  
+                  pre_paste  = pre_header_spaces[i],
                   post_paste = post_header_spaces[i],
                   underscore = underscore[i],
                   under_mat  = under_mat[setdiff(seq_len(nrow(under_mat)), seq_len(i - 1)), , drop = FALSE],
                   nested_header = nested_header)
       )
   }
-  
+
   header.mat.align
 
   .NNTable$width <- list(width = width)
@@ -1733,7 +1738,7 @@ apply_splitPages <- function(.NNTable) {
   header.lines <- 2 + length(.NNTable$header$header)
 
   # calculate footer lines
-  footer.lines <- 1 + max(1, length(.NNTable$wrapping[["footer"]])) + 1 + 
+  footer.lines <- 1 + max(1, length(.NNTable$wrapping[["footer"]])) + 1 +
     max(0, length(.NNTable$wrapping[["sys_footnote"]]))
   footer       <- paste0(paste(.NNTable$wrapping[["footer"]], collapse = "\n"), "\n")
   auto_foot    <- paste0(paste(alignRight(.NNTable$wrapping[["sys_footnote"]],
@@ -1771,16 +1776,16 @@ apply_splitPages <- function(.NNTable) {
       group_cols <- c("NNTable_master_group", paste(group_cols[-1], "split", sep = "_"))
 
     wrongBreaks <- function(data, group_cols = "NNTable_master_group", correction = 0) {
-      
+
       # get the outermost grouping
       grouping_col <- group_cols[1]
       grouping     <- data[, get(grouping_col)]
       group_size   <- table(grouping)[unique(grouping)]
       group_breaks <- cumsum(group_size) + correction
-      
-      
+
+
       wrong_breaks <- function(group_breaks, group_size, body.lines,
-                               missings = list(), added = 0, 
+                               missings = list(), added = 0,
                                corrected_levels = character(0)) {
 
         fromV <- c(0, group_breaks[-length(group_breaks)]) + 1
@@ -1795,33 +1800,33 @@ apply_splitPages <- function(.NNTable) {
           to - fromV < body.lines  # check that it is breakable
 
         any_wrong_break <- any(wrong_break)
-        
+
         #a <- data.frame(fromV, to, body_check, wrong_break)
         sub_missing <- list()
-        
+
         check_groups <- setdiff(names(wrong_break), corrected_levels)
-        
+
         if (length(group_cols) > 1) {
           pot_unbreak <- (fromV < body_check & to > body_check)[check_groups]
           if (any(pot_unbreak)) {
-            if (!any_wrong_break || 
-                names(group_breaks[check_groups][wrong_break][1]) != 
+            if (!any_wrong_break ||
+                names(group_breaks[check_groups][wrong_break][1]) !=
                 names(group_breaks[check_groups][pot_unbreak][1])) {
 
               # Get the unbreakable name
               unbreakable <- names(group_breaks[check_groups][pot_unbreak][1])
 
-              
+
               # The line number on the page is found
-              correction <- max(0, fromV[which(names(wrong_break) == unbreakable)[1]] - 
+              correction <- max(0, fromV[which(names(wrong_break) == unbreakable)[1]] -
                                   body.lines * (ceiling(fromV[which(names(wrong_break) == unbreakable)[1]] / body.lines) - 1) - 1)
 
-            
+
               # Get the wrongbreaks within the subgroup
               sub_missing <- wrongBreaks(data = data[data[, get(grouping_col)] == unbreakable, ],
                                          group_cols = group_cols[-1], correction = correction)
-              
-              
+
+
               # If any new lines needs to be added they are added to the overall global missing
               # and the line counter is corrected to match the new number
               if (length(sub_missing)) {
@@ -1859,15 +1864,15 @@ apply_splitPages <- function(.NNTable) {
 
           return(wrong_breaks(group_breaks, group_size, body.lines, missings))
         } else {
-          if (length(sub_missing)) { # try to get a grip on what is happening 
-                                     # when no breaks occur in the outer level 
+          if (length(sub_missing)) { # try to get a grip on what is happening
+                                     # when no breaks occur in the outer level
                                      # but one does occur in the inner
-                                     
+
            # group_breaks <- group_breaks[setdiff(names(group_breaks), unbreakable)]
-            
+
           #  group_size <- group_size[setdiff(names(group_size), unbreakable)]
-            
-            return(wrong_breaks(group_breaks, group_size, body.lines, missings, 
+
+            return(wrong_breaks(group_breaks, group_size, body.lines, missings,
                                 corrected_levels = c(corrected_levels, unbreakable)))
           } else {
             return(missings)
@@ -1893,13 +1898,13 @@ apply_splitPages <- function(.NNTable) {
                   stringr::str_trim(data_str[, get("NNTable_grouped_name")]) == "" &
                   data_str[, get("NNTable_added_blank")] == "")
         } else {
-          
+
           potentials <- data_str[, get(grouping_col)]  %in% names(wrong_break_list[[grouping_col]]) &
             stringr::str_trim(data_str[, get("NNTable_grouped_name")]) == "" &
             data_str[, get("NNTable_added_blank")] == "Y"
-          
+
           data_str[, get(grouping_col)][potentials]
-          
+
           which(potentials)[!duplicated( data_str[, get(grouping_col)][potentials])]
         }
       )
@@ -1932,97 +1937,97 @@ apply_splitPages <- function(.NNTable) {
 }
 
 apply_add_separators <- function(.NNTable) {
-  
+
   # extract the data.frame as a data.table
   data_str <- data.table::as.data.table(.NNTable$data_str)
-  
+
   # Extract the columns wanted in the final table
-  remove <- c(.NNTable$remove$columns, 
+  remove <- c(.NNTable$remove$columns,
               .NNTable$remove$columns_trunc)
-  
+
   cola <- setdiff(colnames(data_str), remove)
-  
+
   # subset data_str accordingly
   a <- data_str[, (cola), with = FALSE]
-  
-  
+
+
   # no sep columns are wanted next to space columns
   spacers <- grep("^space.column.", cola)
   non_space_columns <- setdiff(seq_len(ncol(a)), spacers)
-  
+
   # For all non-space colums that are next to each other a sep column is needed
   width_columns <- non_space_columns[c(0, diff(non_space_columns)) == 1]
-  
+
   if (length(width_columns)) {
-    
+
     # # Extract the column headers from the titles
     # space_char <- sapply(gregexpr("__#__", cola), function(x) {x[1]} )
-    # 
-    # # Find the number where the header separators  
+    #
+    # # Find the number where the header separators
     # pasters <- substring(cola, space_char)
     # pasters[space_char < 0] <- ""
-    # 
-    # # If the column headers are identical for the before and after columns 
+    #
+    # # If the column headers are identical for the before and after columns
     # # it should be added to the separator name
-    # 
+    #
     # p1 <- pasters[width_columns - 1]
     # p2 <- pasters[width_columns]
     # pf <- rep("", length(p1))
     # pf[p1 == p2] <- p1[p1 == p2]
-    # 
+    #
     # new_cols <- paste0("sep.column.", width_columns - 1, ".", width_columns, pf)
-    
+
     split_cols <- strsplit(cola, "__#__")
-    
+
     pf <- rep("", length(width_columns))
     pf_pot <- which(sapply(split_cols, length) > 1)[-1]
     wh_split <- intersect(width_columns, c(pf_pot))
-    
-    
+
+
     for (i in seq_along(wh_split)) {
-      
+
       j <- wh_split[i]
-      
+
       if (length(split_cols[[j]]) == length(split_cols[[j - 1]])) {
-        wh <- split_cols[[j - 1]][(seq_len(length(split_cols[[j - 1]]))[-1])] == 
+        wh <- split_cols[[j - 1]][(seq_len(length(split_cols[[j - 1]]))[-1])] ==
           split_cols[[j]][(seq_len(length(split_cols[[j]]))[-1])]
-        
+
         if (any(!wh) & !all(!wh)) {
           wh[seq_len(max(which(!wh)))] <- FALSE
         }
-        
-        
+
+
         vec <- split_cols[[j]]
         vec[!c(FALSE, wh)] <- ""
-        
+
         pf[j == width_columns] <- paste(vec, collapse = "__#__")
       }
     }
-    
+
     new_cols <- paste0("sep.column.", width_columns - 1, ".", width_columns, pf)
-    
-        
+
+
     # assign the new columns to a
     a[, (new_cols) := ""]
     data_str[, (new_cols) := ""]
-    
+
     # reorder a according to the wanted column order
-    new_ord <- 
+    new_ord <-
       apply(data.frame(
         a = width_columns - 1,
         b = width_columns
       ), 1, mean)
-    
-    
+
+
     col_order <- c(
-      names(sort(structure(c(seq_along(cola), new_ord), names = colnames(a)))), 
+      names(sort(structure(c(seq_along(cola), new_ord), names = colnames(a)))),
       setdiff(colnames(.NNTable$data_str), cola)
     )
-    
+
     # assign the reordered data.frame back to .NNTable
     .NNTable$data_str <- as.data.frame(data.table::setcolorder(data_str, col_order))
   }
-  
+
   return(.NNTable)
 }
 

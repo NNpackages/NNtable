@@ -172,7 +172,7 @@ applyExposure <- function(.NNTable) {
     }
 
     # Pivot the data to match the data_str format
-    exposure <- tidyr::pivot_longer(exposure, cols = new_cols,
+    exposure <- tidyr::pivot_longer(exposure, cols = all_of(new_cols),
                                     names_to = unlist(names_to), values_to = values_to)
 
     # Pivot the format data similarly
