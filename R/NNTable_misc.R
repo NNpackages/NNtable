@@ -392,6 +392,7 @@ adjustFormat <- function(format, data_format) {
 #' NNTable <- Format(NNtable, format_data = format_data)
 #' }
 #' @importFrom data.table ':='
+#' @importFrom dplyr filter across
 Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3, big.mark = "", small.mark = "") {
 
   .NNTable <- x
