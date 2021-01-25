@@ -23,20 +23,20 @@ Add ordering variables for NNTable
 ## *****************************************************************************
 ## # Example of transpose from wide to long                                 ----
 ##
-## Calculate the statistics for an AE table  
+## Calculate the statistics for an AE table
 ## *****************************************************************************
- 
+
 library(dplyr)
 # library(NNR)
 
 # Filter data according Safety analysis set
-adsl_f <- adsl            \%>\% 
-  filter(SAFFL == "Y")    \%>\% 
+adsl_f <- adsl            \%>\%
+  filter(SAFFL == "Y")    \%>\%
     rename(TRTA = TRT01P)
 
-# Calculate total exposure 
-totals <- adsl_f        \%>\% 
-  group_by(TRTA)        \%>\% 
+# Calculate total exposure
+totals <- adsl_f        \%>\%
+  group_by(TRTA)        \%>\%
   summarize("Number of subjects"     = n_distinct(USUBJID),
             "Total exposure (years)" = sum(TR01DURY))
 
@@ -45,23 +45,23 @@ output <- adae \%>\% group_by(AEBODSYS, AEDECOD, TRTA) \%>\%
   dplyr::summarise(N = n_distinct(USUBJID),
                    P = N / nrow(adsl),
                    E = n())
-  
+
 # Generate the NNTable ------------------------------------------------------
 
 # Initiate by defining the columns based on ADAE
-.NNTable <- NNTable(output, "AEBODSYS", "AEDECOD", "TRTA", "N", "(\%)" = "(P)", "E") 
+.NNTable <- NNTable(output, "AEBODSYS", "AEDECOD", "TRTA", "N", "(\%)" = "(P)", "E")
 
 # Add exposure calculated from ADSL
-.NNTable <- .NNTable \%>\% 
-  addExposure(exposure = totals, 
-              format_alone = FALSE, 
-              format_data  = c("Number of subjects"     = "\%.0f", 
+.NNTable <- .NNTable \%>\%
+  addExposure(exposure = totals,
+              format_alone = FALSE,
+              format_data  = c("Number of subjects"     = "\%.0f",
                                "Total exposure (years)" = "\%.2f"))
- 
-# Transpose to wide  
+
+# Transpose to wide
 .NNTable <- .NNTable \%>\% addTransWide(TRTA = c("N", "(\%)", "E"))
 
-# Add Filling such that non-observed events is assigned 0 
+# Add Filling such that non-observed events is assigned 0
 .NNTable <- .NNTable \%>\% addFilling(N = 0)
 
 # Add formatting information for the table
@@ -70,8 +70,8 @@ output <- adae \%>\% group_by(AEBODSYS, AEDECOD, TRTA) \%>\%
 # Group the columns AEBODSYS and AEDECOD
 .NNTable <- .NNTable \%>\% addGroupedColumns("AEBODSYS", "AEDECOD" , name = "some name")
 
-# Truncate columns at a certain width such that long names appear on multiple lines 
-.NNTable <- .NNTable \%>\% addTruncation(AEBODSYS = 50, AEDECOD = 48) 
+# Truncate columns at a certain width such that long names appear on multiple lines
+.NNTable <- .NNTable \%>\% addTruncation(AEBODSYS = 50, AEDECOD = 48)
 
 # Order the table according to P in descending order
 .NNTable <- .NNTable \%>\% addOrder(P = -1)
