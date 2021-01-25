@@ -14,6 +14,8 @@ output_path <- file.path(nntable_dir, "tests",  "output")
 dir.create(file.path(output_path, "got"), showWarnings = FALSE)
 
 
+
+NNtraining::createTrainingDB()
 (db <- nnaccess("0001", root = "~/training"))
 
 adae_f <- db$adam("adae") %>% filter(SAFFL == "Y" & TRTA != "")
