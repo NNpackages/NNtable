@@ -84,7 +84,7 @@ addOrder <- function(.NNTable, ...) {
 #x <- NNTable %>% addOrder("P")
 
 #' @importFrom rlang sym syms
-#' @importFrom dplyr group_by ungroup
+#' @importFrom dplyr group_by ungroup select
 apply_add_sorting_vars <- function(.NNTable) {
 
 
