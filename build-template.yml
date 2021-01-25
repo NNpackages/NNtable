@@ -120,6 +120,7 @@ steps:
 
 - script: |
     echo Running code coverage $(pkgName)
+    export HOME=$(Agent.BuildDirectory)
     if [ -d "tests/testthat" ]; then
       /opt/R/$(R_VERSION)/bin/R -e "cov <- covr::azure()"
     fi
