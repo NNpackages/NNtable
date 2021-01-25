@@ -416,6 +416,7 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
 
   create_format_data <- function(x, keep = character(0), cols = unlist(concat$table)) {
 
+
     out_format <- data.frame(matrix(ncol = length(c(cols, keep)),
                                     nrow = nrow(x)),
                              stringsAsFactors = FALSE)
@@ -430,10 +431,21 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
     if (!is.null(format_data)) {
       column_match <- intersect(colnames(x)[!numerics], colnames(format_data))
 
+      format_data_small <- format_data
+
       if (length(column_match)) {
-        any_check <-
-          any(unlist(as.data.frame(x)[, column_match]) %in%
-                unlist(as.data.frame(format_data)[, column_match]))
+
+        format_data_small <- format_data %>%
+          filter(across(column_match, ~ .x %in% unique(unlist(as.data.frame(x)[, column_match])) | is.na(.x)))
+
+        any_check <- nrow(format_data_small) > 0
+
+
+          # any(unique(unlist(as.data.frame(x)[, column_match])) %in%
+          #       unique(unlist(as.data.frame(format_data)[, column_match])))
+          #
+
+
       } else {
         any_check <- TRUE
       }
@@ -445,7 +457,7 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
       if (!is.null(format_data) && any_check) {
         out_format[, joint] <-
           updatejointFormat(data = as.data.frame(x)[, c(column_match, joint)],
-                            format_data, dec = dec, big.mark = big.mark, small.mark = small.mark)[, joint]
+                            format_data_small, dec = dec, big.mark = big.mark, small.mark = small.mark)[, joint]
 
       } else {
         out_format[, joint] <-
@@ -460,7 +472,7 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
 
       if (!is.null(format_data) && any_check) {
         out_temp <-
-          updateUniFormat(data = as.data.frame(x)[, c(column_match, non_joint)], format_data, dec = dec,
+          updateUniFormat(data = as.data.frame(x)[, c(column_match, non_joint)], format_data_small, dec = dec,
                           big.mark = big.mark, small.mark = small.mark)#[, non_joint]
         out_format[, colnames(out_temp)] <- out_temp
       } else {

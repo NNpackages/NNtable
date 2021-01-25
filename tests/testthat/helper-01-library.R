@@ -10,4 +10,6 @@ suppressPackageStartupMessages({
   library("NNtable")
   library("forcats")
   library("labelled")
+  library("NNaccess")
+  library("NNtraining")
 })
