@@ -1,6 +1,6 @@
 Package: NNtable
 Title: A Grammer for the Layout of Tables  
-Version: 0.0.0.9004
+Version: 0.0.1
 Authors@R: 
     person(given = "SFFL (Steffen Falgreen Larsen)",
            role = c("aut", "cre"),
