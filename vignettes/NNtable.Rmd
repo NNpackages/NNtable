@@ -1,8 +1,8 @@
 ---
-title: "nnaccess"
+title: "NNTable"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{nnaccess}
+  %\VignetteIndexEntry{NNTable}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ## Setup training data base
 In case you have not already setup a training database please run
-```{r, results='hide'}
+```{r, results='hide', message=FALSE}
 NNtraining::createTrainingDB()
 ```
 
@@ -25,7 +25,7 @@ NNtraining::createTrainingDB()
 
 Load the NNR and NNBiostat packages, which will load a number of packages often used 
 
-```{r setup, results='hide'}
+```{r setup, results='hide', message=FALSE}
 library(NNR)
 library(NNBiostat)
 ```
