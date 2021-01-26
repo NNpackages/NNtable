@@ -1,4 +1,4 @@
-
+globalVariables(c(":=", "!!", ".SD", "Group", "orig_order_to_delte", "keep_order_xy"))
 
 #' Initialise an NN table
 #'
@@ -294,6 +294,10 @@ get_column_tree <- function(columns, name = character(0)) {
 
 
 
+
+
+
+
 #' Print an NNTable object
 #'
 #' @param x The NNTable object
@@ -381,5 +385,24 @@ print.NNTable <- function(x, ..., page = 1, file = NULL, verbose = TRUE, check_e
   }
 
   return(invisible(.NNTable))
+}
+
+
+
+apply_print_cons <- function(.NNTable, page = 1) {
+
+  # Find the lines to print
+  lines <- seq((page - 1) * .NNTable$page_size$page.length + 1 ,
+               page * .NNTable$page_size$page.length)
+
+  lines <- lines[lines < length(.NNTable$output)]
+  # print to the console
+  cat(.NNTable$output[lines], sep = "\n")
+}
+
+apply_print_file <- function(.NNTable, file = tempfile(fileext = ".txt"),
+                             verbose = TRUE) {
+
+  write_encoded(.NNTable$output, file)
 }
 

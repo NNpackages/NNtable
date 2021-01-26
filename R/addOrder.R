@@ -81,7 +81,20 @@ addOrder <- function(.NNTable, ...) {
   .NNTable
 }
 
-#x <- NNTable %>% addOrder("P")
+apply_order <- function(.NNTable) {
+
+  # Get the data
+  data_str <- .NNTable$data_str
+
+  # order according to order columns
+  data_str <- data.table::setorderv(data.table::as.data.table(data_str), c(.NNTable$order_columns$sort_columns))
+
+
+  .NNTable$data_str <- as.data.frame(data_str, stringsAsFactors = FALSE)
+
+  return(.NNTable)
+}
+
 
 #' @importFrom rlang sym syms
 #' @importFrom dplyr group_by ungroup select
@@ -228,4 +241,74 @@ apply_add_sorting_vars <- function(.NNTable) {
 
   .NNTable
 }
+
+add_order_val <- function(x, ...) {
+  UseMethod("add_order_val")
+}
+
+add_order_val.numeric <- function(x, ..., group_var = FALSE, descending = FALSE) {
+
+  if (!length(x)) {
+    return(x)
+  }
+
+  if (group_var) {
+    x_u <- unique(x)
+
+    if (length(x_u) > 1) {
+      diff <- min(diff(sort(unique(x)))) / 2
+    } else {
+      diff <- 0
+    }
+
+    if (descending) {
+      return(max(x) + diff)
+    } else {
+      return(min(x) - diff)
+    }
+
+
+  } else {
+    if (descending) {
+      return(max(x))
+    } else {
+      return(min(x))
+    }
+  }
+}
+
+add_order_val.factor  <- function(x, ..., group_var = FALSE, descending = FALSE) {
+
+  if (!length(x)) {
+    return(x)
+  }
+
+  if (descending)
+    return(ifelse(group_var, levels(x)[length(levels(x))], levels(x)[levels(x) %in% x]))
+
+  return(ifelse(group_var, (setdiff(levels(x), "NNTable_Empty"))[1], levels(x)[levels(x) %in% x]))
+}
+add_order_val.character <- function(x, ..., group_var = FALSE, descending = FALSE) {
+
+  if (!length(x)) {
+    return(x)
+  }
+
+  if (descending)
+    return(ifelse(group_var, paste0(max(x), "0"), max(x)))
+
+  ifelse(group_var, paste0("0", min(x)), min(x))
+}
+add_order_val.defeault <- function(x, ..., group_var = FALSE, descending = FALSE) {
+
+  if (!length(x)) {
+    return(x)
+  }
+
+  if (descending)
+    return(max(x))
+
+  return(min(x))
+}
+
 

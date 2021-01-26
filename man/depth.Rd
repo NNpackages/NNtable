@@ -17,3 +17,4 @@ depth(list, current_depth = 0)
 \description{
 Get the depth of a list
 }
+\keyword{internal}

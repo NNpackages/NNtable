@@ -17,3 +17,4 @@ the horizontal line
 \description{
 Line to separate header and footnote from table
 }
+\keyword{internal}
