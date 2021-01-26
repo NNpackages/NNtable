@@ -1,4 +1,6 @@
-# NNtable (development version)
+# NNtable 0.0.2
+
+* Split the functions into several smaller files, such that functionality is kept together
 
 # NNtable 0.0.1
 

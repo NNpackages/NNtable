@@ -266,6 +266,7 @@ Format.default <- function(x, ...) as.character(x)
 #'
 #' @return The formated vector
 #' @export
+#' @rdname Format
 Format.numeric <- function(x, ..., format = guessFormat(x, dec = min(3, decimalPlaces(x)))) {
   y <- x
   y[!is.na(x)] <- sprintf(format[!is.na(x)], x[!is.na(x)])
@@ -284,6 +285,7 @@ Format.numeric <- function(x, ..., format = guessFormat(x, dec = min(3, decimalP
 #'
 #' @return The formated vector
 #' @export
+#' @rdname Format
 Format.integer <- function(x, ..., format = guessFormat(x, dec = min(3, decimalPlaces(x)))) {
   Format(as.numeric(x), ..., format = format)
 }
@@ -339,6 +341,7 @@ Format.integer <- function(x, ..., format = guessFormat(x, dec = min(3, decimalP
 #' }
 #' @importFrom data.table ':='
 #' @importFrom dplyr filter across
+#' @rdname Format
 Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3, big.mark = "", small.mark = "") {
 
   .NNTable <- x

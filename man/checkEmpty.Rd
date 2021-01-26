@@ -15,3 +15,4 @@ An object of class \code{NNTable} without any data
 \description{
 Replace an NNTable object with an empty one if no data is present
 }
+\keyword{internal}

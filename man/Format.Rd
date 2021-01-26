@@ -2,22 +2,96 @@
 % Please edit documentation in R/addFormat.R
 \name{Format}
 \alias{Format}
+\alias{Format.numeric}
+\alias{Format.integer}
+\alias{Format.NNTable}
 \title{Format method}
 \usage{
 Format(x, ...)
+
+\method{Format}{numeric}(x, ..., format = guessFormat(x, dec = min(3, decimalPlaces(x))))
+
+\method{Format}{integer}(x, ..., format = guessFormat(x, dec = min(3, decimalPlaces(x))))
+
+\method{Format}{NNTable}(
+  x,
+  ...,
+  format_data = NULL,
+  group_by = NULL,
+  dec = 3,
+  big.mark = "",
+  small.mark = ""
+)
 }
 \arguments{
-\item{x}{The vector to format}
+\item{x}{An \code{NNTable} object}
 
-\item{...}{additional arguments passed on}
+\item{...}{Not currently used}
+
+\item{format}{The format to use}
+
+\item{format_data}{A \code{data.frame} with formats to use on the tables}
+
+\item{group_by}{The formatting can be grouped accoding to a column. This
+means that decimal places will only be aligned within each group and not
+the total column}
+
+\item{dec}{Number of decimals to use as base}
+
+\item{big.mark}{\code{character} specifying the character used to separate 1000 in a big number}
+
+\item{small.mark}{\code{character} specifying the character to use to separate every 5th decimal.}
 }
 \value{
 The formatted vector
+
+The formated vector
+
+The formated vector
+
+The NNTable with the format to be used for each value attached
 }
 \description{
 Format method
+
+Format numeric
+
+Format integer
+
+Format an NNTable
 }
 \examples{
 Format(c("ad", "chrjf"))
 Format(c(rnorm(10, 10, 20)))
+\dontrun{
+nrows <- 200
+letters_col <- character(122)
+for(i in 1:122)
+  letters_col[i] <- sample(paste(sample(letters, 25, replace = TRUE), collapse = ""))
+
+tab <- data.frame(sex = as.character(sample(c("Female", "Male"), nrows, replace = TRUE)),
+                  by_var = sample(c("type a", "type b"), nrows, replace = TRUE),
+                  letter = as.character(sample(letters_col, nrows, replace = TRUE)),
+                  n    = round(rnorm(nrows, 10, 20)),
+                  mean = rnorm(nrows, 10, 20),
+                  sd   = exp(rnorm(nrows, 0, 1)),
+                  min  = rnorm(nrows, 10, 20),
+                  max  = rnorm(nrows, 10, 20),
+                  stringsAsFactors = FALSE)
+
+NNtable <- NNTable(tab, columns =  c("sex", "by_var", "letter", "n",
+                                "Mean (SD)" = "mean (sd)", "min ; max"))
+
+
+n_form <- length(unique(tab$letter))
+format_data <- data.frame(letter = unique(tab$letter),
+                          n    = "\%.0f",
+                          mean = sample(c("\%.1f", "\%.2f"), n_form, replace  = TRUE),
+                          sd   = sample(c("\%.1f", "\%.2f"), n_form, replace  = TRUE),
+                          min  = sample(c("\%.1f", "\%.2f"), n_form, replace  = TRUE),
+                          stringsAsFactors = FALSE)
+format_data$max = format_data$min
+
+NNTable <- Format(NNtable, format_data = format_data)
+}
 }
