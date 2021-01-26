@@ -25,20 +25,20 @@ Add alignment specifications to an .NNTable
 ## *****************************************************************************
 ## # Example of transpose from wide to long                                 ----
 ##
-## Calculate the statistics for an AE table  
+## Calculate the statistics for an AE table
 ## *****************************************************************************
- 
+
 library(dplyr)
 # library(NNR)
 
 # Filter data according Safety analysis set
-adsl_f <- adsl            \%>\% 
-  filter(SAFFL == "Y")    \%>\% 
+adsl_f <- adsl            \%>\%
+  filter(SAFFL == "Y")    \%>\%
     rename(TRTA = TRT01P)
 
-# Calculate total exposure 
-totals <- adsl_f        \%>\% 
-  group_by(TRTA)        \%>\% 
+# Calculate total exposure
+totals <- adsl_f        \%>\%
+  group_by(TRTA)        \%>\%
   summarize("Number of subjects"     = n_distinct(USUBJID),
             "Total exposure (years)" = sum(TR01DURY))
 
@@ -47,22 +47,22 @@ output <- adae \%>\% group_by(AEBODSYS, AEDECOD, TRTA) \%>\%
   dplyr::summarise(N = n_distinct(USUBJID),
                    P = N / nrow(adsl),
                    E = n())
-  
+
 # Generate the NNTable ------------------------------------------------------
 
 # Initiate by defining the columns based on ADAE
-.NNTable <- NNTable(output, "AEBODSYS", "AEDECOD", "TRTA", "N", "(\%)" = "(P)", "E") 
+.NNTable <- NNTable(output, "AEBODSYS", "AEDECOD", "TRTA", "N", "(\%)" = "(P)", "E")
 
 # Add exposure calculated from ADSL
-.NNTable <- .NNTable \%>\% 
-  addExposure(exposure = totals, 
-              format_alone = FALSE, 
-              format_data  = c("Number of subjects"     = "\%.0f", 
+.NNTable <- .NNTable \%>\%
+  addExposure(exposure = totals,
+              format_alone = FALSE,
+              format_data  = c("Number of subjects"     = "\%.0f",
                                "Total exposure (years)" = "\%.2f"))
 
-# Test alignment                               
+# Test alignment
 .NNTable <- .NNTable \%>\% addAlignment(AEDECOD = "c", AEBODSYS = "r")
-  
+
 # print the table
 .NNTable
 }

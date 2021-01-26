@@ -39,20 +39,20 @@ Add wrapping to an NNTable
 ## *****************************************************************************
 ## # Example of transpose from wide to long                                 ----
 ##
-## Calculate the statistics for an AE table  
+## Calculate the statistics for an AE table
 ## *****************************************************************************
- 
+
 library(dplyr)
 # library(NNR)
 
 # Filter data according Safety analysis set
-adsl_f <- adsl            \%>\% 
-  filter(SAFFL == "Y")    \%>\% 
+adsl_f <- adsl            \%>\%
+  filter(SAFFL == "Y")    \%>\%
     rename(TRTA = TRT01P)
 
-# Calculate total exposure 
-totals <- adsl_f        \%>\% 
-  group_by(TRTA)        \%>\% 
+# Calculate total exposure
+totals <- adsl_f        \%>\%
+  group_by(TRTA)        \%>\%
   summarize("Number of subjects"     = n_distinct(USUBJID),
             "Total exposure (years)" = sum(TR01DURY))
 
@@ -61,21 +61,21 @@ output <- adae \%>\% group_by(AEBODSYS, AEDECOD, TRTA) \%>\%
   dplyr::summarise(N = n_distinct(USUBJID),
                    P = N / nrow(adsl),
                    E = n())
-  
+
 # Generate the NNTable ------------------------------------------------------
 
 # Initiate by defining the columns based on ADAE
-.NNTable <- NNTable(output, "AEBODSYS", "AEDECOD", "TRTA", "N", "(\%)" = "(P)", "E") \%>\% 
-            addTruncation(AEBODSYS = 50, AEDECOD = 48)                              \%>\% 
+.NNTable <- NNTable(output, "AEBODSYS", "AEDECOD", "TRTA", "N", "(\%)" = "(P)", "E") \%>\%
+            addTruncation(AEBODSYS = 50, AEDECOD = 48)                              \%>\%
             addGroupedColumns("AEBODSYS", "AEDECOD" , name = "some name")
- 
-# Add the title and footnote, these can span several lines and will 
-#  automatically be wrapped             
-.NNTable <- .NNTable \%>\% 
+
+# Add the title and footnote, these can span several lines and will
+#  automatically be wrapped
+.NNTable <- .NNTable \%>\%
             addWrapping(title        = "This could be a very long title",
                         footnote     = "This could be a very long footnote",
-                        sys_footnote = "Explain where the data comes from")           
- 
+                        sys_footnote = "Explain where the data comes from")
+
 # View the final result
 .NNTable
 }

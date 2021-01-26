@@ -47,25 +47,25 @@ Add columns that needs to be transposed from wide to long
 # library(NNR)
 library(dplyr)
 
-adsl_f <- adsl       \%>\% 
-filter(FASFL == "Y") \%>\% 
+adsl_f <- adsl       \%>\%
+filter(FASFL == "Y") \%>\%
   rename(TRTP = TRT01P)
 
 # calculate the totals by treatment arm
-totals <- adsl_f         \%>\% 
+totals <- adsl_f         \%>\%
   mutate(TRTP = "Total") \%>\%
   bind_rows(adsl_f)      \%>\%
-  filter(FASFL == "Y")   \%>\% 
-  group_by(TRTP)         \%>\% 
+  filter(FASFL == "Y")   \%>\%
+  group_by(TRTP)         \%>\%
   summarize("Number of subjects"     = n_distinct(USUBJID),
             "Total exposure (years)" = sum(TR01DURY))
 
 # Calculate the summary statistcs
-output <- adlb                                                  \%>\% 
+output <- adlb                                                  \%>\%
   mutate(TRTP = "Total")                                        \%>\%
-  bind_rows(adlb)                                               \%>\% 
-  filter(SAFFL == "Y" & PARAMCD \%in\% c("ABSR148N", "ABTIT148")) \%>\% 
-  group_by(TRTP, PARAM, STUDYID)                                \%>\% 
+  bind_rows(adlb)                                               \%>\%
+  filter(SAFFL == "Y" & PARAMCD \%in\% c("ABSR148N", "ABTIT148")) \%>\%
+  group_by(TRTP, PARAM, STUDYID)                                \%>\%
   summarize(N  = n_distinct(USUBJID),
             Mean = mean(AVAL, na.rm = TRUE),
             SD   = sd(  AVAL, na.rm = TRUE),
@@ -75,7 +75,7 @@ output <- adlb                                                  \%>\%
 
 # The NNTable is generated in small steps to view what happens
 
-# Initiate the table 
+# Initiate the table
 .NNTable <- NNTable(output, "PARAM", "TRTP", "N", "Mean (SD)", "Min ; Max")
 
 # View the table
@@ -84,20 +84,20 @@ output <- adlb                                                  \%>\%
 
 # Transpose the summary columns to long format
 .NNTable <- .NNTable                                    \%>\%
-  addTransLong(SUM = c("N", "Mean (SD)" , "Min ; Max"), 
-               var_name = "Called var")                 \%>\% 
+  addTransLong(SUM = c("N", "Mean (SD)" , "Min ; Max"),
+               var_name = "Called var")                 \%>\%
   addFormat(format_data = c(N = "\%.0f"), dec = 2)
 
 # View the table
 .NNTable
 
 # Add exposure, transpose to wide and ad grouping variables
-.NNTable <- addExposure(.NNTable, exposure = totals, 
-                        format_alone = TRUE, 
-                        format_data  = c("Number of subjects" = "\%.0f")) \%>\% 
-            addTransWide(TRTP = "SUM")                                   \%>\% 
+.NNTable <- addExposure(.NNTable, exposure = totals,
+                        format_alone = TRUE,
+                        format_data  = c("Number of subjects" = "\%.0f")) \%>\%
+            addTransWide(TRTP = "SUM")                                   \%>\%
             addGroupedColumns("PARAM", "Called var")
-            
+
 # View the final result
 .NNTable
 
