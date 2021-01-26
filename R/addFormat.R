@@ -256,6 +256,7 @@ Format <- function(x, ...) {
 #'
 #' @return The formatted vector
 #' @export
+#' @rdname Format
 Format.default <- function(x, ...) as.character(x)
 
 #' Format numeric
