@@ -242,4 +242,3 @@ initName <- function(x) {
   initName(x[[1]])
 }
 
-

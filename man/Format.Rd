@@ -2,12 +2,15 @@
 % Please edit documentation in R/addFormat.R
 \name{Format}
 \alias{Format}
+\alias{Format.default}
 \alias{Format.numeric}
 \alias{Format.integer}
 \alias{Format.NNTable}
 \title{Format method}
 \usage{
 Format(x, ...)
+
+\method{Format}{default}(x, ...)
 
 \method{Format}{numeric}(x, ..., format = guessFormat(x, dec = min(3, decimalPlaces(x))))
 
@@ -45,6 +48,8 @@ the total column}
 \value{
 The formatted vector
 
+The formatted vector
+
 The formated vector
 
 The formated vector
@@ -53,6 +58,8 @@ The NNTable with the format to be used for each value attached
 }
 \description{
 Format method
+
+Format default
 
 Format numeric
 

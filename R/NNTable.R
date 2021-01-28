@@ -367,9 +367,9 @@ print.NNTable <- function(x, ..., page = 1, file = NULL, verbose = TRUE, check_e
 
   .NNTable <- apply_add_separators(.NNTable)
 
-  .NNTable <- apply_createHeader(.NNTable)
-
   .NNTable <- apply_alignment(.NNTable)
+
+  .NNTable <- apply_createHeader(.NNTable)
 
   .NNTable <- apply_width(.NNTable, spread = TRUE)
 

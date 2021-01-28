@@ -6,6 +6,10 @@
 
 
 
+
+
+
+
 apply_add_separators <- function(.NNTable) {
 
   # extract the data.frame as a data.table
@@ -104,6 +108,205 @@ apply_add_separators <- function(.NNTable) {
 
 
 
+#' @importFrom Matrix t
+apply_createHeader <- function(.NNTable) {
+
+  data_str <- .NNTable$data_str[, setdiff(colnames(.NNTable$data_str),
+                                          c(.NNTable$remove$columns, .NNTable$remove$columns_trunc)), drop = FALSE]
+
+  # Remove the added _trunc from the colnames
+  colnames(data_str)[grep("_trunc$", colnames(data_str))] <-
+    gsub("_trunc$", "", colnames(data_str)[grep("_trunc$", colnames(data_str))])
+
+  # Get the number of columns
+  ncol <- ncol(data_str)
+
+  # Find the number of characters in the header
+  rep_name = ""
+  if (!is.null(.NNTable$grouped_columns$name))
+    rep_name = .NNTable$grouped_columns$name
+
+  col_names <- gsub("NNTable_grouped_name", rep_name , colnames(data_str))
+
+  if (!is.null(.NNTable$header$underscore) && .NNTable$header$underscore) {
+    col_names <- gsub("__#__", "__#__NNTable_undescore__#__" , col_names)
+  }
+
+  list <- strsplit(col_names, "__#__")
+  n.header.rows <- max(sapply(list, length))
+
+  # create the initial header matrix
+  header.mat <- sapply(list, function(x) rev(c(x, rep("", n.header.rows - length(x)))))
+
+  if (!is.matrix(header.mat)) {
+    header.mat <- as.matrix(t(header.mat))
+  }
+
+  # find the columns_to_wide spacers and rename to blank
+  spacers <- grep("^space.column.|^sep.column", colnames(data_str))
+  prev.space <- FALSE
+
+  for (i in seq_len(nrow(header.mat))) {
+    if (i > 1) prev.space <- header.mat[i - 1, spacers - 1] != header.mat[i - 1, spacers + 1]
+    header.mat[i, spacers[header.mat[i, spacers - 1] != header.mat[i, spacers + 1] | prev.space ]] <- ""
+  }
+
+  header_last_row <- header.mat[i, ]
+
+  # clear last row if only one repeat is present for the second to last row
+  if (i > 1 && length(.NNTable$columns_to_wide) > 0 && .NNTable$columns_to_wide$.remove_last_header_row) {
+    if (max(rle(header.mat[ i - 1  , header.mat[ i - 1, ] != ""])$lengths) == 1) {
+      header.mat[i, header.mat[ i - 1, ] != ""] <- ""
+
+      if (all(header.mat[i - 1, header.mat[ i, ] != ""] == "")) {
+        header.mat[i - 1, header.mat[ i, ] != ""] <- header.mat[i, header.mat[ i, ] != ""]
+        header.mat <- header.mat[-i, ]
+      }
+    }
+  }
+
+  if (!is.matrix(header.mat)) {
+    header.mat <- as.matrix(t(header.mat))
+  }
+
+  # remove header name for the long format column
+  if (!is.null(.NNTable$columns_to_long) && length(.NNTable$columns_to_long)) {
+    header.mat[header.mat == .NNTable$columns_to_long$var_name ] <-
+      .NNTable$columns_to_long$display_name
+  }
+
+
+  ### split the header matrix into more rows in accordance with split
+  if (!is.null(.NNTable$cell_split)) {
+
+    header.mat_pre <- header.mat
+
+    alignment <- .NNTable$alignment$alignment
+
+    # make sure that all top level rows are aligned center
+    for (i in seq_len(nrow(header.mat) - 1)) {
+      split_list <- strsplit(header.mat[i, ], .NNTable$cell_split$split)
+      header.mat[i, ] <- sapply(lapply(split_list, align, "c"), paste, collapse = gsub("\\\\", "", .NNTable$cell_split$split))
+    }
+
+    # For the last row we align as dictated unless it is a grouped header, then we centre
+    split_list <- strsplit(header.mat[nrow(header.mat), ], .NNTable$cell_split$split)
+
+    apply(header.mat[seq_len(nrow(header.mat) - 1), ] != "", 2, any)
+
+    alignment[apply(header.mat[seq_len(nrow(header.mat) - 1), ] != "", 2, any)] <- "c"
+
+    split_align <- mapply(align, x = split_list, alignment)
+
+    header.mat[nrow(header.mat), ] <-
+      sapply(split_align, paste, collapse = gsub("\\\\", "", .NNTable$cell_split$split))
+
+
+    # make sure that within each group level each the same number of cell-splits occur
+
+    created_blanks <- rep(0, ncol(header.mat))
+
+    if (nrow(header.mat) > 1) {
+      for (i in seq_len(nrow(header.mat))[-1]) {
+
+        non_blank <- apply(header.mat_pre[seq_len(i - 1),, drop = FALSE] != "", 2, any)
+        at_non_blank <- header.mat[i, non_blank]
+        n_lines <- sapply(gregexpr(.NNTable$cell_split$split, at_non_blank), function(x) sum(x > 0))
+        n_missing_lines <- max(n_lines) - n_lines
+
+        if (.NNTable$cell_split$align == "centre") {
+          n_left_splits  <- ceiling(n_missing_lines / 2)
+          n_right_splits <- n_missing_lines - n_left_splits
+        } else if (.NNTable$cell_split$align == "bottom") {
+          n_left_splits  <- n_missing_lines
+          n_right_splits <- rep(0, length(n_missing_lines))
+        } else {
+          n_left_splits  <- rep(0, length(n_missing_lines))
+          n_right_splits <- n_missing_lines
+        }
+
+        created_blanks[non_blank] <- n_missing_lines
+
+        left_splits <- sapply(c(Matrix::t(n_left_splits)),
+                              function(n) paste(rep(gsub("\\\\", "", .NNTable$cell_split$split), n),
+                                                collapse = ""))
+
+        right_splits <- sapply(c(Matrix::t(n_right_splits)),
+                               function(n) paste(rep(gsub("\\\\", "", .NNTable$cell_split$split), n),
+                                                 collapse = ""))
+
+        header.mat[i, non_blank] <- paste0(left_splits, at_non_blank, right_splits)
+
+      }
+
+
+      non_blank <- apply(header.mat_pre[-nrow(header.mat_pre),, drop = FALSE] != "", 2, any)
+
+      header.mat[-nrow(header.mat_pre), non_blank] <-
+        matrix(paste0(c(Matrix::t(header.mat[-nrow(header.mat_pre), non_blank])),
+                      gsub("\\\\", "", .NNTable$cell_split$split)),
+               nrow = (nrow(header.mat) - 1), byrow = TRUE)
+
+      head_collapsed <- apply(header.mat, 2, paste0, collapse = "")
+
+    } else {
+      head_collapsed <- header.mat
+    }
+
+
+
+    n_new_lines <-
+      sapply(gregexpr(.NNTable$cell_split$split, head_collapsed), function(x) sum(x > 0))
+
+    n_missing_lines <- max(n_new_lines) - n_new_lines
+
+    if (.NNTable$cell_split$align == "centre") {
+      n_left_splits  <- ceiling(n_missing_lines / 2)
+      n_right_splits <- n_missing_lines - n_left_splits
+    } else if (.NNTable$cell_split$align == "bottom") {
+      n_left_splits  <- n_missing_lines
+      n_right_splits <- rep(0, length(n_missing_lines))
+    } else {
+      n_left_splits  <- rep(0, length(n_missing_lines))
+      n_right_splits <- n_missing_lines
+    }
+
+
+    left_splits <-
+      sapply(n_left_splits, function(n)
+        paste(rep(gsub("\\\\", "", .NNTable$cell_split$split), n), collapse = ""))
+
+    right_splits <-
+      sapply(n_right_splits, function(n)
+        paste(rep(gsub("\\\\", "", .NNTable$cell_split$split), n), collapse = ""))
+
+
+    head_collapsed <- paste0(left_splits, head_collapsed, right_splits)
+
+
+    new_list <- strsplit(head_collapsed, .NNTable$cell_split$split)
+
+    header.mat <- sapply(new_list, function(x) c(x, rep("", max(n_new_lines) + 1 - length(x))))
+
+    if (!is.matrix(header.mat)) {
+      header.mat <- as.matrix(t(header.mat))
+    }
+  }
+  ###
+
+  if (!is.null(.NNTable$header)) {
+    .NNTable$header$matrix <- header.mat
+  } else {
+    .NNTable$header <- list(matrix = header.mat,
+                            underscore = FALSE)
+
+  }
+
+  return(.NNTable)
+}
+
+
+
 apply_width <- function(.NNTable, spread = TRUE) {
 
   # Get data
@@ -123,15 +326,21 @@ apply_width <- function(.NNTable, spread = TRUE) {
 
   header <- setdiff(colnames(data_str), c(NNTable_added_group, "NNTable_group_level"))
 
-  header.mat <- .NNTable$header$matrix
+  header.mat_underscore <- .NNTable$header$matrix
 
   # Make sure that at least one space is added between space cols
   data_str[, grep("^space.column", colnames(data_str))] <- ""
 
 
-  n.headers <- nrow(header.mat)
+  n.headers <- nrow(header.mat_underscore)
 
+  # Take the NNTable_underscore tag into account
+  header.mat_underscore_rep <- header.mat_underscore
 
+  wh_underscore_1 <- header.mat_underscore == "NNTable_undescore"
+  wh_underscore_2 <- rbind(wh_underscore_1[-1,], wh_underscore_1[1,])
+  header.mat_underscore_rep[wh_underscore_1] <- header.mat_underscore[wh_underscore_2]
+  header.mat <- header.mat_underscore_rep
   #---------------------------------------------------------------------------#
   ######              Establish the width of the columns                 ######
   #---------------------------------------------------------------------------#
@@ -163,6 +372,7 @@ apply_width <- function(.NNTable, spread = TRUE) {
 
   # When more than one header is present we need to do something in order to
   # align the headers
+
   if (n.headers > 1) {
 
     count_mat <- nchar(header.mat)
@@ -359,14 +569,14 @@ apply_width <- function(.NNTable, spread = TRUE) {
   underscoreWidth <- function(x, width) {
     v <- rle(x)
     from_to <- c(0, cumsum(v$length))
-
     hline_width <- width
 
-    # Above the adjust in accordance with needed withs
+
+
+    # Above the adjust in accordance with needed widths
     for (i in seq_along(v$lengths)) {
       seq <- (from_to[i] + 1):from_to[i + 1]
-      new_width <-
-        sum(width[seq]) # + length(seq) - 1 # let the extra space count
+      new_width <- sum(width[seq])
 
       needed_space <- nchar(v$values[i]) - new_width
       if (needed_space > 0) {
@@ -387,7 +597,7 @@ apply_width <- function(.NNTable, spread = TRUE) {
 
   # create the alignment of the header
   headAlign <- function(x, width, alignment, nrows, any_pre_p,
-                        pre_paste, post_paste, underscore, under_mat,
+                        pre_paste, post_paste, underscore, under_mat, under_mat_c,
                         nested_header) {
 
     #browser()
@@ -399,7 +609,8 @@ apply_width <- function(.NNTable, spread = TRUE) {
     # Above the adjust in accordance with needed widths
     for (i in seq_along(v$lengths)) {
       seq <- (from_to[i] + 1):from_to[i + 1]
-      new_width <- sum(width[seq]) # + length(seq) - 1 # let the extra space count
+
+      new_width <- sum(width[seq])
 
       head_space <- max(apply(under_mat[, seq, drop = FALSE], 1, sum))
 
@@ -427,73 +638,63 @@ apply_width <- function(.NNTable, spread = TRUE) {
       }
     }
 
-    hline <- character(0)
-    hline_make <- .NNTable$header$underscore && underscore && max(v$lengths[v$values != ""]) > 1
     header.text <- character(0)
-    #browser()
+
     for (i in seq_along(v$lengths)) {
       seq <- (from_to[i] + 1):from_to[i + 1]
       new_width <- sum(use_width[seq]) # + length(seq) - 1 # let the extra space count
 
-
-      if ((v$length[i] == 1  & nrows == 1 & i == 1) | (!any(nested_header[seq]) & v$length[i] == 1)) {
+      if (v$values[i] == "NNTable_undescore") {
+        header.text[i] <- hline(times = max(apply(under_mat[, seq, drop = FALSE], 1, sum)))
+      } else if ((v$length[i] == 1  & nrows == 1 & i == 1) | (!any(nested_header[seq]) & v$length[i] == 1)) {
         header.text[i] <- align(x = v$values[i], alignment[from_to[i + 1]], new_width, keep.empty = FALSE)
       } else {
         header.text[i] <- align(x = v$values[i], "c", new_width, keep.empty = FALSE)
       }
-      if (hline_make)
-        hline[i] <- ifelse(v$values[i] != "", #& length(seq) > 1
-                           hline(times = max(apply(under_mat[, seq, drop = FALSE], 1, sum))),
-                           paste(rep(" ", new_width), collapse = ""))
     }
     pre_paste <- ""
-    c(
-      paste(c(pre_paste, header.text, post_paste), collapse = ""),
-      if (hline_make) paste(c(pre_paste, hline, post_paste), collapse = "")
-    )
+
+    paste(c(pre_paste, header.text, post_paste), collapse = "")
+
   }
 
-  #
-  # alignment_p[setdiff(names(alignment_p), "NNTable_pre_space")[1]]
-  #
-  # nested_header <- grepl("__#__", header)
-  # if (nested_header)
+
 
   under_mat <- width_mat <-
     matrix(rep(width, each = n.headers), nrow = n.headers, byrow = FALSE)
 
-
-
   if (nrow(under_mat) > 1) {
     # extract the length of the underscores
-    for(i in seq_len(nrow(under_mat) - 1))
+    for (i in seq_len(nrow(under_mat) - 1)) {
       under_mat[i, ] <- underscoreWidth(x = header.mat[i, ], width =  width_mat[i, ])
-
+    }
     #under_mat <- under_mat[seq_len(nrow(under_mat) - 1), ]
   }
 
-  alignment_p <- alignment
-  underscore <- c(diff(.NNTable$header$repeats), 0) > 0
+  # in order to keep the changes made to header.mat a new matrix is made that
+  # incorporates those changes but also keeps "NNTable_underscore" tag
+  header.mat_underscore2 <- header.mat
+  header.mat_underscore2[header.mat_underscore == "NNTable_undescore"]  <- "NNTable_undescore"
+
   header.mat.align <- character()
-
-
-
+  #browser()
   for (i in seq_len(n.headers)) {
     header.mat.align <-
       c(
         header.mat.align,
-        headAlign(x = header.mat[i, ],
+        headAlign(x = header.mat_underscore2[i, ],
                   width      = width_mat[i, ],
                   alignment  = alignment,
                   nrows      = n.headers,
                   any_pre_p  = any(nchar(pre_header_spaces)),
                   pre_paste  = pre_header_spaces[i],
                   post_paste = post_header_spaces[i],
-                  underscore = underscore[i],
                   under_mat  = under_mat[setdiff(seq_len(nrow(under_mat)), seq_len(i - 1)), , drop = FALSE],
+                  under_mat_c = under_mat[seq_len(i), , drop = FALSE],
                   nested_header = nested_header)
       )
   }
+
 
   header.mat.align
 

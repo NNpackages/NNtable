@@ -22,8 +22,8 @@ test_that("Make simple_table on one page", {
 
   print(.NNTable, file = file.path(output_path, "got", file))
 
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 })
 
 test_that("Make simple_table on multiple pages", {
@@ -42,8 +42,8 @@ test_that("Make simple_table on multiple pages", {
 
   print(.NNTable, file = file.path(output_path, "got", file))
 
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 })
 
 test_that("Make grouped table on multiple pages", {
@@ -62,8 +62,8 @@ test_that("Make grouped table on multiple pages", {
 
   print(.NNTable, file = file.path(output_path, "got", file))
 
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 })
 
 
@@ -94,8 +94,8 @@ test_that("NNTable trapose to wide with two levels", {
   print(.NNTable, file = file.path(output_path, "got", file))
 
   # fix in new version
-  #expect_equal(readLines(file.path(output_path, "expected", file)),
-  #             readLines(file.path(output_path, "got",      file)))
+  #expect_equal(read_encoded(file.path(output_path, "expected", file)),
+  #             read_encoded(file.path(output_path, "got",      file)))
 
 
   # change the order of the transpose
@@ -108,8 +108,8 @@ test_that("NNTable trapose to wide with two levels", {
   print(.NNTable, file = file.path(output_path, "got", file))
 
   # fix in new version
-  #expect_equal(readLines(file.path(output_path, "expected", file)),
-  #             readLines(file.path(output_path, "got",      file)))
+  #expect_equal(read_encoded(file.path(output_path, "expected", file)),
+  #             read_encoded(file.path(output_path, "got",      file)))
 
 
   # reordering of the columns will test the case where a new column is necessar
@@ -133,8 +133,8 @@ test_that("NNTable trapose to wide with two levels", {
   print(.NNTable, file = file.path(output_path, "got", file))
 
   # fix in new version
-  #expect_equal(readLines(file.path(output_path, "expected", file)),
-  #             readLines(file.path(output_path, "got",      file)))
+  #expect_equal(read_encoded(file.path(output_path, "expected", file)),
+  #             read_encoded(file.path(output_path, "got",      file)))
 
 
   # switching will test the case where a column is smaller than the nested
@@ -147,8 +147,8 @@ test_that("NNTable trapose to wide with two levels", {
   print(.NNTable, file = file.path(output_path, "got", file))
 
   # fix in new version
-  #expect_equal(readLines(file.path(output_path, "expected", file)),
-  #             readLines(file.path(output_path, "got",      file)))
+  #expect_equal(read_encoded(file.path(output_path, "expected", file)),
+  #             read_encoded(file.path(output_path, "got",      file)))
 
 
   # test the spanning rows for group columns
@@ -165,8 +165,8 @@ test_that("NNTable trapose to wide with two levels", {
 
   print(.NNTable, file = file.path(output_path, "got", file))
 
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 })
 
 
@@ -197,8 +197,8 @@ test_that("NNTable trapose to wide with two levels and split header", {
   print(.NNTable, file = file.path(output_path, "got", file))
 
   # fix in new version
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 
 
 
@@ -212,8 +212,8 @@ test_that("NNTable trapose to wide with two levels and split header", {
   print(.NNTable, file = file.path(output_path, "got", file))
 
   # fix in new version
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 
 
 
@@ -238,8 +238,8 @@ test_that("NNTable trapose to wide with two levels and split header", {
   print(.NNTable, file = file.path(output_path, "got", file))
 
   # fix in new version
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 
 
   .NNTable <- .NNTable %>%
@@ -252,8 +252,8 @@ test_that("NNTable trapose to wide with two levels and split header", {
   print(.NNTable, file = file.path(output_path, "got", file))
 
   # fix in new version
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 })
 
 test_that("NNTable transpose to wide table on multiple pages with spaces in name", {
@@ -273,8 +273,8 @@ test_that("NNTable transpose to wide table on multiple pages with spaces in name
 
   print(.NNTable, file = file.path(output_path, "got", file))
 
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 })
 
 
@@ -299,8 +299,8 @@ test_that("NNTable addFilling before addFormat", {
 
   print(.NNTable, file = file.path(output_path, "got", file))
 
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 })
 
 
@@ -325,8 +325,8 @@ test_that("NNTable grouup transpose to wide on multiple pages", {
 
   print(.NNTable, file = file.path(output_path, "got", file))
 
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 
 })
 
@@ -355,8 +355,8 @@ test_that("NNTable grouup transpose to wide on multiple pages", {
 
   print(.NNTable, file = file.path(output_path, "got", file))
 
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 })
 
 test_that("NNTable grouup transpose to wide on multiple pages", {
@@ -384,8 +384,8 @@ test_that("NNTable grouup transpose to wide on multiple pages", {
 
   print(.NNTable, file = file.path(output_path, "got", file))
 
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 })
 
 
@@ -433,8 +433,8 @@ test_that("NNTable add exposure table", {
     print(.NNTable, file = file.path(output_path, "got", file))
   })
 
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 
 
 
@@ -451,8 +451,8 @@ test_that("NNTable add exposure table", {
   print(.NNTable, file = file.path(output_path, "got", file))
 
   # fix in new version
-  #expect_equal(readLines(file.path(output_path, "expected", file)),
-  #             readLines(file.path(output_path, "got",      file)))
+  #expect_equal(read_encoded(file.path(output_path, "expected", file)),
+  #             read_encoded(file.path(output_path, "got",      file)))
 })
 
 

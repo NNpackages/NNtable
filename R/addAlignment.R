@@ -68,10 +68,6 @@ apply_alignment <- function(.NNTable) {
     .NNTable$alignment <- list()
   }
 
-  # get size of header
-  n.header.rows <- nrow(.NNTable$header$matrix)
-
-
   data <- .NNTable$data
   data_str <- .NNTable$data_str[, setdiff(colnames(.NNTable$data_str),
                                           c(.NNTable$remove$columns, .NNTable$remove$columns_trunc)), drop = FALSE]
@@ -132,16 +128,13 @@ apply_alignment <- function(.NNTable) {
     # extract the variables
     vars <- initName(.NNTable$columns_to_long$columns)
 
-    # if all columns are numerical we centre the created column
-    # this is taken out again since we want the values to be left aligned
-    #if (all(vars %in% names_conv))
-    #  alignment[.NNTable$columns_to_long$value_name[.NNTable$columns_to_long$value_name %in% header]] <- "c"
-
 
     cols <- intersect(vars, names(classes))
     if (length(cols) && !any(classes[cols] %in% c("numeric", "integer"))) {
 
       list <- strsplit(gsub("NNTable_grouped_name", "" , colnames(data_str)), "__#__")
+      n.header.rows <- max(sapply(list, length))
+
       cols <- sapply(list, function(x) rev(c(x, rep("", n.header.rows - length(x)))))
       if (is.matrix(cols)) {
         which <- apply(cols == .NNTable$columns_to_long$value_name, 2, any)
@@ -196,6 +189,9 @@ alignCenter <- function(text, width = max(nchar(text)),
                         type = c("non-trimmed", "trimmed"),
                         fill = TRUE,
                         keep.empty = TRUE) {
+  if (!length(text))
+    return(text)
+
   textWidth <- nchar(text)
   spare <- width - textWidth
   nspaces   <- pmax(ceiling(spare/2), 0)
@@ -228,6 +224,10 @@ alignCenter <- function(text, width = max(nchar(text)),
 #' @return The \code{character} \code{text} wtihout leading and trailing blanks
 #' @keywords internal
 alignRight <- function(text, width = max(nchar(text)), type = c("non-trimmed", "trimmed"), keep.empty = TRUE) {
+
+  if (!length(text))
+    return(text)
+
   textWidth <- nchar(text)
   nspaces   <- floor((width - textWidth))
   spaces    <- sapply(nspaces, function(n) paste(rep(" ", n), collapse = ""))
@@ -254,6 +254,9 @@ alignLeft <- function(text, width = max(nchar(text)),
                       type = c("non-trimmed", "trimmed"),
                       sep = " ",
                       keep.empty = TRUE) {
+  if(!length(text))
+    return(text)
+
   textWidth <- nchar(text, keepNA = FALSE)
   nspaces   <- floor((width - textWidth))
   spaces    <- sapply(nspaces, function(n) paste(rep(sep, n), collapse = ""))

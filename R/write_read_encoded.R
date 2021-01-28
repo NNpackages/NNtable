@@ -35,9 +35,12 @@ write_encoded <- function(text, file, enc = "CP1252") {
 #' @param file \code{character} indicating the file to read
 #' @param enc \code{character} indicating the encoding to be used. The EOT tool
 #'   expects this to be in CP1252
+#' @param conv \code{character} with the format to use in R. The R-server expects UTF-8
 #'
 #' @return character with the read lines
 #' @export
-read_encoded <- function(file, enc = "CP1252") {
-  readLines(file, encoding = "CP1252")
+read_encoded <- function(file, enc = "CP1252", conv = "UTF-8") {
+  x <- readLines(file, encoding = enc)
+
+  iconv(x, enc, conv)
 }
