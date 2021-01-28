@@ -4,13 +4,15 @@
 \alias{read_encoded}
 \title{Read an encoded txt output}
 \usage{
-read_encoded(file, enc = "CP1252")
+read_encoded(file, enc = "CP1252", conv = "UTF-8")
 }
 \arguments{
 \item{file}{\code{character} indicating the file to read}
 
 \item{enc}{\code{character} indicating the encoding to be used. The EOT tool
 expects this to be in CP1252}
+
+\item{conv}{\code{character} with the format to use in R. The R-server expects UTF-8}
 }
 \value{
 character with the read lines
