@@ -1,4 +1,4 @@
-# NNtable (development version)
+# NNtable 0.0.3
 
 # NNtable 0.0.2
 
