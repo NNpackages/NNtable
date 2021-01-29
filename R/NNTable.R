@@ -392,12 +392,18 @@ print.NNTable <- function(x, ..., page = 1, file = NULL, verbose = TRUE, check_e
 apply_print_cons <- function(.NNTable, page = 1) {
 
   # Find the lines to print
-  lines <- seq((page - 1) * .NNTable$page_size$page.length + 1 ,
-               page * .NNTable$page_size$page.length)
+  if (is.numeric(page)) {
+    lines <- seq((min(page) - 1) * .NNTable$page_size$page.length + 1 ,
+                 max(page) * .NNTable$page_size$page.length)
 
-  lines <- lines[lines < length(.NNTable$output)]
+    lines <- lines[lines < length(.NNTable$output)]
+  } else {
+    lines <- seq_along(.NNTable$output)
+  }
+
+
   # print to the console
-  cat(.NNTable$output[lines], sep = "\n")
+  cat(gsub("\\f", "", .NNTable$output[lines]), sep = "\n")
 }
 
 apply_print_file <- function(.NNTable, file = tempfile(fileext = ".txt"),
