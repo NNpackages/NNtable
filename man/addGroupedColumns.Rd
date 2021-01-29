@@ -13,7 +13,8 @@ addGroupedColumns(
   add_blank_row = TRUE,
   add_blank_row_when = c("missing", "always"),
   add_blank_row_invisible = FALSE,
-  add_header_rows_invisible = TRUE
+  add_header_rows_invisible = TRUE,
+  remove_duplicated_stub_row = TRUE
 )
 }
 \arguments{
@@ -49,6 +50,10 @@ character.}
 \item{add_header_rows_invisible}{\code{logical} Should a blank header row be
 added to invisible grouped columns. Alternative, \code{character} with
 invisible groups that should have a blank header.}
+
+\item{remove_duplicated_stub_row}{\code{logical} indicating whether or not
+duplicated rows should be displayed or be left blank. Defaults to TRUE as
+this is usually the wanted behavior, where the repeats are considered noise}
 }
 \value{
 An object of class \code{NNTable} with the column grouping specified

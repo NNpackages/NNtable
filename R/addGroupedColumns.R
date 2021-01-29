@@ -24,6 +24,9 @@
 #'   header is supplied in the data no blank row is added. When set equal to
 #'   \code{always} it is added regardless of the group header was supplied in
 #'   the data.
+#' @param remove_duplicated_stub_row \code{logical} indicating whether or not
+#'   duplicated rows should be displayed or be left blank. Defaults to TRUE as
+#'   this is usually the wanted behavior, where the repeats are considered noise
 #'
 #' @return An object of class \code{NNTable} with the column grouping specified
 #' @export
@@ -90,7 +93,8 @@ addGroupedColumns <- function(.NNTable, ..., name = "", invisible = character(0)
                               add_blank_row = TRUE,
                               add_blank_row_when = c("missing", "always"),
                               add_blank_row_invisible  = FALSE,
-                              add_header_rows_invisible = TRUE) {
+                              add_header_rows_invisible = TRUE,
+                              remove_duplicated_stub_row = TRUE) {
 
   add_blank_row_when <- match.arg(add_blank_row_when)
   columns <- c(...)
@@ -108,6 +112,7 @@ addGroupedColumns <- function(.NNTable, ..., name = "", invisible = character(0)
                                    add_blank_row_when = add_blank_row_when,
                                    add_blank_row_invisible = add_blank_row_invisible,
                                    add_header_rows_invisible = add_header_rows_invisible,
+                                   remove_duplicated_stub_row = remove_duplicated_stub_row,
                                    invisible = invisible)
 
   .NNTable$remove$columns <- c(.NNTable$remove$columns, "NNTable_master_group", columns, "NNTable_added_blank", "NNTable_added_group", "NNTable_group_level")
@@ -386,6 +391,12 @@ apply_groupColumns <- function(.NNTable) {
 
     data_str <- data_str[, (split_cols2) := lapply(.SD, function(x) ifelse(grepl("^\\s*Inserted Blank$", x), "", x)), .SDcols = split_cols2]
   }
+
+
+  # remove repeated group columns
+  # collapse all these columns together, if they are duplicated replace NNTable_grouped_name with blank
+  if (.NNTable$grouped_columns$remove_duplicated_stub_row)
+    data_str$NNTable_grouped_name[duplicated(data_str[, mget(c(group_cols, "NNTable_grouped_name"))])] <- ""
 
   order_columns <-
     c(.NNTable$order_columns$sort_columns, "NNTable_master_group", .NNTable$grouped_columns$columns)

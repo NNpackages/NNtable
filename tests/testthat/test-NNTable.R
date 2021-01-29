@@ -54,7 +54,10 @@ test_that("Make grouped table on multiple pages", {
                      E = n())
 
   # create the NNTable
-  .NNTable <- NNTable(output) %>% addGroupedColumns("AEBODSYS", "AEDECOD")
+  .NNTable <- NNTable(output) %>%
+    addGroupedColumns("AEBODSYS", "AEDECOD", remove_duplicated_stub_row = FALSE)
+
+
 
   file <- "adae_group_mutiple_pages.txt"
 
