@@ -878,16 +878,19 @@ apply_splitPages <- function(.NNTable) {
     numerics <-
       lapply(group_cols,  function(grouping_col)
         if (grouping_col == "NNTable_master_group") {
-          which(data_str[, get(grouping_col)]  %in% names(wrong_break_list[[grouping_col]]) &
+
+
+          potentials <-  data_str[, get(grouping_col)]  %in% names(wrong_break_list[[grouping_col]]) &
                   stringr::str_trim(data_str[, get("NNTable_grouped_name")]) == "" &
-                  data_str[, get("NNTable_added_blank")] == "")
+                  data_str[, get("NNTable_added_blank")] == ""
+
+          which(potentials)[!duplicated( data_str[, get(grouping_col)][potentials])]
+
         } else {
 
           potentials <- data_str[, get(grouping_col)]  %in% names(wrong_break_list[[grouping_col]]) &
             stringr::str_trim(data_str[, get("NNTable_grouped_name")]) == "" &
             data_str[, get("NNTable_added_blank")] == "Y"
-
-          data_str[, get(grouping_col)][potentials]
 
           which(potentials)[!duplicated( data_str[, get(grouping_col)][potentials])]
         }

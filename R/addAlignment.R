@@ -116,7 +116,11 @@ apply_alignment <- function(.NNTable) {
   # alignment[names(to_numeric)[names(to_numeric) %in% header]] <- "c"
 
   names_conv <- names(.NNTable$concat$table[sapply(.NNTable$concat$table, function(x) {all( x %in% numerics)})])
-  alignment[names_conv[names_conv %in% header | paste0(names_conv, "_trunc") %in% header]] <- "c"
+  names_conv2 <-names_conv[names_conv %in% header | paste0(names_conv, "_trunc") %in% header]
+
+  alignment[names(alignment) %in%
+              c(names_conv, names_conv2, paste0(c(names_conv, names_conv2), "_trunc"))] <- "c"
+
 
   # columns that are really short should be centred
   small <- sapply(data_str[classes_str == "character"], function(x) max(nchar(x,  keepNA = FALSE))) <= 4

@@ -370,6 +370,8 @@ apply_groupColumns <- function(.NNTable) {
   # correct the group column indicator
   data_str$NNTable_added_group[data_str$NNTable_grouped_name == ""] <- FALSE
 
+  #browser()
+
   # Delete rows where all actual columns are blank and added for additional columns
   # Currently also deletes splits on other group vars
   if (!is.null(.NNTable$truncation) | !is.null(.NNTable$cell_split)) {
@@ -377,12 +379,12 @@ apply_groupColumns <- function(.NNTable) {
     split_cols2 <- unique(c(split_cols, "NNTable_grouped_name"))
     cols <- setdiff(.NNTable$truncation$split_cols, names(group_cols))
 
-    delete <- grepl("Inserted Blank", data_str[["NNTable_grouped_name"]]) &
+    delete <- grepl("^\\s*Inserted Blank$", data_str[["NNTable_grouped_name"]]) &
       apply(data_str[, mget(cols), drop = FALSE], 1, function(x) all(x == "Inserted Blank" | x == ""))
 
     data_str <- data_str[!delete, ]
 
-    data_str <- data_str[, (split_cols2) := lapply(.SD, function(x) ifelse(x == "Inserted Blank", "", x)), .SDcols = split_cols2]
+    data_str <- data_str[, (split_cols2) := lapply(.SD, function(x) ifelse(grepl("^\\s*Inserted Blank$", x), "", x)), .SDcols = split_cols2]
   }
 
   order_columns <-
