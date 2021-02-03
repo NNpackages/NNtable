@@ -1,3 +1,9 @@
+# NNtable (development version)
+
+* bugfixes 
+
+    + 336364 addFormat fails when used together with addExposure and first column is not mentioned in addFormat
+
 # NNtable 0.0.3
 
 * Ability to print multiple pages with one call to, e.g. `print.NNTable(table, page = 1:5)` or `print.NNTable(table, page = "all")`
