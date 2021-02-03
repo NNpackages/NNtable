@@ -384,12 +384,12 @@ apply_groupColumns <- function(.NNTable) {
     split_cols2 <- unique(c(split_cols, "NNTable_grouped_name"))
     cols <- setdiff(.NNTable$truncation$split_cols, names(group_cols))
 
-    delete <- grepl("^\\s*Inserted Blank$", data_str[["NNTable_grouped_name"]]) &
-      apply(data_str[, mget(cols), drop = FALSE], 1, function(x) all(x == "Inserted Blank" | x == ""))
+    delete <- grepl("^\\s*NNTable_Inserted_Blank$", data_str[["NNTable_grouped_name"]]) &
+      apply(data_str[, mget(cols), drop = FALSE], 1, function(x) all(x == "NNTable_Inserted_Blank" | x == ""))
 
     data_str <- data_str[!delete, ]
 
-    data_str <- data_str[, (split_cols2) := lapply(.SD, function(x) ifelse(grepl("^\\s*Inserted Blank$", x), "", x)), .SDcols = split_cols2]
+    data_str <- data_str[, (split_cols2) := lapply(.SD, function(x) ifelse(grepl("^\\s*NNTable_Inserted_Blank$", x), "", x)), .SDcols = split_cols2]
   }
 
 

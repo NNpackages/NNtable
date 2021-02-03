@@ -1,0 +1,33 @@
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+TRTP    PARAM                                        keep   Called var               SUM            
+————————————————————————————————————————————————————————————————————————————————————————————————————
+I287                                                        Number of subjects       130            
+I287                                                        Total exposure (years)    63.68         
+IGlar                                                       Number of subjects       117            
+IGlar                                                       Total exposure (years)    56.45         
+Total                                                       Number of subjects       247            
+Total                                                       Total exposure (years)   120.13         
+I287    Anti-insulin 287 antibody level (% B/T)      2.30   N                         69            
+I287    Anti-insulin 287 antibody level (% B/T)      2.30   Mean (SD)                  2.30 ( 1.82) 
+I287    Anti-insulin 287 antibody level (% B/T)      2.30   Min ; Max                  1.10 ;  14.19
+I287    Anti-insulin 287 antibody titre (no unit)   33.42   N                         69            
+I287    Anti-insulin 287 antibody titre (no unit)   33.42   Mean (SD)                 33.42 (80.16) 
+I287    Anti-insulin 287 antibody titre (no unit)   33.42   Min ; Max                  0.00 ; 336.00
+IGlar   Anti-insulin 287 antibody level (% B/T)      3.28   N                         57            
+IGlar   Anti-insulin 287 antibody level (% B/T)      3.28   Mean (SD)                  3.28 ( 9.83) 
+IGlar   Anti-insulin 287 antibody level (% B/T)      3.28   Min ; Max                  1.10 ;  92.49
+IGlar   Anti-insulin 287 antibody titre (no unit)   37.54   N                         57            
+IGlar   Anti-insulin 287 antibody titre (no unit)   37.54   Mean (SD)                 37.54 (88.95) 
+IGlar   Anti-insulin 287 antibody titre (no unit)   37.54   Min ; Max                  0.00 ; 336.00
+Total   Anti-insulin 287 antibody level (% B/T)      2.75   N                        126            
+Total   Anti-insulin 287 antibody level (% B/T)      2.75   Mean (SD)                  2.75 ( 6.81) 
+Total   Anti-insulin 287 antibody level (% B/T)      2.75   Min ; Max                  1.10 ;  92.49
+Total   Anti-insulin 287 antibody titre (no unit)   35.32   N                        126            
+Total   Anti-insulin 287 antibody titre (no unit)   35.32   Mean (SD)                 35.32 (84.30) 
+Total   Anti-insulin 287 antibody titre (no unit)   35.32   Min ; Max                  0.00 ; 336.00
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+

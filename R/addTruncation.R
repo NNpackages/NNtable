@@ -123,7 +123,7 @@ apply_truncation <- function(.NNTable) {
     y[["Mat"]][, 2]), use.names = FALSE))
 
   X <- lapply(seq_along(SetUp), function(y) {
-    M <- matrix("Inserted Blank", nrow = nrow(data_str), ncol = Ncol)
+    M <- matrix("NNTable_Inserted_Blank", nrow = nrow(data_str), ncol = Ncol)
     M[SetUp[[y]][["Mat"]]] <- SetUp[[y]][["Val"]]
     M
   })
@@ -134,11 +134,11 @@ apply_truncation <- function(.NNTable) {
   indt[, (split_cols) := lapply(X, unlist, use.names = FALSE)][]
 
 
-  indt <- indt[!apply(indt[, split_cols, with = FALSE] == "Inserted Blank", 1, all), ]
+  indt <- indt[!apply(indt[, split_cols, with = FALSE] == "NNTable_Inserted_Blank", 1, all), ]
 
   # We cannot clean this up yet because we need to group vars later and perhaps drop some of these cols
   if (is.null(.NNTable$grouped_columns))
-    indt <- indt[, (split_cols) := lapply(.SD, function(x) ifelse(x == "Inserted Blank", "", x)), .SDcols = split_cols]
+    indt <- indt[, (split_cols) := lapply(.SD, function(x) ifelse(x == "NNTable_Inserted_Blank", "", x)), .SDcols = split_cols]
 
   .NNTable$truncation$split_cols <- split_cols
 

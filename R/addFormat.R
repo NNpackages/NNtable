@@ -87,6 +87,8 @@ addFormat <- function(.NNTable, dec = 3, format_data = NULL,
     factors <- sapply(format_data, is.factor)
     if (length(factors))
       format_data[, factors] <- lapply(format_data[, factors], as.character)
+
+    matrix(ncol = ncol(format_data))
   }
 
   .NNTable$NNFormat <- list(dec         = dec,
@@ -391,11 +393,11 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
 
         any_check <- nrow(format_data_small) > 0
 
-
-        # any(unique(unlist(as.data.frame(x)[, column_match])) %in%
-        #       unique(unlist(as.data.frame(format_data)[, column_match])))
-        #
-
+        if (!any(is.na(unlist(format_data_small[, column_match])))) {
+          l_row <- format_data_small[nrow(format_data_small), , drop = FALSE]
+          l_row[] <- NA
+          format_data_small <- rbind(format_data_small, l_row)
+        }
 
       } else {
         any_check <- TRUE
@@ -542,7 +544,7 @@ updatejointFormat <- function(data, format_data, dec, big.mark = "", small.mark 
   column_match <- intersect(colnames(data)[!numerics], colnames(format_data))
 
   # get the order of the format_data
-  fmt_order <- match(apply(data[, column_match, drop = FALSE],         1, paste, collapse = ""),
+  fmt_order <- match(apply(data[, column_match, drop = FALSE],        1, paste, collapse = ""),
                      apply(format_data[, column_match, drop = FALSE], 1, paste, collapse = ""))
 
   # restrict to the applicable colnames
@@ -605,16 +607,33 @@ updateUniFormat <- function(data, format_data, dec, big.mark = "", small.mark = 
   # find the numeric columns
   numerics <- sapply(data, is.numeric)
 
+  # In case we have missing format for some they are
+  in_both <- intersect(colnames(data)[numerics], colnames(format_data))
+
+  for (col in in_both)
+    format_data[is.na(format_data[[col]]), col] <-
+      guessFormat(data[is.na(format_data[, col]), col],
+                  dec = min(dec, decimalPlaces(data[is.na(format_data[, col]), col])),
+                  big.mark = big.mark, small.mark = small.mark)
+
+
+
   missing <- setdiff(colnames(data)[numerics], colnames(format_data))
+  for (col in missing)
+    format_data[, col] <-
+      guessFormat(data[, col],
+                  dec = min(dec, decimalPlaces(data[, col])),
+                  big.mark = big.mark, small.mark = small.mark)
 
-  if (length(missing)) {
-    mis_form <- as.data.frame(t(structure(rep(paste0("%.", dec, "f"), length(missing)), names = missing)))
-
-    if (nrow(format_data) == 1)
-      format_data <- dplyr::bind_cols(format_data, mis_form)
-    else
-      format_data <- dplyr::bind_rows(format_data, mis_form)
-  }
+  #
+#   if (length(missing)) {
+#     mis_form <- as.data.frame(t(structure(rep(paste0("%.", dec, "f"), length(missing)), names = missing)))
+#
+#     if (nrow(format_data) == 1)
+#       format_data <- dplyr::bind_cols(format_data, mis_form)
+#     else
+#       format_data <- dplyr::bind_rows(format_data, mis_form)
+#   }
 
   # find the column match as the non numeric column in both datasets
   column_match <- intersect(colnames(data)[!numerics], colnames(format_data))
@@ -651,10 +670,11 @@ updateUniFormat <- function(data, format_data, dec, big.mark = "", small.mark = 
     }
 
     all.na <- sapply(new_format, function(x)  all(is.na(x)))
+
     if (length(all.na))
-      new_format[, setdiff(colnames(new_format), c(column_match, names(all.na[all.na])))] <-
-      as.data.frame(lapply(
-        new_format[, setdiff(colnames(new_format), c(column_match, names(all.na[all.na]))), drop = FALSE], fillFormat))
+      new_format[,setdiff(colnames(new_format), c(column_match, names(all.na[all.na])))] <-
+        as.data.frame(lapply(
+          new_format[, setdiff(colnames(new_format), c(column_match, names(all.na[all.na]))), drop = FALSE], fillFormat))
   }
 
   data_form <- sapply(data[, numerics, drop = FALSE], guessFormat, dec = dec, big.mark = big.mark, small.mark = small.mark)
