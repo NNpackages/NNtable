@@ -22,6 +22,7 @@ Suggests:
     labelled,
     forcats,
     knitr,
+    lava,
     NNR,
     NNBiostat,
     NNtraining

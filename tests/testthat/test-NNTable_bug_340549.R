@@ -6,12 +6,22 @@
 
 context("Test NNTable bug 340549")
 
+
+
+nntable_dir <- gsub("/NNtable-tests/testthat|/tests/testthat", "", getwd())
+output_path <- file.path(nntable_dir, "tests",  "output")
+
+dir.create(file.path(output_path, "got"), showWarnings = FALSE)
+
+
 ## Treatment arm
 trt <- c("sema",
          "sema + GIP 2 mg",
          "sema + GIP 3 mg",
          "GIP 2 mg",
          "GIP 3 mg")
+
+set.seed(100)
 
 # Dummy ADPP data
 m <- lvm()
