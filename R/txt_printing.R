@@ -127,9 +127,10 @@ apply_createHeader <- function(.NNTable) {
     rep_name = .NNTable$grouped_columns$name
 
   col_names <- gsub("NNTable_grouped_name", rep_name , colnames(data_str))
-
+  under_count <- 0
   if (!is.null(.NNTable$header$underscore) && .NNTable$header$underscore) {
     col_names <- gsub("__#__", "__#__NNTable_undescore__#__" , col_names)
+    under_count <- 1
   }
 
   list <- strsplit(col_names, "__#__")
@@ -146,19 +147,35 @@ apply_createHeader <- function(.NNTable) {
   spacers <- grep("^space.column.|^sep.column", colnames(data_str))
   prev.space <- FALSE
 
-  for (i in seq_len(nrow(header.mat))) {
-    if (i > 1) prev.space <- header.mat[i - 1, spacers - 1] != header.mat[i - 1, spacers + 1]
-    header.mat[i, spacers[header.mat[i, spacers - 1] != header.mat[i, spacers + 1] | prev.space ]] <- ""
+  if (!is.null(.NNTable$header$underscore) && .NNTable$header$underscore) {
+    for (i in seq_len(nrow(header.mat))[c(TRUE,FALSE)]) {
+      if (i > 1) prev.space <- header.mat[i - 2, spacers - 1] != header.mat[i - 2, spacers + 1]
+      header.mat[i, spacers[header.mat[i, spacers - 1] != header.mat[i, spacers + 1] | prev.space ]] <- ""
+      if (i > 1)
+      header.mat[i - 1, spacers[header.mat[i - 1, spacers - 1] != header.mat[i - 1, spacers + 1] | prev.space ]] <- ""
+    }
+  } else {
+    for (i in seq_len(nrow(header.mat))) {
+      if (i > 1) prev.space <- header.mat[i - 1, spacers - 1] != header.mat[i - 1, spacers + 1]
+      header.mat[i, spacers[header.mat[i, spacers - 1] != header.mat[i, spacers + 1] | prev.space ]] <- ""
+    }
   }
 
-  header_last_row <- header.mat[i, ]
 
   # clear last row if only one repeat is present for the second to last row
   if (i > 1 && length(.NNTable$columns_to_wide) > 0 && .NNTable$columns_to_wide$.remove_last_header_row) {
-    if (max(rle(header.mat[ i - 1  , header.mat[ i - 1, ] != ""])$lengths) == 1) {
-      header.mat[i, header.mat[ i - 1, ] != ""] <- ""
+    if (max(rle(header.mat[ i - 1 - under_count  , header.mat[ i - 1 - under_count, ] != ""])$lengths) == 1) {
 
-      if (all(header.mat[i - 1, header.mat[ i, ] != ""] == "")) {
+      header.mat[i, header.mat[ i - 1 - under_count, ] != ""] <- ""
+
+      if (all(header.mat[i - 1 - under_count, header.mat[ i, ] != ""] == "")) {
+
+        # remove the last underscore
+        if (under_count) {
+          header.mat <- header.mat[-(i - 1), ]
+          i <- i - 1
+        }
+
         header.mat[i - 1, header.mat[ i, ] != ""] <- header.mat[i, header.mat[ i, ] != ""]
         header.mat <- header.mat[-i, ]
       }
