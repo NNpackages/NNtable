@@ -157,9 +157,10 @@ apply_add_sorting_vars <- function(.NNTable) {
 
     stable_non_wide <- setdiff(stable_non_wide, grouped_columns)
 
+
     if (length(stable_non_wide)) {
       data_str$NNTable_stable_filling_sort <-
-        glue::glue_data(data_str, paste0("{", paste(stable_non_wide, collapse = "}_{"), "}"))
+        glue::glue_data(data_str, paste0("{", paste0("`", stable_non_wide, "`", collapse = "}_{"), "}"))
 
       grouped_columns <- c(grouped_columns, "NNTable_stable_filling_sort")
     }
