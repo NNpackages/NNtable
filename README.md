@@ -35,27 +35,29 @@ An NNTable consists of several elements that are outlined by the different colou
 It is only possible to add the same type of element once, otherwise the previous addition is overwritten. 
 The transformations of the layout changes introduced by the `add...` functions are performed in the following order:
 
-1. **Exposure data:** The exposure data is added to the original data in accordance with `addExposure()`
+1. **Translation** The translations to data such as "Female" replacing "F" and "Male" replacing "M" is done in accordance with `addTranslate()` 
 
-2. **Filling:** The combinatorial blanks created by transposing data are occupired as determined by `addFilling()`
+2. **Exposure data:** The exposure data is added to the original data in accordance with `addExposure()`
 
-3. **Formating:** The columns are formatted in accordance to the specification given in `addFormat()`
+3. **Filling:** The combinatorial blanks created by transposing data are occupired as determined by `addFilling()`
 
-4. **Rename:** The rename determined in the `NNTable()` call is performed
+4. **Formating:** The columns are formatted in accordance to the specification given in `addFormat()`
 
-5. **Concatenation:** The concatenation and formating of columns determined in the `NNTable()` call is performed, e.g. brackets around numbers or concatenating `Mean (SD)`
+5. **Rename:** The rename determined in the `NNTable()` call is performed
 
-6. **Transpose longer:** The columns defined by `addTransLong()` are created
+6. **Concatenation:** The concatenation and formating of columns determined in the `NNTable()` call is performed, e.g. brackets around numbers or concatenating `Mean (SD)`
 
-7. **Transpose wider:** The colums defined by  `addTransWide()` are created. 
+7. **Transpose longer:** The columns defined by `addTransLong()` are created
 
-8. **Cell split:** The cells are split into new rows in accordance with the predetermined cell splits as determined by `addCellSplit()`. 
+8. **Transpose wider:** The colums defined by  `addTransWide()` are created. 
 
-9. **Truncation:** Them cells are split into new rows in accordance with the individual maximum width determined by `addTruncation()`
+9. **Cell split:** The cells are split into new rows in accordance with the predetermined cell splits as determined by `addCellSplit()`. 
 
-10. **Stub:** The stub is created as defined by `addGroupedColumns()`
+10. **Truncation:** Them cells are split into new rows in accordance with the individual maximum width determined by `addTruncation()`
 
-11. **Ordering** The data is ordered as defined by `addOrder()`
+11. **Stub:** The stub is created as defined by `addGroupedColumns()`
+
+12. **Ordering** The data is ordered as defined by `addOrder()`
 
 The execution order is always carried out in the order outlined above. Consequently, 
 the order the `add...` functions are used is disregarded. This enables the possibility to slowly advance in the creation of the layout and print the table in the progress to see what is needed.
