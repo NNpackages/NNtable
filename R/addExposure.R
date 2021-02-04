@@ -104,7 +104,12 @@ addExposure <- function(.NNTable,
 applyExposure <- function(.NNTable) {
 
   # Get the exposure
-  exposure <- .NNTable$exposure$data
+  if (!is.null(.NNTable$exposure$data_trans)) {
+    exposure <- .NNTable$exposure$data_trans
+  } else {
+    exposure <- .NNTable$exposure$data
+  }
+
 
   # Get the data
   data_str <- .NNTable$data_str

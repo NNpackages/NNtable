@@ -1,9 +1,15 @@
 # NNtable (development version)
 
-* bugfixes 
+* Feture request 302334
 
+    + The function `addTranslate()` have been added to NNtable to make it easy to change values. This could for instance be for SEX where "Male" should replace "M" and "Female" should replace "F"
+
+
+* bugfixes 
+    
     + 336364 addFormat fails when used together with addExposure and first column is not mentioned in addFormat
     + 340549 addUnderScore messes up when addTranspose is used on columns with non-similar subcolumns
+    + 342059 addOrder fails when a space exists in the name of a column that is not used in either grouped columns or transposed
     
 # NNtable 0.0.3
 

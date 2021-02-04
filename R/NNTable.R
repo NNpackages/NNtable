@@ -323,6 +323,11 @@ print.NNTable <- function(x, ..., page = 1, file = NULL, verbose = TRUE, check_e
 
   .NNTable <- apply_createTree(.NNTable)
 
+
+  if (!is.null(.NNTable$translations)) {
+    .NNTable <- apply_tanslation(.NNTable)
+  }
+
   # Add the exposure data to data_str
   if (!is.null(.NNTable$exposure)) {
     .NNTable <- applyExposure(.NNTable)
