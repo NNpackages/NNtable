@@ -122,7 +122,7 @@ stats$`sex 2`    <- stats$SEX
 stats$`TRTA  2`  <- stats$TRTA
 stats$`AESOC  2` <- stats$AESOC
 
-table <- NNTable(stats, "TRTA  2", "SEX", sex = "sex 2", "AESOC  2","N","E") %>%
+table <- NNTable(stats, "TRTA  2", sex = "sex 2", "AESOC  2","N","E") %>%
   addTransWide("TRTA  2" = c("N","E")) %>%
   addGroupedColumns("AESOC  2") %>%
   addOrder(E = -1)
