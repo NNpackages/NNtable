@@ -2,19 +2,17 @@
 
 ## Features
 
-Exported a subsetting function for NNTable object. It is now possible to subset to e.g. females by NNTable[SEX = "F"], check out the help here `[.NNTable()`
+Exported a subsetting function for an NNTable object. It is now possible to subset to e.g. females by NNTable[SEX = "F"], check out the functionality here `'[.NNTable'()`
 
 * Feture request 302334
 
     + The function `addTranslate()` have been added to NNtable to make it easy to change values. This could for instance be for SEX where "Male" should replace "M" and "Female" should replace "F"
 
-## bugs 
-
-* bugfixes 
+## Bugfixes 
     
-    + 336364 addFormat fails when used together with addExposure and first column is not mentioned in addFormat
-    + 340549 addUnderScore messes up when addTranspose is used on columns with non-similar subcolumns
-    + 342059 addOrder fails when a space exists in the name of a column that is not used in either grouped columns or transposed
+* 336364 addFormat fails when used together with addExposure and first column is not mentioned in addFormat
+* 340549 addUnderScore messes up when addTranspose is used on columns with non-similar subcolumns
+* 342059 addOrder fails when a space exists in the name of a column that is not used in either grouped columns or transposed
     
 # NNtable 0.0.3
 
@@ -24,7 +22,7 @@ Exported a subsetting function for NNTable object. It is now possible to subset 
 
     + Per default duplicated values of grouped columns are removed from the stub
 
-* bugfixes 
+* Bugfixes 
 
     + 285824 When adding nested columns for tables with columns that already includes line shift it breaks on top
     + 319823 addExposure interferes with addFilling

@@ -2,7 +2,7 @@
 % Please edit documentation in R/addGroupedColumns.R
 \name{addGroupedColumns}
 \alias{addGroupedColumns}
-\title{Add grouped columns to an NNTable}
+\title{Add grouped columns to an NNTable to form the table STUB}
 \usage{
 addGroupedColumns(
   .NNTable,
@@ -59,7 +59,7 @@ this is usually the wanted behavior, where the repeats are considered noise}
 An object of class \code{NNTable} with the column grouping specified
 }
 \description{
-Add grouped columns to an NNTable
+Add grouped columns to an NNTable to form the table STUB
 }
 \examples{
 
