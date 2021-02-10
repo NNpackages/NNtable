@@ -2,7 +2,7 @@
 % Please edit documentation in R/addSpaceControl.R
 \name{addSpaceControl}
 \alias{addSpaceControl}
-\title{Add specifications to the width beteen columns}
+\title{Add specifications to the width between columns}
 \usage{
 addSpaceControl(
   .NNTable,
@@ -28,8 +28,72 @@ should the leading space be discarded}
 \item{space}{\code{integer} indicating the width of the separation between grouped columns}
 }
 \value{
-An object of class \code{NNTable} with the page split added
+An object of class \code{NNTable} with the column separation options specified
 }
 \description{
-Add specifications to the width beteen columns
+Add specifications to the width between columns
+}
+\examples{
+library(lava)
+library(dplyr)
+
+trt <- c("sema",
+         "sema + GIP 2 mg",
+         "sema + GIP 3 mg",
+         "GIP 2 mg",
+         "GIP 3 mg",
+         "ico",
+         "ico + GIP 2 mg",
+         "ico + GIP 3 mg",
+         "Iglar GIP 2 mg",
+         "Iglar GIP 3 mg")
+
+set.seed(100)
+
+# Dummy ADPP data
+m <- lvm()
+m <- categorical(m, ~TRTP, K = 10, p = rep(0.1, 10), labels = trt)
+distribution(m, ~AVAL) <- normal.lvm(mean = 120, sd = 20)
+
+adpc <- as_tibble(sim(m, 200))
+
+## Add cohorts
+adpc <- adpc \%>\%
+  mutate(cohort = case_when(grepl("sema", TRTP)   ~ "cohort1",
+                            TRTP \%in\% c("GIP 2 mg", "GIP 3 mg") ~ "cohort2",
+                            grepl("ico", TRTP)   ~ "cohort3",
+                            TRUE ~ "cohort4"),
+         sex = sample(c("Female", "Male + a long name"), n(), replace = TRUE)) \%>\%
+  group_by(cohort, TRTP, sex) \%>\%
+  summarize(MEAN = mean(AVAL),
+            MIN = min(AVAL),
+            MAX = max(AVAL))
+
+# Creating the table that needs to be split on two pages on the width
+table <- NNTable(adpc, Sex = "sex", "cohort", "TRTP", "MEAN","MIN", "MAX",
+                 page_size = list(page.length = 81, page.width = 140)) \%>\%
+     addTransLong(SUM = c("MEAN", "MIN" , "MAX"), var_name = "Summary") \%>\%
+     addTransWide(cohort = list(TRTP = "SUM")) \%>\%
+     addUnderScore() \%>\%
+     addGroupedColumns("Summary") \%>\%
+     addAlignment(SUM = "c") \%>\%
+     addPageSplit(keepers = "Sex")
+
+# print the table
+table
+
+# do not use the build in spread function
+table \%>\% addSpaceControl(spread = FALSE)
+
+
+# control the exact width, note that sep controls the width between
+# ordinary columns and space controls the space between nested columns
+table \%>\% addSpaceControl(spread = FALSE, sep = 5, space = 10)
+
+# Sometimes the spread functionality can lead to weird tables, where the spread
+# is too much, then we can use max.sep and max.space to control the maximum allowed space
+table \%>\% addSpaceControl(spread = TRUE, max.sep = 1, max.space = 20)
+
+
+
 }

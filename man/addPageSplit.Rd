@@ -27,3 +27,82 @@ An object of class \code{NNTable} with the page split added
 \description{
 Add grouped columns to an NNTable to form the table STUB
 }
+\examples{
+library(lava)
+library(dplyr)
+
+trt <- c("sema",
+         "sema + GIP 2 mg",
+         "sema + GIP 3 mg",
+         "GIP 2 mg",
+         "GIP 3 mg",
+         "ico",
+         "ico + GIP 2 mg",
+         "ico + GIP 3 mg",
+         "Iglar GIP 2 mg",
+         "Iglar GIP 3 mg")
+
+set.seed(100)
+
+# Dummy ADPP data
+m <- lvm()
+m <- categorical(m, ~TRTP, K = 10, p = rep(0.1, 10), labels = trt)
+distribution(m, ~AVAL) <- normal.lvm(mean = 120, sd = 20)
+
+adpc <- as_tibble(sim(m, 200))
+
+## Add cohorts
+adpc <- adpc \%>\%
+  mutate(cohort = case_when(grepl("sema", TRTP)   ~ "cohort1",
+                            TRTP \%in\% c("GIP 2 mg", "GIP 3 mg") ~ "cohort2",
+                            grepl("ico", TRTP)   ~ "cohort3",
+                            TRUE ~ "cohort4"),
+         sex = sample(c("Female", "Male + a long name"), n(), replace = TRUE)) \%>\%
+  group_by(cohort, TRTP, sex) \%>\%
+  summarize(MEAN = mean(AVAL),
+            MIN = min(AVAL),
+            MAX = max(AVAL))
+
+# Creating the table that needs to be split on two pages on the width
+NNTable(adpc, Sex = "sex", "cohort", "TRTP", "MEAN","MIN", "MAX",
+        page_size = list(page.length = 81, page.width = 120)) \%>\%
+     addTransLong(SUM = c("MEAN", "MIN" , "MAX"), var_name = "Summary") \%>\%
+     addTransWide(cohort = list(TRTP = "SUM")) \%>\%
+     addUnderScore() \%>\%
+     addGroupedColumns("Summary") \%>\%
+     addAlignment(SUM = "c") \%>\%
+     addPageSplit(keepers = "Sex")
+
+# Same table but with smaller width forcing the table to split on three pages
+NNTable(adpc, Sex = "sex", "cohort", "TRTP", "MEAN","MIN", "MAX",
+        page_size = list(page.length = 81, page.width = 120)) \%>\%
+     addTransLong(SUM = c("MEAN", "MIN" , "MAX"), var_name = "Summary") \%>\%
+     addTransWide(cohort = list(TRTP = "SUM")) \%>\%
+     addUnderScore() \%>\%
+     addGroupedColumns("Summary") \%>\%
+     addAlignment(SUM = "c") \%>\%
+     addPageSplit(keepers = "Sex")
+
+
+# It is possible to force splits by using the cuts statement
+NNTable(adpc, Sex = "sex", "cohort", "TRTP", "MEAN","MIN", "MAX",
+        page_size = list(page.length = 81, page.width = 90)) \%>\%
+     addTransLong(SUM = c("MEAN", "MIN" , "MAX"), var_name = "Summary") \%>\%
+     addTransWide(cohort = list(TRTP = "SUM")) \%>\%
+     addUnderScore() \%>\%
+     addGroupedColumns("Summary") \%>\%
+     addAlignment(SUM = "c") \%>\%
+     addPageSplit(keepers = "Sex", cuts = c("cohort2", "cohort4"))
+
+# It could also be that you wanted all top levels on diffetent pages
+NNTable(adpc, Sex = "sex", "cohort", "TRTP", "MEAN","MIN", "MAX",
+        page_size = list(page.length = 81, page.width = 80)) \%>\%
+     addTransLong(SUM = c("MEAN", "MIN" , "MAX"), var_name = "Summary") \%>\%
+     addTransWide(cohort = list(TRTP = "SUM")) \%>\%
+     addUnderScore() \%>\%
+     addGroupedColumns("Summary") \%>\%
+     addAlignment(SUM = "c") \%>\%
+     addPageSplit(keepers = "Sex", cuts = sort(unique(adpc$TRTP)))
+
+
+}

@@ -53,7 +53,7 @@ test_that("add page split - keep sex", {
     addUnderScore() %>%
     addGroupedColumns("Summary") %>%
     addAlignment(SUM = "c") %>%
-    addPageSplit(keepers = "Sex", cuts = sort(unique(adpc$TRTP))) %>%
+    addPageSplit(keepers = "Sex") %>%
     addWrapping(title = "how does the title look", footnote = "You need to give a footnote", sys_footnote = "Hi I am a system")
 
 
