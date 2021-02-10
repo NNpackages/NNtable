@@ -252,6 +252,7 @@ test_that("add page split - specify all mid levels", {
 
 
 
+
 test_that("add page split - specify all mid levels - three pages long", {
 
   .NNTable <- NNTable(adpc, Sex = "sex", "cohort", "TRTP", "MEAN","MIN", "MAX", page_size = list(page.length = 15, page.width = 80)) %>%
@@ -274,6 +275,114 @@ test_that("add page split - specify all mid levels - three pages long", {
 
   expect_equal(read_encoded(file.path(output_path, "expected", file)),
                read_encoded(file.path(output_path, "got",      file)))
+})
+
+db <- nnaccess("0001", root = "~/training")
+
+adae_f <- db$adam("adae") %>% filter(SAFFL == "Y" & TRTA != "")
+adsl_f <- db$adam("adsl") %>% filter(SAFFL == "Y")
+
+set.seed(100)
+
+# create the NNTable
+output <- adae_f %>%
+  mutate(TRTA   = paste0(TRTA, "|with a longer and longer|name added"),
+         AGEGR2 = sample(c("65<= years", "18<= to <65 years"), n(), replace = TRUE))        %>%
+  group_by(AGEGR2, AEBODSYS, AEDECOD, TRTA) %>%
+  dplyr::summarise(N = n_distinct(USUBJID),
+                   P = N / nrow(adsl_f) * 100,
+                   E = n())
+
+
+
+output$AGEGR2 <- forcats::fct_relevel(forcats::as_factor(output$AGEGR2),
+                                      "65<= years", "18<= to <65 years")
+output$TRTA <- forcats::fct_relevel(forcats::as_factor(output$TRTA),
+                                    "B|with a longer and longer|name added", "A|with a longer and longer|name added")
+
+
+test_that("add page split - specify all mid levels - three pages long", {
+
+
+  .NNTable <- NNTable(output, "AGEGR2", "AEBODSYS", "AEDECOD", "TRTA", "N", "(%)" = "(P)", "E",
+                      page_size = list(page.length = 80, page.width = 78)) %>%
+    addTransWide(AGEGR2 = list(TRTA = c("N", "(%)", "E"))) %>%
+    addFilling(N = 0) %>%
+    addGroupedColumns("AEBODSYS", "AEDECOD") %>%
+    addTruncation(AEBODSYS = 32, AEDECOD = "30") %>%
+    addOrder(N = -1) %>%
+    addCellSplit() %>%
+    addUnderScore() %>%
+    addPageSplit()
+
+  # Check that we get an error when we cannot split
+  expect_error({
+    a <- print(.NNTable, verbose = FALSE)
+  })
+
+
+  .NNTable <- NNTable(output, "AGEGR2", "AEBODSYS", "AEDECOD", "TRTA", "N", "(%)" = "(P)", "E",
+                      page_size = list(page.length = 80, page.width = 100)) %>%
+    addTransWide(AGEGR2 = list(TRTA = c("N", "(%)", "E"))) %>%
+    addFilling(N = 0) %>%
+    addGroupedColumns("AEBODSYS", "AEDECOD") %>%
+    addTruncation(AEBODSYS = 32, AEDECOD = "30") %>%
+    addOrder(N = -1) %>%
+    addCellSplit() %>%
+    addUnderScore() %>%
+    addPageSplit()
+
+
+  file <- "table_addPageSplit_12"
+
+  # print(.NNTable, file = file.path(output_path, "expected", file))
+
+  print(.NNTable, file = file.path(output_path, "got", file))
+
+  # fix in new version
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
+
+
+  .NNTable <- NNTable(output, "AGEGR2", "TRTA", "N", "(%)" = "(P)", "E",
+                      page_size = list(page.length = 80, page.width = 99)) %>%
+    addTransWide(AGEGR2 = list(TRTA = c("N", "(%)", "E"))) %>%
+    addFilling(N = 0) %>%
+    addOrder(N = -1) %>%
+    addCellSplit() %>%
+    addUnderScore() %>%
+    addPageSplit()
+
+  file <- "table_addPageSplit_13"
+
+  # print(.NNTable, file = file.path(output_path, "expected", file))
+
+  print(.NNTable, file = file.path(output_path, "got", file))
+
+  # fix in new version
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
+
+
+  .NNTable <- NNTable(output, "AGEGR2", "TRTA", "N", "(%)" = "(P)", "E",
+                      page_size = list(page.length = 80, page.width = 98)) %>%
+    addTransWide(AGEGR2 = list(TRTA = c("N", "(%)", "E"))) %>%
+    addFilling(N = 0) %>%
+    addOrder(N = -1) %>%
+    addCellSplit() %>%
+    addUnderScore() %>%
+    addPageSplit()
+
+  file <- "table_addPageSplit_14"
+
+  # print(.NNTable, file = file.path(output_path, "expected", file))
+
+  print(.NNTable, file = file.path(output_path, "got", file))
+
+  # fix in new version
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
+
 })
 
 

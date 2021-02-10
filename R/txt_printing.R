@@ -253,6 +253,7 @@ get_column_chars <- function(.NNTable, print.warning = TRUE) {
       column.chars <- c(structure(n.spcae, names = "NNTable_pre_space"), column.chars)
       alignment    <- c(structure("l", names = "NNTable_pre_space"), alignment)
       header.mat   <- cbind("", header.mat)
+      header.mat_underscore <-  cbind("", header.mat_underscore)
 
       n.spcae <- needed_space_count[, "NNTable_pre_space"]
 
@@ -270,7 +271,7 @@ get_column_chars <- function(.NNTable, print.warning = TRUE) {
       column.chars <- c(column.chars, structure(n.spcae, names = "NNTable_post_space"))
       alignment    <- c(alignment, structure("l", names = "NNTable_post_space"))
       header.mat   <- cbind(header.mat, "")
-
+      header.mat_underscore <-  cbind(header.mat_underscore, "")
 
       n.spcae <- needed_space_count[, "NNTable_post_space"]
 
@@ -340,11 +341,11 @@ apply_createHeader <- function(.NNTable) {
   prev.space <- FALSE
 
   if (!is.null(.NNTable$header$underscore) && .NNTable$header$underscore) {
-    for (i in seq_len(nrow(header.mat))[c(TRUE,FALSE)]) {
+    for (i in seq_len(nrow(header.mat))[c(TRUE, FALSE)]) {
       if (i > 1) prev.space <- header.mat[i - 2, spacers - 1] != header.mat[i - 2, spacers + 1]
       header.mat[i, spacers[header.mat[i, spacers - 1] != header.mat[i, spacers + 1] | prev.space ]] <- ""
       if (i > 1)
-      header.mat[i - 1, spacers[header.mat[i - 1, spacers - 1] != header.mat[i - 1, spacers + 1] | prev.space ]] <- ""
+        header.mat[i - 1, spacers[header.mat[i - 1, spacers - 1] != header.mat[i -1, spacers + 1] | prev.space ]] <- ""
     }
   } else {
     for (i in seq_len(nrow(header.mat))) {

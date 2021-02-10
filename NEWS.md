@@ -4,9 +4,11 @@
 
 Exported a subsetting function for an NNTable object. It is now possible to subset to e.g. females by NNTable[SEX = "F"], check out the functionality here `'[.NNTable'()`
 
-* Feture request 302334
+* Feature request 302334
 
     + The function `addTranslate()` have been added to NNtable to make it easy to change values. This could for instance be for SEX where "Male" should replace "M" and "Female" should replace "F"
+
+* Feature request 
 
 ## Bugfixes 
     

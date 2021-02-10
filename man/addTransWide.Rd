@@ -11,7 +11,7 @@ addTransWide(
   .remove_empty_columns = TRUE,
   .remove_empty_level = 1,
   add_cat_space = TRUE,
-  fun.aggregate = c
+  fun.aggregate = function(x) gsub("[0-9]", "x", x[1])
 )
 }
 \arguments{

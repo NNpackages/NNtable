@@ -113,19 +113,26 @@ apply_page_split_width <- function(.NNTable) {
     column.chars <- column.chars[-1]
   }
 
-  if ("NNTable_poos_space" == names(column.chars)[1]) {
+  if ("NNTable_post_space" == names(column.chars)[length(column.chars)]) {
     column.chars[length(column.chars) - 1] <-
       column.chars[length(column.chars) - 1] + column.chars[length(column.chars)]
     column.chars <- column.chars[-length(column.chars)]
   }
+  column.chars_zero <- column.chars
+
+  spacers <- grep("^space.column.", names(column.chars))
+  seppers <- grep("^sep.column.", names(column.chars))
+
+  column.chars[spacers]  <- column.chars[spacers] + 1
+  column.chars[seppers]  <- column.chars[seppers] + 1
 
   column.chars[column.chars == 0] <- 1
 
   # Define the keeper columns
-
   keepers <- keepers_init <-
     intersect(c("NNTable_grouped_name",  .NNTable$page_split$keepers),
               names(column.chars))
+
 
   if (length(keepers_init))
     keepers <- names(column.chars)[seq_len(max(match(keepers_init,  names(column.chars)), na.rm = TRUE))]
@@ -196,7 +203,10 @@ apply_page_split_width <- function(.NNTable) {
       stop("The table contain levels in the header that are wider than the total allowed width")
 
     counter <- 0
+
     max_width <- sum(column.chars)
+
+
     pages <- pages_prior <- ceiling(sum(column.chars[to_be_split]) / p_width)
 
     split_res <- list(splits = length(level_chars), max_width = max_width)

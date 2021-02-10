@@ -105,7 +105,7 @@
 addTransWide <- function(.NNTable, ..., .remove_last_header_row = TRUE,
                          .remove_empty_columns = TRUE,
                          .remove_empty_level = 1,
-                         add_cat_space = TRUE, fun.aggregate = c) {
+                         add_cat_space = TRUE, fun.aggregate = function(x) gsub("[0-9]", "x", x[1])) {
   columns <- list(...)
   .NNTable$columns_to_wide <- list(columns = columns, add_cat_space = add_cat_space,
                                    fun.aggregate = fun.aggregate,
@@ -188,7 +188,7 @@ apply_tranToWide <- function(.NNTable) {
     comb <- data.table::dcast(data_out,
                               formula(paste(paste0("`", stable.vars, "`", collapse = " + " ), " ~ ",
                                             paste0("`", names(columns_to_wide.i)[1], "`"), collapse = "")),
-                              value.var = varnames, fill = "", fun.aggregate = .NNTable$columns_to_wide$fun.aggregate,
+                              value.var = varnames, fill = "", #fun.aggregate = .NNTable$columns_to_wide$fun.aggregate,
                               sep = "__#__")
 
 
@@ -265,8 +265,10 @@ apply_tranToWide <- function(.NNTable) {
   if (max(spacers) == ncol(data_out))
     dup.spacers <- c(dup.spacers, ncol(data_out))
 
-  if (min(spacers) == 1)
-    dup.spacers <- c(1, dup.spacers)
+  first <- grep("^NNTable_sort", colnames(data_out), invert = TRUE)[1]
+
+  if (min(spacers) == first)
+    dup.spacers <- c(first, dup.spacers)
 
   .NNTable$data_str <- as.data.frame(data_out[, (dup.spacers) := NULL])
 
