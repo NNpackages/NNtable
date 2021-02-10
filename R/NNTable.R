@@ -180,7 +180,6 @@ NNTable <- function(.data, ..., page_size = getEOTpaper("port", 8)) {
   }
 
 
-
   columns <- get_column_names(columns  = columns_list)
   columns_tree <- get_column_tree(columns  = columns_list)
   .NNTable <- list(data           = dplyr::ungroup(.data),
@@ -376,11 +375,16 @@ print.NNTable <- function(x, ..., page = 1, file = NULL, verbose = TRUE, check_e
 
   .NNTable <- apply_createHeader(.NNTable)
 
-  .NNTable <- apply_width(.NNTable, spread = TRUE)
+  if (!is.null(.NNTable$page_split)) {
+    .NNTable <- apply_page_split_width(.NNTable)
+  } else {
+    .NNTable <- apply_width(.NNTable, spread = TRUE)
 
-  .NNTable <- apply_splitPages(.NNTable)
+    .NNTable <- apply_splitPages(.NNTable)
 
-  .NNTable <- apply_data_to_string(.NNTable)
+    .NNTable <- apply_data_to_string(.NNTable)
+  }
+
 
   if (is.null(file)) {
     if (verbose)
@@ -400,6 +404,10 @@ apply_print_cons <- function(.NNTable, page = 1) {
   if (is.numeric(page)) {
     lines <- seq((min(page) - 1) * .NNTable$page_size$page.length + 1 ,
                  max(page) * .NNTable$page_size$page.length)
+
+    if (!is.null(.NNTable$page_split$c_pages))
+      for (i in seq_len(.NNTable$page_split$c_pages - 1))
+        lines <- c(lines, lines + .NNTable$page_size$page.length * i)
 
     lines <- lines[lines < length(.NNTable$output)]
   } else {
