@@ -562,7 +562,9 @@ apply_width <- function(.NNTable) {
   if (is.null(.NNTable$spacing )) {
     .NNTable$spacing <- list(max.sep   = 50,
                              max.space = 50,
-                             spread    = TRUE)
+                             spread    = TRUE,
+                             space     = 1,
+                             sep       = 1)
   }
   if (.NNTable$spacing$spread) {
     # initialise width
@@ -585,6 +587,13 @@ apply_width <- function(.NNTable) {
     width[seppers] <- width[seppers] + sep_width
 
   } else {
+    if (res.chars - (length(spacers)*.NNTable$spacing$space + length(seppers) * .NNTable$spacing$sep) < 0) {
+      warning("The actual columns are too wide to fit the output with the supplied widths")
+      .NNTable$page_size$used.page.width <- (.NNTable$page_size$used.page.width -
+                                               res.chars) + (length(spacers) + length(seppers))
+      res.chars <- length(spacers) + length(seppers)
+    }
+
     width <- column.chars
     width[seppers] <- .NNTable$spacing$sep
     width[spacers] <- .NNTable$spacing$space

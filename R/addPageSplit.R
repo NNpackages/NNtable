@@ -74,7 +74,7 @@ apply_page_split_width <- function(.NNTable) {
   header.mat_simple <- sapply(list, function(x) rev(c(x, rep("", n.header.rows - length(x)))))
 
 
-  if (length(.NNTable$page_split$cuts) && !is.na(.NNTable$page_split$cuts)) {
+  if (length(.NNTable$page_split$cuts)) {
 
     names_cuts <- .NNTable$page_split$cuts
 
@@ -234,14 +234,14 @@ apply_page_split_width <- function(.NNTable) {
   return(path)
 }
 
-.findSplits <- function(error.table, n.splits, p_width = Inf) {
+.findSplits <- function(error.table, n.pages, p_width = Inf) {
   n.diffs <- nrow(error.table)
   max.val <- error.table[1, n.diffs]
 
   # Table used to backtrace the optimal path
-  idx.table <- array(dim=c(n.splits-1, n.diffs))
+  idx.table <- array(dim=c(n.pages-1, n.diffs))
   cur.best.splits <- error.table[1, ]
-  for (i in 1:(n.splits-1)){
+  for (i in 1:(n.pages-1)){
     cur.best.splits[cur.best.splits > p_width**2] <- Inf
     error.sums <- cur.best.splits + error.table
     idx.table[i, ] <- apply(error.sums, 2, which.min)
@@ -260,15 +260,16 @@ apply_page_split_width <- function(.NNTable) {
   return(chunks)
 }
 
-#' Main function that splits all.values into n.splits
-#' chunks, minimizing sd(sum(chunk))
-balanced.split <- function(values, n.splits, p_width = Inf) {
+#' Main function that splits values into n.pages
+#' chunks, minimizing sd(sum(chunk)) + I(p_width>sum(chunk)) * Inf
+#' @keywords internal
+balanced.split <- function(values, n.pages, p_width = Inf) {
 
-  if (n.splits == 1)
+  if (n.pages == 1)
     return(list(splits = numeric(0), max_width = sum(values)))
 
 
-  if (n.splits == 2) {
+  if (n.pages == 2) {
 
     width_for <- cumsum(values)
     width_rev <- cumsum(rev(values))
@@ -286,7 +287,7 @@ balanced.split <- function(values, n.splits, p_width = Inf) {
   } else {
 
     error.table <- .makeErrorTable(values)
-    splits <- .findSplits(error.table, n.splits, p_width)
+    splits <- .findSplits(error.table, n.pages, p_width)
 
     max_width <- max(sapply(.splitChunks(values, splits), sum))
   }

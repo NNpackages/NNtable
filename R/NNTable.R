@@ -378,7 +378,7 @@ print.NNTable <- function(x, ..., page = 1, file = NULL, verbose = TRUE, check_e
   if (!is.null(.NNTable$page_split)) {
     .NNTable <- apply_page_split_width(.NNTable)
   } else {
-    .NNTable <- apply_width(.NNTable, spread = TRUE)
+    .NNTable <- apply_width(.NNTable)
 
     .NNTable <- apply_splitPages(.NNTable)
 
@@ -402,12 +402,22 @@ apply_print_cons <- function(.NNTable, page = 1) {
 
   # Find the lines to print
   if (is.numeric(page)) {
-    lines <- seq((min(page) - 1) * .NNTable$page_size$page.length + 1 ,
-                 max(page) * .NNTable$page_size$page.length)
 
-    if (!is.null(.NNTable$page_split$c_pages))
-      for (i in seq_len(.NNTable$page_split$c_pages - 1))
-        lines <- c(lines, lines + .NNTable$page_size$page.length * i)
+    if (is.null(.NNTable$page_split$c_pages)) {
+
+      p_length <- .NNTable$page_size$page.length
+
+      lines <-
+        seq((min(page) - 1) * p_length + 1 ,
+                   max(page) * p_length)
+    } else {
+
+      p_length <- .NNTable$page_split$c_pages*.NNTable$page_size$page.length
+
+      lines <-
+        seq((min(page) - 1) * p_length + 1 ,
+            max(page) * p_length)
+    }
 
     lines <- lines[lines < length(.NNTable$output)]
   } else {
