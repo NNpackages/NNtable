@@ -1,4 +1,4 @@
-globalVariables(c(":=", "!!", ".SD", "Group", "orig_order_to_delte", "keep_order_xy"))
+globalVariables(c(":=", "!!", ".SD", "Group", "orig_order_to_delte", "keep_order_xy", ".N"))
 
 #' Initialise an NN table
 #'
