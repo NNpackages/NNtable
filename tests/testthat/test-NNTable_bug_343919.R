@@ -1,8 +1,11 @@
-# test created for bug 343559
+# test created for bug 343919
 
-# NNTable fails when column names have a string in common
+# addFormat and addTransLong interferes with each other
 
-context("Test NNTable bug 343559")
+# The error occured when only one variable was added to format data (uni)
+# In this case the variable SD was the only not to be formatted jointly
+
+context("Test NNTable bug 343919")
 
 
 nntable_dir <- gsub("/NNtable-tests/testthat|/tests/testthat", "", getwd())
@@ -18,40 +21,21 @@ stats <- adlb_f %>%
   group_by(TRTP,PARAMCD,AVISIT) %>%
   summarise(N = n_distinct(USUBJID),
             MEAN = mean(AVAL),
-            GEOMEAN = MEAN*2.75)
+            SD = stats::sd(AVAL),
+            .groups = "drop")
+
 
 # Create NNTable ---------------------------------------------------------------
 
 
-test_that("Bug 343559 test nested names", {
+test_that("Bug 343919 test 1", {
 
-  .NNTable <- NNTable(stats, "TRTP","N", Mean = "MEAN", "Geo Mean" = "GEOMEAN")
-
-  file <- "table_343559_1"
-
-  # print(.NNTable, file = file.path(output_path, "expected", file))
-
-  print(.NNTable, file = file.path(output_path, "got", file))
-
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
-})
+  .NNTable <- NNTable(stats, "TRTP","PARAMCD","AVISIT","N","Mean (SD)" = "MEAN (SD)") %>%
+    addTransLong(SUM = c("N","Mean (SD)")) %>%
+    addFormat(format_data = c(N = "%.0f"), dec = 2)
 
 
-
-stats <- adlb_f %>%
-  group_by(TRTP,PARAMCD,AVISIT) %>%
-  summarise(N = n_distinct(USUBJID),
-            MEAN = mean(AVAL),
-            GEOMEAN = MEAN*2.75,
-            CV = log(GEOMEAN))
-
-
-test_that("Bug 343559 test nested names 2", {
-
-  .NNTable <-  NNTable(stats, "TRTP","N","GEOMEAN (CV)")
-
-  file <- "table_343559_2"
+  file <- "table_343919_1"
 
   # print(.NNTable, file = file.path(output_path, "expected", file))
 
@@ -61,11 +45,14 @@ test_that("Bug 343559 test nested names 2", {
                readLines(file.path(output_path, "got",      file)))
 })
 
-test_that("Bug 343559 test nested names 3", {
 
-  .NNTable <-  NNTable(stats, "TRTP","N","MEAN","Geom.mean (CV%)" = "GEOMEAN (CV)")
+test_that("Bug 343919 test 1 reverse order", {
 
-  file <- "table_343559_3"
+  .NNTable <- NNTable(stats, "TRTP","PARAMCD","AVISIT","N","Mean (SD)" = "MEAN (SD)") %>%
+    addFormat(format_data = c(N = "%.0f"), dec = 2) %>%
+    addTransLong(SUM = c("N","Mean (SD)"))
+
+  file <- "table_343919_1"
 
   # print(.NNTable, file = file.path(output_path, "expected", file))
 
@@ -74,3 +61,4 @@ test_that("Bug 343559 test nested names 3", {
   expect_equal(readLines(file.path(output_path, "expected", file)),
                readLines(file.path(output_path, "got",      file)))
 })
+

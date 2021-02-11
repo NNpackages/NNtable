@@ -155,12 +155,14 @@ get_columns <- function(.NNTable, new_data = NULL) {
       character <- stringr::str_sub(table_form[name], matches)
       possible  <- seq_along(character)[!is.na(character)]
 
-      # Only use the column matches corresponding to the longes matches
+      # Only use the column matches corresponding to the longest matches
       if (sum(!is.na(character)) > 1)
         for (i in seq_along(character)[!is.na(character)][-1])
           if (any(matches[i, 1] <= matches[possible[possible < i], 2] &
-                  matches[i, 2] >= matches[possible[possible < i], 1]))
+                  matches[i, 2] >= matches[possible[possible < i], 1])) {
             matches[i, ] <- NA
+            possible <- setdiff(possible, i)
+          }
 
       if (all(is.na(matches))) {
         table_list[[name]] <- NULL

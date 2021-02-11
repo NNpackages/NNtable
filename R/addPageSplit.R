@@ -211,8 +211,6 @@ apply_page_split_width <- function(.NNTable) {
 
     split_res <- list(splits = length(level_chars), max_width = max_width)
 
-    #browser()
-
     while (max_width > p_width & counter < 3 & pages <= length(level_chars)) {
 
       pages <- pages_prior + counter

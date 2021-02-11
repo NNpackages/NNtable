@@ -369,7 +369,6 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
 
   create_format_data <- function(x, keep = character(0), cols = unlist(concat$table)) {
 
-
     out_format <- data.frame(matrix(ncol = length(c(cols, keep)),
                                     nrow = nrow(x)),
                              stringsAsFactors = FALSE)
@@ -426,7 +425,7 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
 
       if (!is.null(format_data) && any_check) {
         out_temp <-
-          updateUniFormat(data = as.data.frame(x)[, c(column_match, non_joint)], format_data_small, dec = dec,
+          updateUniFormat(data = as.data.frame(x)[, c(column_match, non_joint), drop = FALSE], format_data_small, dec = dec,
                           big.mark = big.mark, small.mark = small.mark)#[, non_joint]
         out_format[, colnames(out_temp)] <- out_temp
       } else {
@@ -637,18 +636,18 @@ updateUniFormat <- function(data, format_data, dec, big.mark = "", small.mark = 
 #   }
 
   # find the column match as the non numeric column in both datasets
+
   column_match <- intersect(colnames(data)[!numerics], colnames(format_data))
 
   # get the order of the format_data
   fmt_order <- match(apply(data[, column_match, drop = FALSE],        1, paste, collapse = ""),
                      apply(format_data[, column_match, drop = FALSE], 1, paste, collapse = ""))
 
-
-  old_format <- format_data[, intersect(colnames(data), colnames(format_data))]
-  new_format <- format_data[fmt_order, intersect(colnames(data), colnames(format_data))]
+  # in cases with no column match we will simply  dublicate the rows
+  old_format <- format_data[, intersect(colnames(data), colnames(format_data)), drop = FALSE]
+  new_format <- format_data[fmt_order, intersect(colnames(data), colnames(format_data)), drop = FALSE]
 
   new_format[, column_match] <- data[, column_match]
-
 
 
   if (all(is.na(fmt_order))) {
@@ -687,9 +686,10 @@ updateUniFormat <- function(data, format_data, dec, big.mark = "", small.mark = 
     as_tibble(sapply(in_format, function(name)
       adjustFormat(new_format[, name], data_form[name])))
 
-
   missing <- as.data.frame(t(data_form[setdiff(names(data_form) , colnames(format_data))]))
-  cbind(new_format, missing)
+  return(cbind(new_format, missing))
+
+
 }
 
 

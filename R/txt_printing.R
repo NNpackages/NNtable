@@ -557,7 +557,7 @@ apply_width <- function(.NNTable) {
                                              res.chars) + (length(spacers) + length(seppers))
     res.chars <- length(spacers) + length(seppers)
   }
-  #browser()
+
   if (is.null(.NNTable$spacing )) {
     .NNTable$spacing <- list(max.sep   = 50,
                              max.space = 50,
@@ -668,12 +668,12 @@ apply_width <- function(.NNTable) {
                         pre_paste, post_paste, underscore, under_mat, under_mat_c,
                         nested_header) {
 
-    #browser()
+
     v <- rle(x)
     from_to <- c(0, cumsum(v$length))
 
     use_width <- width
-    #browser()
+
     # Above the adjust in accordance with needed widths
     for (i in seq_along(v$lengths)) {
       seq <- (from_to[i] + 1):from_to[i + 1]
@@ -745,7 +745,7 @@ apply_width <- function(.NNTable) {
   header.mat_underscore2[header.mat_underscore == "NNTable_undescore"]  <- "NNTable_undescore"
 
   header.mat.align <- character()
-  #browser()
+
   for (i in seq_len(n.headers)) {
     header.mat.align <-
       c(

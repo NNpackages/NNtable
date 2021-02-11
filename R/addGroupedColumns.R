@@ -375,8 +375,6 @@ apply_groupColumns <- function(.NNTable) {
   # correct the group column indicator
   data_str$NNTable_added_group[data_str$NNTable_grouped_name == ""] <- FALSE
 
-  #browser()
-
   # Delete rows where all actual columns are blank and added for additional columns
   # Currently also deletes splits on other group vars
   if (!is.null(.NNTable$truncation) | !is.null(.NNTable$cell_split)) {
