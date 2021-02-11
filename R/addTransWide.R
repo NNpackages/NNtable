@@ -154,7 +154,7 @@ apply_tranToWide <- function(.NNTable) {
   columns_to_wide <- translate(x = columns_to_wide_1)
 
 
-  data$totally_stable_column <- "TESTER"
+  data$NNTable_totally_stable_column <- "TESTER"
 
   getListLevel <- function(x, level = 2) {
     for (i in seq_len(level))
@@ -182,9 +182,14 @@ apply_tranToWide <- function(.NNTable) {
 
     columns_to_wide.i <- getListLevel(columns_to_wide, i)
     #columns_to_wide.i <- gsub("#", "NNable_square", columns_to_wide.i)
-    stable.vars <- setdiff(colnames(data_out), c(names(columns_to_wide.i), varnames))
+    stable.vars <- setdiff(colnames(data_out), c(names(columns_to_wide.i), varnames,  "NNTable_Stable_count"))
 
+    # Take duplicates in stable rows into account
+    NNTable_Stable_count <- paste0("NNTable_Stable_count_", i)
+    data_out[ , (NNTable_Stable_count) := 1:.N, by = c(stable.vars, names(columns_to_wide.i)[1])]
+    stable.vars <- c(stable.vars, NNTable_Stable_count)
 
+    # perform the transformation
     comb <- data.table::dcast(data_out,
                               formula(paste(paste0("`", stable.vars, "`", collapse = " + " ), " ~ ",
                                             paste0("`", names(columns_to_wide.i)[1], "`"), collapse = "")),
@@ -205,8 +210,9 @@ apply_tranToWide <- function(.NNTable) {
     data_out <- comb[, cols,  with = FALSE]
   }
 
-
-  data_out <- data_out[, !"totally_stable_column"]
+  # drop the columns again
+  drop <- c("NNTable_totally_stable_column", paste0("NNTable_Stable_count_", sequence))
+  data_out <- data_out[, (drop) := NULL]
 
   # find space columns
   if (.NNTable$columns_to_wide$.remove_empty_columns) {

@@ -144,13 +144,12 @@ get_column_chars <- function(.NNTable, print.warning = TRUE) {
   ######              Establish the width of the columns                 ######
   #---------------------------------------------------------------------------#
 
-
   # get the data counts
   if ("NNTable_added_group" %in% colnames(data_str) && .NNTable$grouped_columns$span_row) {
     do_span <- TRUE
     to_format <- data_str$NNTable_added_group == FALSE
     count_base_1 <- rbind(apply(data_str[data_str$NNTable_added_group == FALSE,
-                                         setdiff(colnames(data_str), "NNTable_added_group")], 2, nchar),
+                                         setdiff(colnames(data_str), "NNTable_added_group")], 2, nchar, keepNA = FALSE),
                           apply(nchar(header.mat[n.headers, , drop = FALSE]), 2, max, na.rm = TRUE))
 
     data_str <- data_str[, setdiff(colnames(data_str), "NNTable_added_group")]
@@ -213,7 +212,6 @@ get_column_chars <- function(.NNTable, print.warning = TRUE) {
 
       prev_space <- ceiling(needed_space / 2)
       post_space <- needed_space - prev_space
-
 
       if (any(needed_space_where)) {
         for (j in which(needed_space_where)) {

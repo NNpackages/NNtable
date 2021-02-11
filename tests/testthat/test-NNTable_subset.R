@@ -148,6 +148,7 @@ test_that("NNTable subset remove column in exp", {
                  SEX   = c("Female" = "F", "Male" = "M"),
                  AESOC = stringr::str_to_title)
 
+
   .NNTable <- .NNTable[, -"SEX"]
 
   file <- "table_subset_exp_sex_2"
@@ -156,8 +157,8 @@ test_that("NNTable subset remove column in exp", {
 
   print(.NNTable, file = file.path(output_path, "got", file))
 
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 })
 
 test_that("NNTable subset remove column and subset rows", {
@@ -179,3 +180,29 @@ test_that("NNTable subset remove column and subset rows", {
   expect_equal(readLines(file.path(output_path, "expected", file)),
                readLines(file.path(output_path, "got",      file)))
 })
+
+
+
+
+# test_that("NNTable subset remove column in exp", {
+#
+#   .NNTable <- table %>%
+#     addExposure(subjects) %>%
+#     addTranslate(TRTA  = c("Ico" = "A", "NOVO rapid" = "B"),
+#                  SEX   = c("Female" = "F", "Male" = "M"),
+#                  AESOC = stringr::str_to_title) %>%
+#     addFilling(N = 0)
+#
+#
+#   .NNTable <- .NNTable[, -"SEX"]
+#
+#   file <- "table_subset_exp_sex_2"
+#
+#   # print(.NNTable, file = file.path(output_path, "expected", file))
+#
+#   print(.NNTable, file = file.path(output_path, "got", file))
+#
+#   expect_equal(read_encoded(file.path(output_path, "expected", file)),
+#                read_encoded(file.path(output_path, "got",      file)))
+# })
+

@@ -188,8 +188,9 @@ apply_format_concat <- function(.NNTable) {
 
     non_blank <- apply(data_str[, vars, with = FALSE] != "", 1, any)
 
-    data_str <- data_str[, (vars) := lapply(.SD, function(x)
-      ifelse(x == "" & non_blank, "NA", x )), .SDcols = vars ]
+    if (!is.null(vars))
+      data_str <- data_str[, (vars) := lapply(.SD, function(x)
+        ifelse(x == "" & non_blank, "NA", x )), .SDcols = vars ]
 
     # same thing but on a data.frame
     # data_str[, vars][data_str[, vars] == "" & apply(data_str[, ..vars] != "", 1, any)] <- "NA"
@@ -352,7 +353,6 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
 
   # Get the concatination info
   concat <- .NNTable$concat
-
   # Get the columns that needs to be formated together
   combine <- initName(.NNTable$columns_to_long$columns)
 
@@ -377,6 +377,7 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
 
     row.names(out_format) <- NULL
     colnames(out_format) <- c(cols, keep)
+
 
     out_format[, c(cols, keep) ] <- x[, c(cols, keep), with = FALSE]
 
