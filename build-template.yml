@@ -6,10 +6,10 @@ steps:
     export pkgName=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
     export pkgVers=$(sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
     shortName2=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
-    export HOME=$(Agent.BuildDirectory)
+    #export HOME=$(Agent.BuildDirectory)
     shortName2=${shortName2:2}
     export shortName=${shortName2}
-    echo "##vso[task.setvariable variable=HOME]$HOME"
+    #echo "##vso[task.setvariable variable=HOME]$HOME"
     echo "##vso[task.setvariable variable=pkgVers]$pkgVers"
     echo "##vso[task.setvariable variable=pkgName]$pkgName"
     echo "##vso[task.setvariable variable=shortName]$shortName"
@@ -31,7 +31,7 @@ steps:
 - script: |
     echo "whoami"; whoami
     echo "pwd"; pwd
-    export HOME=$(Agent.BuildDirectory)
+    #export HOME=$(Agent.BuildDirectory)
     scp  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
   displayName: 'test scp'
 
