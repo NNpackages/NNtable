@@ -29,12 +29,13 @@ steps:
     sshKeySecureFile: 'id_rsa'
 
 
-# - script: |
-#     echo "whoami"; whoami
-#     echo "pwd"; pwd
-#     #export HOME=$(Agent.BuildDirectory)
-#     scp  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
-#   displayName: 'test scp'
+- script: |
+    echo "whoami"; whoami
+    echo "pwd"; pwd
+    #export HOME=$(Agent.BuildDirectory)
+    #scp  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
+    rsync OPTION README.md sffl@whale.nn.nnithosting.com:help
+  displayName: 'test scp'
 
 # Show some debugging info, pipeline and environmental variables
 - script: |
