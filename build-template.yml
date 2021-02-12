@@ -36,7 +36,7 @@ steps:
 #     AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
 #   displayName: 'Login Azure DevOps Extension'
 
-- script: az devops configure --defaults organization=https://novonordiskit.visualstudio.com project="BOS" --use-git-aliases true
+- script: az devops configure --defaults organization=https://novonordiskit.visualstudio.com project="Trial Execution" --use-git-aliases true
   env:
     AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
     AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
