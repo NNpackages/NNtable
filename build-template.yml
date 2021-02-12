@@ -45,6 +45,9 @@ steps:
 - script: |
     az pipelines build list
     git pr list
+  env:
+    AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
+    AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
   displayName: 'Show build list and PRs'
 
 - script: |
