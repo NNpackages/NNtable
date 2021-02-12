@@ -28,12 +28,25 @@ steps:
     sshPublicKey: '$(myPubKey)'
     sshKeySecureFile: 'id_rsa'
 
-- script: |
-    echo "whoami"; whoami
-    echo "pwd"; pwd
-    #export HOME=$(Agent.BuildDirectory)
-    scp  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
-  displayName: 'test scp'
+# Copy files over SSH
+# Copy files or build artifacts to a remote machine over SSH
+- task: CopyFilesOverSSH@0
+  inputs:
+    sshEndpoint:
+    #sourceFolder: # Optional
+    contents: 'README.md'
+    #targetFolder: # Optional
+    #cleanTargetFolder: false # Optional
+    #overwrite: true # Optional
+    #failOnEmptySource: false # Optional
+    #flattenFolders: false # Optional
+
+# - script: |
+#     echo "whoami"; whoami
+#     echo "pwd"; pwd
+#     #export HOME=$(Agent.BuildDirectory)
+#     scp  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
+#   displayName: 'test scp'
 
 # Show some debugging info, pipeline and environmental variables
 - script: |
