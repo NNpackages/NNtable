@@ -20,6 +20,7 @@ jobs:
   variables:
     imageName: 'R:$(Build.BuildId)'
     repoName: '$(Build.Repository.Name)'
+    HOME: '$(Agent.BuildDirectory)''
 
   steps:
     - template: build-template.yml
