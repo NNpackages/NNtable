@@ -13,7 +13,24 @@ steps:
     echo "##vso[task.setvariable variable=shortName]$shortName"
   displayName: "Fetch and set package version as variables"
 
+- task: DownloadSecureFile@1
+  name: caCertificate
+  displayName: 'Download ssh'
+  inputs:
+    secureFile: 'id_rsa'
 
+- task: InstallSSHKey@0
+  displayName: 'Install an SSH key'
+  inputs:
+    knownHostsEntry: 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJmmFte7jLDg1cpqo/AdE/ZIfzyMLjb/RtHPYUuJF79dtFxK+oub4pHy4u5zsIvgOQRfrBlh4q06A1lWC3o8OQw='
+    sshPublicKey: '$(myPubKey)'
+    sshKeySecureFile: 'id_rsa'
+
+- script: |
+    echo "whoami"; whoami
+    echo "pwd"; pwd
+    scp  README.md sffl@whale.nn.nnithosting.com:test_file.test
+  displayName: 'test scp'
 
 # Show some debugging info, pipeline and environmental variables
 - script: |
