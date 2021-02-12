@@ -31,7 +31,8 @@ steps:
 - script: |
     echo "whoami"; whoami
     echo "pwd"; pwd
-    scp  README.md sffl@whale.nn.nnithosting.com:test_file.test
+    export HOME=$(Agent.BuildDirectory)
+    scp  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
   displayName: 'test scp'
 
 # Show some debugging info, pipeline and environmental variables
