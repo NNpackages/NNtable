@@ -28,12 +28,16 @@ steps:
     sshPublicKey: '$(myPubKey)'
     sshKeySecureFile: 'id_rsa'
 
+- script: az extension add -n azure-devops
+  displayName: 'Install Azure DevOps Extension'
+
+
 
 - script: |
     echo "whoami"; whoami
     echo "pwd"; pwd
     #export HOME=$(Agent.BuildDirectory)
-    scp -i /opt/vsts-agent/_work/_temp/id_rsa  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
+    scp -i $(Agent.BuildDirectory)/.ssh/id_rsa  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
     #rsync OPTION README.md sffl@whale.nn.nnithosting.com:help
   displayName: 'test scp'
 
