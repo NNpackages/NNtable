@@ -24,7 +24,7 @@ steps:
 - task: InstallSSHKey@0
   displayName: 'Install an SSH key'
   inputs:
-    knownHostsEntry: 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJmmFte7jLDg1cpqo/AdE/ZIfzyMLjb/RtHPYUuJF79dtFxK+oub4pHy4u5zsIvgOQRfrBlh4q06A1lWC3o8OQw='
+    knownHostsEntry: 'whale.nn.nnithosting.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJmmFte7jLDg1cpqo/AdE/ZIfzyMLjb/RtHPYUuJF79dtFxK+oub4pHy4u5zsIvgOQRfrBlh4q06A1lWC3o8OQw='
     sshPublicKey: '$(myPubKey)'
     sshKeySecureFile: 'id_rsa'
 
