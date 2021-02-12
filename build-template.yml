@@ -14,7 +14,7 @@ steps:
   displayName: "Fetch and set package version as variables"
 
 - task: DownloadSecureFile@1
-  name: caCertificate
+  name: id_rsa
   displayName: 'Download ssh'
   inputs:
     secureFile: 'id_rsa'
