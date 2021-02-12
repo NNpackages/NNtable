@@ -28,18 +28,6 @@ steps:
     sshPublicKey: '$(myPubKey)'
     sshKeySecureFile: 'id_rsa'
 
-# Copy files over SSH
-# Copy files or build artifacts to a remote machine over SSH
-- task: CopyFilesOverSSH@0
-  inputs:
-    sshEndpoint: 'sffl@whale.nn.nnithosting.com'
-    #sourceFolder: # Optional
-    contents: 'README.md'
-    #targetFolder: # Optional
-    #cleanTargetFolder: false # Optional
-    #overwrite: true # Optional
-    #failOnEmptySource: false # Optional
-    #flattenFolders: false # Optional
 
 # - script: |
 #     echo "whoami"; whoami
