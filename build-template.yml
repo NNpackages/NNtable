@@ -32,7 +32,7 @@ steps:
 # Copy files or build artifacts to a remote machine over SSH
 - task: CopyFilesOverSSH@0
   inputs:
-    sshEndpoint:
+    sshEndpoint: sffl@whale.nn.nnithosting.com
     #sourceFolder: # Optional
     contents: 'README.md'
     #targetFolder: # Optional
