@@ -36,7 +36,7 @@ steps:
 #     AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
 #   displayName: 'Login Azure DevOps Extension'
 
-- script: az devops configure --defaults organization=https://novonordiskit.visualstudio.com project="Trial Execution" --use-git-aliases true
+- script: az devops configure --defaults organization=https://novonordiskit.visualstudio.com project="BOS" --use-git-aliases true
   env:
     AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
     AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
@@ -45,7 +45,7 @@ steps:
 - script: |
     az pipelines build list
     git pr list
-    az boards work-item update --id 230050 --state 'In Progress' --area 'Trial Execution\nn1436\nn1436-4462'
+    az boards work-item update --id 349644 --state 'Active' --area 'BOS\NNPackages\NNtable'
   env:
     AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
     AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
