@@ -31,12 +31,15 @@ steps:
 - script: az extension add -n azure-devops
   displayName: 'Install Azure DevOps Extension'
 
-- script: echo ${AZURE_DEVOPS_CLI_PAT} | az devops login --organization=https://novonordiskit.visualstudio.com
-  env:
-    AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
-  displayName: 'Login Azure DevOps Extension'
+# - script: echo ${AZURE_DEVOPS_CLI_PAT} | az devops login --organization=https://novonordiskit.visualstudio.com
+#   env:
+#     AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
+#   displayName: 'Login Azure DevOps Extension'
 
 - script: az devops configure --defaults organization=https://novonordiskit.visualstudio.com project="BOS" --use-git-aliases true
+  env:
+    AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
+    AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
   displayName: 'Set default Azure DevOps organization and project'
 
 - script: |
