@@ -64,7 +64,7 @@ steps:
     #rsync OPTION README.md sffl@whale.nn.nnithosting.com:help
   env:
      HOME: $(Agent.BuildDirectory)
-     ssh_home_t
+     ssh_home_t: $(Agent.BuildDirectory)
   displayName: 'test scp'
 
 # Show some debugging info, pipeline and environmental variables
