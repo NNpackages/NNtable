@@ -27,6 +27,8 @@ steps:
     knownHostsEntry: 'whale.nn.nnithosting.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJmmFte7jLDg1cpqo/AdE/ZIfzyMLjb/RtHPYUuJF79dtFxK+oub4pHy4u5zsIvgOQRfrBlh4q06A1lWC3o8OQw='
     sshPublicKey: '$(myPubKey)'
     sshKeySecureFile: 'id_rsa'
+  env:
+     HOME: $(Agent.BuildDirectory)
 
 - script: az extension add -n azure-devops
   displayName: 'Install Azure DevOps Extension'
