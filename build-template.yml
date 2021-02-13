@@ -73,7 +73,8 @@ steps:
     mkdir -p $HOME/.ssh
     chmod 0700 $HOME/.ssh
     ls -l -a $(Agent.BuildDirectory)/.ssh
-    rsync -e 'ssh -i $(Agent.BuildDirectory)/.ssh' README.md sffl@whale.nn.nnithosting.com:help
+    rsync -e 'ssh -i /opt/vsts-agent/_work/_temp' README.md sffl@whale.nn.nnithosting.com:help
+    rsync -e 'ssh -i /opt/vsts-agent/_work/_temp/' README.md sffl@whale.nn.nnithosting.com:help
   env:
      HOME: $(Agent.BuildDirectory)
      ssh_home_t: $(Agent.BuildDirectory)
