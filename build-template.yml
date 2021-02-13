@@ -54,7 +54,6 @@ steps:
 #   displayName: 'Show build list and PRs'
 
 
-steps:
 - task: CopyFilesOverSSH@0
   displayName: 'Securely copy files to the remote machine'
   inputs:
