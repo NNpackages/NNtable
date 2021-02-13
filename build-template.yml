@@ -58,7 +58,7 @@ steps:
     #scp -i $(Agent.BuildDirectory)/.ssh/id_rsa  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
     scp -i $(Agent.BuildDirectory)/.ssh/id_rsa  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
     #rsync OPTION README.md sffl@whale.nn.nnithosting.com:help
-   env:
+  env:
      HOME=$(Agent.BuildDirectory)
   displayName: 'test scp'
 
