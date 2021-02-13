@@ -64,11 +64,14 @@ steps:
 - script: |
     echo "whoami"; whoami
     echo "pwd"; pwd
+    ll
     export HOME=$(Agent.BuildDirectory)
     #scp -i $(Agent.BuildDirectory)/.ssh/id_rsa  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
     #semanage fcontext -a -s unconfined_u -t ssh_home_t '$(Agent.BuildDirectory)\.ssh(/.*)?'
     #scp  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
     #scp -i $(Agent.BuildDirectory)/.ssh/id_rsa  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
+    mkdir -p $HOME/.ssh
+    chmod 0700 $HOME/.ssh
     rsync -e 'ssh' README.md sffl@whale.nn.nnithosting.com:help
   env:
      HOME: $(Agent.BuildDirectory)
