@@ -53,6 +53,15 @@ steps:
 #     AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
 #   displayName: 'Show build list and PRs'
 
+
+steps:
+- task: CopyFilesOverSSH@0
+  displayName: 'Securely copy files to the remote machine'
+  inputs:
+    sshEndpoint: sfflwhale
+    contents: README.md
+    targetFolder: '../../projstat/nn1436/nn1436-4462/current/stats/program/draft/sffl/test'
+
 - script: |
     echo "whoami"; whoami
     echo "pwd"; pwd
