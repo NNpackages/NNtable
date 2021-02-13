@@ -72,7 +72,7 @@ steps:
     #scp -i $(Agent.BuildDirectory)/.ssh/id_rsa  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
     mkdir -p $HOME/.ssh
     chmod 0700 $HOME/.ssh
-    ls -l
+    ls -l -a
     rsync -e 'ssh' README.md sffl@whale.nn.nnithosting.com:help
   env:
      HOME: $(Agent.BuildDirectory)
