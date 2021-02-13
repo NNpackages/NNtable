@@ -64,12 +64,12 @@ steps:
 - script: |
     echo "whoami"; whoami
     echo "pwd"; pwd
-    #export HOME=$(Agent.BuildDirectory)
+    export HOME=$(Agent.BuildDirectory)
     #scp -i $(Agent.BuildDirectory)/.ssh/id_rsa  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
-    semanage fcontext -a -s unconfined_u -t ssh_home_t '$(Agent.BuildDirectory)\.ssh(/.*)?'
-    scp  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
-    scp -i $(Agent.BuildDirectory)/.ssh/id_rsa  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
-    #rsync OPTION README.md sffl@whale.nn.nnithosting.com:help
+    #semanage fcontext -a -s unconfined_u -t ssh_home_t '$(Agent.BuildDirectory)\.ssh(/.*)?'
+    #scp  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
+    #scp -i $(Agent.BuildDirectory)/.ssh/id_rsa  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
+    rsync README.md sffl@whale.nn.nnithosting.com:help
   env:
      HOME: $(Agent.BuildDirectory)
      ssh_home_t: $(Agent.BuildDirectory)
