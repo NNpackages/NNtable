@@ -15,51 +15,6 @@ steps:
     echo "##vso[task.setvariable variable=shortName]$shortName"
   displayName: "Fetch and set package version as variables"
 
-- task: DownloadSecureFile@1
-  name: id_rsa
-  displayName: 'Download ssh'
-  inputs:
-    secureFile: 'id_rsa'
-
-- task: InstallSSHKey@0
-  displayName: 'Install an SSH key'
-  inputs:
-    knownHostsEntry: 'whale.nn.nnithosting.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJmmFte7jLDg1cpqo/AdE/ZIfzyMLjb/RtHPYUuJF79dtFxK+oub4pHy4u5zsIvgOQRfrBlh4q06A1lWC3o8OQw='
-    sshPublicKey: '$(myPubKey)'
-    sshKeySecureFile: 'id_rsa'
-  env:
-     HOME: $(Agent.BuildDirectory)
-
-- script: az extension add -n azure-devops
-  displayName: 'Install Azure DevOps Extension'
-
-# - script: echo ${AZURE_DEVOPS_CLI_PAT} | az devops login --organization=https://novonordiskit.visualstudio.com
-#   env:
-#     AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
-#   displayName: 'Login Azure DevOps Extension'
-
-- script: az devops configure --defaults organization=https://novonordiskit.visualstudio.com project="Trial Execution" --use-git-aliases true
-  env:
-    AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
-    AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
-  displayName: 'Set default Azure DevOps organization and project'
-
-# - script: |
-#     az pipelines build list
-#     git pr list
-#     az boards work-item update --id 230135 --state 'In Progress' --area 'Trial Execution\nn1436\nn1436-4462'
-#   env:
-#     AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
-#     AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
-#   displayName: 'Show build list and PRs'
-
-
-- task: CopyFilesOverSSH@0
-  displayName: 'Securely copy files to the remote machine'
-  inputs:
-    sshEndpoint: sfflwhale
-    contents: README.md
-    targetFolder: '../../projstat/nn1436/nn1436-4462/current/stats/program/draft/sffl/test'
 
 - script: |
     echo "whoami"; whoami
