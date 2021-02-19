@@ -16,25 +16,6 @@ steps:
   displayName: "Fetch and set package version as variables"
 
 
-- script: |
-    echo "whoami"; whoami
-    echo "pwd"; pwd
-    ll
-    export HOME=$(Agent.BuildDirectory)
-    #scp -i $(Agent.BuildDirectory)/.ssh/id_rsa  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
-    #semanage fcontext -a -s unconfined_u -t ssh_home_t '$(Agent.BuildDirectory)\.ssh(/.*)?'
-    #scp  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
-    #scp -i $(Agent.BuildDirectory)/.ssh/id_rsa  README.md sffl@whale.nn.nnithosting.com:test_file_2.test
-    mkdir -p $HOME/.ssh
-    chmod 0700 $HOME/.ssh
-    ls -l -a $(Agent.BuildDirectory)/.ssh
-    rsync -e 'ssh -i /opt/vsts-agent/_work/_temp' README.md sffl@whale.nn.nnithosting.com:help
-    rsync -e 'ssh -i /opt/vsts-agent/_work/_temp/' README.md sffl@whale.nn.nnithosting.com:help
-  env:
-     HOME: $(Agent.BuildDirectory)
-     ssh_home_t: $(Agent.BuildDirectory)
-     SSH.HOME.T: $(Agent.BuildDirectory)
-  displayName: 'test scp'
 
 # Show some debugging info, pipeline and environmental variables
 - script: |
