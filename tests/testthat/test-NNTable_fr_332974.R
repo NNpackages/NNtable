@@ -90,3 +90,10 @@ test_that("Feature request 332974 test 2", {
 })
 
 
+
+# table <- NNTable(adae_clean, cols, page_size = getEOTpaper("land")) %>%
+#   addCellSplit(align = "bottom") %>%
+#   addTruncation("Preferred term/|investigator's|description" = 20, exdent = 1)
+#
+# table %>%
+#   addGroupedColumns(names(cols)[1], name = names(cols)[1])

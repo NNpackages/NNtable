@@ -589,12 +589,21 @@ updatejointFormat <- function(data, format_data, dec, big.mark = "", small.mark 
 
   #adjusted_num <- num_all + max(missing_dec, spec_fmt_max$dec) + 1
 
-  new_dec <- sapply(new_format[, setdiff(colnames(new_format), column_match), drop = FALSE],
-                    function(x) split_format(x)$dec)
+  out_format_adj <- sapply(new_format[, setdiff(colnames(new_format), column_match), drop = FALSE],
+                    function(x) split_format(x)$dec, simplify = "matrix")
 
   # Create the adjusted and new format data frames
-  out_format_adj <- sapply(as.data.frame(new_dec), function(dec2) paste0("%", num_all + dec2 + ifelse(dec2 > 0, 1, 0), ".", dec2, "f"))
-  out_format_new <- data[, numerics & !(colnames(data) %in% colnames(format_data)), drop = FALSE]
+
+  if ((is.numeric(out_format_adj) | is.character(out_format_adj)) && !is.null(names(out_format_adj))) {
+    out_format_adj <- as.data.frame(t(out_format_adj))
+  } else {
+    out_format_adj <- as.data.frame(out_format_adj)
+  }
+
+  out_format_adj[,] <-
+    sapply(out_format_adj, function(dec2) paste0("%", num_all + dec2 + ifelse(dec2 > 0, 1, 0), ".", dec2, "f"), simplify = "matrix")
+
+    out_format_new <- data[, numerics & !(colnames(data) %in% colnames(format_data)), drop = FALSE]
   out_format_new[,] <- paste0("%",  num_all + missing_dec + ifelse(missing_dec > 0, 1, 0), ".", missing_dec, "f")
 
   # bind the created formats together
