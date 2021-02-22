@@ -375,8 +375,8 @@ print.NNTable <- function(x, ..., page = 1, file = NULL, verbose = TRUE, check_e
 
   .NNTable <- apply_createHeader(.NNTable)
 
-  if (!is.null(.NNTable$print_method) && .NNTable$print_method$type == "flextable")
-    print_flextable(.NNTable)
+  # if (!is.null(.NNTable$print_method) && .NNTable$print_method$type == "flextable")
+  #   print_flextable(.NNTable)
 
 
   if (!is.null(.NNTable$page_split)) {
