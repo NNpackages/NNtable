@@ -196,7 +196,8 @@ apply_groupColumns <- function(.NNTable) {
   # test for adding sorting to characters, The characters are made as factors
   # because of sorting issues
   for (char in names(classes[classes == "character"])) {
-    data_str <- data_str[data_str[[char]] == "", (char) := "NNTable_Empty"]
+    data_str <- data_str[data_str[[char]] == "",  (char) := "NNTable_Empty"]
+    data_str <- data_str[is.na(data_str[[char]]), (char) := "NNTable_Empty"]
     data_str[, char] <- as.factor(data_str[[char]])
     classes[char] <-  "factor"
   }
@@ -221,7 +222,7 @@ apply_groupColumns <- function(.NNTable) {
 
   # Replace NA with empty
   na_cols <- unique(c(group_cols, names(group_cols)))
-  data_str[, (na_cols) := lapply(.SD, function(x) {x[is.na(x)] <- " "; return(x)}), .SDcols = na_cols]
+  data_str <- data_str[, (na_cols) := lapply(.SD, function(x) {x[is.na(x)] <- " "; return(x)}), .SDcols = na_cols]
 
 
   # Initiate cols -----------------------------------------------
