@@ -118,6 +118,7 @@ apply_page_split_width <- function(.NNTable) {
       column.chars[length(column.chars) - 1] + column.chars[length(column.chars)]
     column.chars <- column.chars[-length(column.chars)]
   }
+
   column.chars_zero <- column.chars
 
   spacers <- grep("^space.column.", names(column.chars))
@@ -278,6 +279,8 @@ apply_page_split_width <- function(.NNTable) {
     }
 
     subtable <- apply_width(subtable)
+
+    subtable <- apply_n_bodylines(subtable)
 
     subtable <- apply_splitPages(subtable)
 

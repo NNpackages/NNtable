@@ -93,6 +93,8 @@ apply_truncation <- function(.NNTable) {
 
   data_str <- .NNTable$data_str
 
+  data_str$NNTable_trunc_id <- seq_len(nrow(data_str))
+
   table_cols <- setdiff(colnames(data_str), .NNTable$remove$columns)
 
   if (!is.null(.NNTable$grouped_columns))
@@ -103,7 +105,7 @@ apply_truncation <- function(.NNTable) {
   if (!data.table::is.data.table(data_str))
     data_str <- data.table::as.data.table(data_str)
 
-  # copy colums
+  # copy columns
   data_str[, (table_cols_trunc) := lapply(.SD, as.character), .SDcols = table_cols]
 
   split_cols <- table_cols_trunc
@@ -144,7 +146,7 @@ apply_truncation <- function(.NNTable) {
 
   .NNTable$data_str <- as.data.frame(indt)
 
-  trunc_remove <- intersect(paste0(.NNTable$remove$columns, "_trunc"), colnames(.NNTable$data_str))
+  trunc_remove <- c(intersect(paste0(.NNTable$remove$columns, "_trunc"), colnames(.NNTable$data_str)), "NNTable_trunc_id", "NNTable_trunc_id_trunc")
   .NNTable$remove$columns_trunc <- c(table_cols, trunc_remove)
 
   return(.NNTable)

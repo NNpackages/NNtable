@@ -8,7 +8,8 @@ getEOTpaper(
   orientation = c("port", "land"),
   font_size = 8,
   figure_size = c("defeault", "full"),
-  type = c("table", "listing", "figure")
+  type = c("table", "listing", "figure"),
+  format = "txt"
 )
 }
 \arguments{
@@ -16,9 +17,11 @@ getEOTpaper(
 
 \item{font_size}{the font size. Only applicable for figure}
 
-\item{figure_size}{Should the size be defeault or full}
+\item{figure_size}{Should the size be default or full}
 
 \item{type}{Should the output be character widths or figure width in cm.}
+
+\item{format}{\code{character} the type of output, currently \code{"txt"} or \code{"flextable"}}
 }
 \value{
 list with paper size

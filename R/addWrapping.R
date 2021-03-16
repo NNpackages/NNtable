@@ -59,20 +59,139 @@
 #' .NNTable
 addWrapping <- function(.NNTable, title, footnote, sys_footnote, title_space = "", footer_space = "") {
 
+  .NNTable$wrapping <- list(title_orig        = title,
+                            footer_orig       = footnote,
+                            sys_footnote_orig = sys_footnote,
+                            title_space       = title_space,
+                            footer_space      = footer_space)
+  return(.NNTable)
+}
+
+
+apply_width_wrapping <- function(.NNTable) {
+
   width <- .NNTable$page_size$page.width
 
+  title  <- .NNTable$wrapping$title_orig
+  footer <- .NNTable$wrapping$footer_orig
+  sys_footnote <- .NNTable$wrapping$sys_footnote_orig
+
   # Add the title
-  title <- stringi::stri_wrap(title, width = width, simplify = TRUE)
-  title <- c(title, title_space)
+  if (.NNTable$print_method$type != "txt") {
 
-  footer <- stringi::stri_wrap(footnote, width = width, simplify = TRUE)
-  footer <- c(footer, footer_space)
+    caption <- stringWrap(title, width = width, font_size = 11)
+    .NNTable$wrapping$caption <- caption
 
-  sys_footnote <- stringi::stri_wrap(sys_footnote, width = width, simplify = TRUE)
+    title  <- stringWrap(title, width = width, font_size = .NNTable$font_size)
+    footer <- stringWrap(footer, width = width, font_size = .NNTable$font_size)
+    sys_footnote <- stringWrap(sys_footnote, width = width, font_size = .NNTable$font_size)
+    auto_foot <- sys_footnote
+  } else {
+    title  <- stringi::stri_wrap(title, width = width, simplify = TRUE)
+    footer <- stringi::stri_wrap(footer, width = width, simplify = TRUE)
+    sys_footnote <- stringi::stri_wrap(sys_footnote, width = width, simplify = TRUE)
+    auto_foot <- alignRight(c(sys_footnote, ""), width = .NNTable$page_size$page.width)
+  }
 
-  .NNTable$wrapping <- list(title = title, footer = footer, sys_footnote = sys_footnote)
+  title <- c(title, .NNTable$wrapping$title_space)
+  footer <- c(footer, .NNTable$wrapping$footer_space)
+
+  .NNTable$wrapping$title <- title
+  .NNTable$wrapping$footer <- footer
+  .NNTable$wrapping$sys_footnote <- sys_footnote
+
+  .NNTable$wrapping$auto_foot <- auto_foot
 
   return(.NNTable)
 }
+
+
+apply_n_bodylines <- function(.NNTable) {
+
+  #---------------------------------------------------------------------------#
+  ######                        lines calculation                        ######
+  #---------------------------------------------------------------------------#
+
+  if (.NNTable$print_method$type == "txt") {
+
+    # Calculate title lines
+    title.lines <- max(1, length(.NNTable$wrapping[["title"]]))
+
+    # calculate the number of header lines
+    header.lines <- 2 + length(.NNTable$header$header)
+
+    # calculate footer lines
+    footer.lines <- 1 + max(1, length(.NNTable$wrapping[["footer"]])) + 1 +
+      max(0, length(.NNTable$wrapping[["sys_footnote"]]))
+
+     # body lines
+    .NNTable$page_size$body.lines <- .NNTable$page_size$page.length - (title.lines + header.lines + footer.lines)
+    .NNTable$page_size$body.lines.page1 <- .NNTable$page_size$body.lines
+    .NNTable$page_size$body.lines.page2 <- .NNTable$page_size$body.lines
+
+  } else {
+    #---------------------------------------------------------------------------#
+    ######                   Calculate table height                        ######
+    #---------------------------------------------------------------------------#
+
+
+    caption_height <-
+      stringHeightAdj(paste(c(unlist(.NNTable$wrapping$caption)), collapse = "\n"),
+                      font_size = 11, font_type = 2) +
+      stringHeightAdj("M", font_size = 10, font_type = 1)
+
+
+    title_height <-
+      stringHeightAdj(paste(c(unlist(.NNTable$wrapping$title), "", ""), collapse = "\n"),
+                      font_size = .NNTable$font_size)
+
+
+
+    footer_height <-
+      stringHeightAdj(paste(c(unlist(.NNTable$wrapping$footer),
+                              unlist(.NNTable$wrapping$sys_footnote)), collapse = "\n"),
+                      font_size = .NNTable$font_size)
+
+
+    footer_height <- footer_height +
+      sum((c(unlist(.NNTable$wrapping$footer), unlist(.NNTable$wrapping$sys_footnote)) == "") *
+            stringHeightAdj("M", font_size = .NNTable$font_size)) * 0.25
+
+    height_page1 <- .NNTable$page_size$page.length -
+      (caption_height + footer_height)
+
+    height_page2 <- .NNTable$page_size$page.length -
+      (title_height + footer_height)
+
+
+
+    cell_height <- stringHeightAdj("M", font_size = .NNTable$font_size)
+
+
+    n.lines_page1 <- floor(height_page1 / cell_height)
+    n.lines_page2 <- floor(height_page2 / cell_height)
+
+
+    #---------------------------------------------------------------------------#
+    ######                  subtract header lines                          ######
+    #---------------------------------------------------------------------------#
+
+    if (.NNTable$header$underscore) {
+      n_header_lines <- ceiling(nrow(.NNTable$header$matrix) / 2)
+    } else {
+      n_header_lines <- nrow(.NNTable$header$matrix)
+    }
+
+    .NNTable$page_size$body.lines <- n.lines_page1 - n_header_lines
+
+    .NNTable$page_size$body.lines.page1 <- n.lines_page1 - n_header_lines
+    .NNTable$page_size$body.lines.page2 <- n.lines_page2 - n_header_lines
+    .NNTable$page_size$cell_height <- cell_height
+  }
+
+
+  .NNTable
+}
+
 
 

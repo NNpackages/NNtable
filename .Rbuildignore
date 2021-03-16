@@ -18,3 +18,5 @@ sec*_*
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^LICENSE\.md$
+^data-raw$

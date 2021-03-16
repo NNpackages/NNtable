@@ -1,5 +1,9 @@
 # NNtable (development version)
 
+## Bugfixes
+
+* 388785 When NA is used in subcategories they are now treated as blanks as expected
+
 # NNtable 0.0.4
 
 ## Features

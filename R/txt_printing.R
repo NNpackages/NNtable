@@ -105,7 +105,7 @@ apply_add_separators <- function(.NNTable) {
   return(.NNTable)
 }
 
-get_column_chars <- function(.NNTable, print.warning = TRUE) {
+get_column_chars <- function(.NNTable, print.warning = TRUE, font = "mono") {
 
   # Get data
   alignment <- .NNTable$alignment$alignment
@@ -120,6 +120,23 @@ get_column_chars <- function(.NNTable, print.warning = TRUE) {
   data_str <- .NNTable$data_str[, setdiff(colnames(.NNTable$data_str),
                                           setdiff(c(.NNTable$remove$columns, .NNTable$remove$columns_trunc),
                                                   NNTable_added_group)), drop = FALSE]
+
+
+
+  # we use that the apis font has a space that is exactly half as wide as a number
+  classes_str <- NULL
+  if (font != "mono") {
+
+    classes_str <- get_classes(data = .NNTable$data, data_str = data_str, .NNTable = .NNTable)
+
+    data_str[, classes_str %in% c("integer", "numeric", "all_numeric")] <-
+      sapply(data_str[, classes_str %in% c("integer", "numeric", "all_numeric")], function(x) gsub(" ", "  ", x))
+
+    data_str[, !classes_str %in% c("integer", "numeric", "all_numeric")] <-
+      sapply(data_str[, !classes_str %in% c("integer", "numeric", "all_numeric")], double_leading_space)
+  }
+
+
 
   ncol <- ncol(data_str)
 
@@ -148,22 +165,38 @@ get_column_chars <- function(.NNTable, print.warning = TRUE) {
   if ("NNTable_added_group" %in% colnames(data_str) && .NNTable$grouped_columns$span_row) {
     do_span <- TRUE
     to_format <- data_str$NNTable_added_group == FALSE
-    count_base_1 <- rbind(apply(data_str[data_str$NNTable_added_group == FALSE,
-                                         setdiff(colnames(data_str), "NNTable_added_group")], 2, nchar, keepNA = FALSE),
-                          apply(nchar(header.mat[n.headers, , drop = FALSE]), 2, max, na.rm = TRUE))
+    if (font == "mono") {
+      count_base_1 <- rbind(apply(data_str[data_str$NNTable_added_group == FALSE,
+                                           setdiff(colnames(data_str), "NNTable_added_group")], 2, nchar, keepNA = FALSE),
+                            apply(nchar(header.mat[n.headers, , drop = FALSE]), 2, max, na.rm = TRUE))
+    } else {
+      count_base_1 <- rbind(apply(data_str[data_str$NNTable_added_group == FALSE,
+                                           setdiff(colnames(data_str), "NNTable_added_group")], 2, stringWidth),
+                            stringWidth(header.mat[n.headers, , drop = FALSE]))
+    }
+
 
     data_str <- data_str[, setdiff(colnames(data_str), "NNTable_added_group")]
   } else {
     do_span <- FALSE
     to_format <- rep(TRUE, nrow(data_str))
-    count_base_1 <- rbind(apply(data_str, 2, nchar, keepNA = FALSE),
-                          apply(nchar(header.mat[n.headers, , drop = FALSE]),
-                                2, max, na.rm = TRUE))
+    if (font == "mono") {
+      count_base_1 <- rbind(apply(data_str, 2, nchar, keepNA = FALSE),
+                            apply(nchar(header.mat[n.headers, , drop = FALSE]),
+                                  2, max, na.rm = TRUE))
+    } else {
+      count_base_1 <- rbind(apply(data_str, 2, stringWidth),
+                            stringWidth(header.mat[n.headers, , drop = FALSE]))
+    }
   }
 
   count_base <- apply(count_base_1, 2, max)
   count_base_w1s <- count_base
-  count_base_w1s[grep("space.column|sep.column", names(count_base))] <- 1
+  if (font == "mono") {
+    count_base_w1s[grep("space.column|sep.column", names(count_base))] <- 1
+  } else {
+    count_base_w1s[grep("space.column|sep.column", names(count_base))] <- stringWidth(" ")
+  }
   # initialize the pre/post headers
   pre_header_spaces  <- rep("", n.headers)
   post_header_spaces <- rep("", n.headers)
@@ -172,8 +205,12 @@ get_column_chars <- function(.NNTable, print.warning = TRUE) {
   # align the headers
 
   if (n.headers > 1) {
-
-    count_mat <- nchar(header.mat)
+    if (font == "mono") {
+      count_mat <- nchar(header.mat)
+    } else {
+      count_mat <- matrix(0, nrow = nrow(header.mat), ncol = ncol(header.mat))
+      count_mat[] <- sapply(header.mat, stringWidth)
+    }
 
     needed_space_count <- cbind(0, count_mat[,, drop = FALSE], 0)
 
@@ -210,7 +247,8 @@ get_column_chars <- function(.NNTable, print.warning = TRUE) {
 
       #needed_space[needed_space_where] <- needed_space[needed_space_where] + 2
 
-      prev_space <- ceiling(needed_space / 2)
+      prev_space <- needed_space / 2
+      if (font == "mono") prev_space <- ceiling(prev_space)
       post_space <- needed_space - prev_space
 
       if (any(needed_space_where)) {
@@ -240,41 +278,49 @@ get_column_chars <- function(.NNTable, print.warning = TRUE) {
 
     column.chars <- count_base + apply(needed_space_count[, -c(1, ncol(needed_space_count)), drop = FALSE], 2, max)
 
-    if (max(needed_space_count[, "NNTable_pre_space"]) > 0) {
-      n.spcae <- max(needed_space_count[, "NNTable_pre_space"])
 
-      data_str <-
-        cbind(data.frame(NNTable_pre_space = paste(rep(" ", n.spcae), collapse = "")), data_str)
+    if (max(needed_space_count[, "NNTable_pre_space"]) > 0) {
+      n.spcae     <- needed_space_count[, "NNTable_pre_space"]
+      n.spcae.max <- max(n.spcae)
 
       # update the columns chars with the new var
 
-      column.chars <- c(structure(n.spcae, names = "NNTable_pre_space"), column.chars)
+      column.chars <- c(structure(n.spcae.max, names = "NNTable_pre_space"), column.chars)
       alignment    <- c(structure("l", names = "NNTable_pre_space"), alignment)
       header.mat   <- cbind("", header.mat)
       header.mat_underscore <-  cbind("", header.mat_underscore)
 
-      n.spcae <- needed_space_count[, "NNTable_pre_space"]
+      if (font == "mono") {
+        data_str <-
+          cbind(data.frame(NNTable_pre_space = paste(rep(" ", n.spcae.max), collapse = "")), data_str)
 
-      pre_header_spaces <-
-        sapply(max(n.spcae) - n.spcae, function(n) paste(rep(" ", n), collapse = ""))
+        pre_header_spaces <-
+          sapply(n.spcae.max - n.spcae, function(n) paste(rep(" ", n), collapse = ""))
+      } else {
+        data_str <- cbind(data.frame(NNTable_pre_space = ""), data_str)
+      }
     }
 
     if (max(needed_space_count[, "NNTable_post_space"]) > 0) {
-      n.spcae <- max(needed_space_count[, "NNTable_post_space"])
-      data_str <-
-        cbind(data_str, data.frame(NNTable_post_space = paste(rep(" ", n.spcae), collapse = "")))
+      n.spcae     <- needed_space_count[, "NNTable_post_space"]
+      n.spcae.max <- max(needed_space_count[, "NNTable_post_space"])
 
       # update the columns chars with the new var
 
-      column.chars <- c(column.chars, structure(n.spcae, names = "NNTable_post_space"))
+      column.chars <- c(column.chars, structure(n.spcae.max, names = "NNTable_post_space"))
       alignment    <- c(alignment, structure("l", names = "NNTable_post_space"))
       header.mat   <- cbind(header.mat, "")
       header.mat_underscore <-  cbind(header.mat_underscore, "")
 
-      n.spcae <- needed_space_count[, "NNTable_post_space"]
+      if (font == "mono") {
+        data_str <-
+          cbind(data_str, data.frame(NNTable_post_space = paste(rep(" ", n.spcae.max), collapse = "")))
 
-      post_header_spaces <-
-        sapply(max(n.spcae) - n.spcae, function(n) paste(rep(" ", n), collapse = ""))
+        post_header_spaces <-
+          sapply(n.spcae.max - n.spcae, function(n) paste(rep(" ", n), collapse = ""))
+      } else {
+        data_str <- cbind(data_str, data.frame(NNTable_post_space = ""))
+      }
     }
 
 
@@ -292,6 +338,7 @@ get_column_chars <- function(.NNTable, print.warning = TRUE) {
        header.mat = header.mat,
        header.mat_underscore = header.mat_underscore,
        column.chars = column.chars,
+       classes_str = classes_str,
        pre_header_spaces = pre_header_spaces,
        post_header_spaces = post_header_spaces)
 
@@ -774,6 +821,7 @@ apply_width <- function(.NNTable) {
 
 
 
+
 #' @importFrom stringr str_trim
 apply_splitPages <- function(.NNTable) {
 
@@ -781,35 +829,14 @@ apply_splitPages <- function(.NNTable) {
   ######                        lines calculation                        ######
   #---------------------------------------------------------------------------#
 
-  # Calculate title lines
-  title.lines <- max(1, length(.NNTable$wrapping[["title"]]))
-  title <- paste0(paste(.NNTable$wrapping[["title"]], collapse = "\n"), "\n")
-
-
-  # calculate the number of header lines
-  header.lines <- 2 + length(.NNTable$header$header)
-
-  # calculate footer lines
-  footer.lines <- 1 + max(1, length(.NNTable$wrapping[["footer"]])) + 1 +
-    max(0, length(.NNTable$wrapping[["sys_footnote"]]))
-  footer       <- paste0(paste(.NNTable$wrapping[["footer"]], collapse = "\n"), "\n")
-  auto_foot    <- paste0(paste(alignRight(.NNTable$wrapping[["sys_footnote"]],
-                                          width = .NNTable$page_size$page.width), collapse = "\n"), "\n")
-
-  # body lines
-  body.lines <- .NNTable$page_size$page.length - (title.lines + header.lines + footer.lines)
-
-  .NNTable$wrapping$title_p <- title
-  .NNTable$wrapping$footer_p <- footer
-  .NNTable$wrapping$auto_foot <- alignRight(c(.NNTable$wrapping[["sys_footnote"]], ""),
-                                            width = .NNTable$page_size$page.width)
-  .NNTable$wrapping$auto_foot_p <- auto_foot
+  body.lines <- .NNTable$page_size$body.lines
 
   #---------------------------------------------------------------------------#
   ######                        split the data                           ######
   #---------------------------------------------------------------------------#
 
   data_str <- data.table::as.data.table(.NNTable$data_str)
+
 
   group_cols <- .NNTable$grouped_columns$columns
 
@@ -975,13 +1002,16 @@ apply_splitPages <- function(.NNTable) {
   # Ensure that we have data.frame
   data_str <- as.data.frame(data_str, stringsAsFactors = FALSE)
 
-  # remove unwanted colums
-  data_str <- data_str[, setdiff(colnames(data_str), c(.NNTable$remove$columns,
-                                                       .NNTable$remove$columns_trunc,
-                                                       .NNTable$remove$split_page)), drop = FALSE]
 
-  # clear colnames
-  colnames(data_str) <- NULL
+  # remove unwanted colums
+  if (.NNTable$print_method$type == "txt") {
+    data_str <- data_str[, setdiff(colnames(data_str), c(.NNTable$remove$columns,
+                                                         .NNTable$remove$columns_trunc,
+                                                         .NNTable$remove$split_page)), drop = FALSE]
+
+    # clear colnames
+    colnames(data_str) <- NULL
+  }
 
   # split the data into list in accordance with body.lines
   pages  <- rep(seq_len(ceiling(nrow(data_str) / body.lines)), each = body.lines)[seq_len(nrow(data_str))]

@@ -2,11 +2,13 @@ Package: NNtable
 Title: A Grammer for the Layout of Tables  
 Version: 0.0.4.9000
 Authors@R: 
-    person(given = "SFFL (Steffen Falgreen Larsen)",
+    c(person(given = "SFFL (Steffen Falgreen Larsen)",
            role = c("aut", "cre"),
-           email = "sffl@novonordisk.com")
-Description: The philosophy behind NNtable is to separate the derivation of statistics and the layout of an output table. All layout specic derivations are supposed to be handled by the NNTable functionality.
-License: Novo Nordisk (C)
+           email = "sffl@novonordisk.com"),
+    person(given = "Novo Nordisk A/S",
+           role = c("cph")))
+Description: The philosophy behind NNtable is to separate the derivation of statistics and the layout of an output table. All layout specific derivations are supposed to be handled by the NNTable functionality.
+License: MIT + file LICENSE
 URL: http://10.59.86.7/NNpackages/NNtable,
     https://novonordiskit.visualstudio.com/BOS/_git/NNtable
 BugReports: https://novonordiskit.visualstudio.com/BOS/_boards/board/t/NNtable/Stories
@@ -39,5 +41,9 @@ Imports:
     purrr,
     tibble,
     magrittr,
-    forcats
+    forcats,
+    flextable,
+    officer,
+    stats,
+    graphics
 VignetteBuilder: knitr

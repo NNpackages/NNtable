@@ -8,6 +8,8 @@ globalVariables(c(":=", "!!", ".SD", "Group", "orig_order_to_delte", "keep_order
 #' @param ... Names of the columns in .data that should be included in the
 #'   table. If none are suppied all columns are used. If named, e.g. "New name"
 #'   = "old name" the new name will be displayed.
+#' @param .font_size \code{numeric} The font size to use. For the \code{"txt"} print it must be 8, 9, or 10.
+#' @param .orientation \code{character} The orientation of the page, \code{"port"} for portrait and \code{"land"} for landscape.
 #'
 #' @return An object of type \code{NNTable}
 #' @export
@@ -167,7 +169,10 @@ globalVariables(c(":=", "!!", ".SD", "Group", "orig_order_to_delte", "keep_order
 #' # View the final result
 #' .NNTable
 #' @importFrom dplyr ungroup
-NNTable <- function(.data, ..., page_size = getEOTpaper("port", 8)) {
+NNTable <- function(.data, ...,
+                    .font_size = 8,
+                    .orientation = "port",
+                    page_size = NULL) {
   # create columns vector
   columns_list <- list(...)
 
@@ -188,7 +193,9 @@ NNTable <- function(.data, ..., page_size = getEOTpaper("port", 8)) {
                   columns_attr    = list(columns_list = columns_list,
                                          columns_tree = columns_tree),
                   remove          = list(columns = setdiff(NULL, columns)),
-                  page_size       = page_size,
+                  font_size       = .font_size,
+                  orientation     = .orientation,
+                  page_size_orig  = page_size,
                   order_columns   = list(columns = NULL, descending = NULL),
                   columns_to_long = list(),
                   columns_to_wide = list()
@@ -197,6 +204,8 @@ NNTable <- function(.data, ..., page_size = getEOTpaper("port", 8)) {
   class(.NNTable) <- c("NNTable", class(.NNTable))
 
   .NNTable <- get_columns(.NNTable)
+
+  .NNTable <- addPrinter(.NNTable)
 
   return(.NNTable)
 }
@@ -320,6 +329,17 @@ print.NNTable <- function(x, ..., page = 1, file = NULL, verbose = TRUE, check_e
 
   .NNTable$data_str <- .NNTable$data
 
+  if (is.null(.NNTable$page_size_orig)) {
+    .NNTable$page_size <-
+      getEOTpaper(.NNTable$orientation,
+                  .NNTable$font_size,
+                  format = .NNTable$print_method$type)
+  } else {
+    .NNTable$page_size <- .NNTable$page_size_orig
+  }
+
+  .NNTable <- apply_width_wrapping(.NNTable)
+
   .NNTable <- apply_createTree(.NNTable)
 
 
@@ -375,26 +395,39 @@ print.NNTable <- function(x, ..., page = 1, file = NULL, verbose = TRUE, check_e
 
   .NNTable <- apply_createHeader(.NNTable)
 
-  # if (!is.null(.NNTable$print_method) && .NNTable$print_method$type == "flextable")
-  #   print_flextable(.NNTable)
-
 
   if (!is.null(.NNTable$page_split)) {
     .NNTable <- apply_page_split_width(.NNTable)
   } else {
-    .NNTable <- apply_width(.NNTable)
 
-    .NNTable <- apply_splitPages(.NNTable)
+    if (!is.null(.NNTable$print_method) && .NNTable$print_method$type %in% c("flextable", "docx")) {
+      .NNTable <- print_flextable(.NNTable)
+    } else {
+      .NNTable <- apply_width(.NNTable)
 
-    .NNTable <- apply_data_to_string(.NNTable)
+      .NNTable <- apply_n_bodylines(.NNTable)
+
+      .NNTable <- apply_splitPages(.NNTable)
+
+      .NNTable <- apply_data_to_string(.NNTable)
+    }
   }
 
-
   if (is.null(file)) {
-    if (verbose)
-      apply_print_cons(.NNTable, page = page)
+    if (verbose) {
+      if (!is.null(.NNTable$print_method) && .NNTable$print_method$type %in% c("flextable", "docx")) {
+        if (is.numeric(page)) {
+          print(.NNTable$flex[[page]])
+        } else {
+          print(.NNTable$flex)
+        }
+      } else {
+        apply_print_cons(.NNTable, page = page)
+      }
+    }
+
   } else {
-    apply_print_file(.NNTable, file = file)
+    apply_print_txt(.NNTable, file = file)
   }
 
   return(invisible(.NNTable))
@@ -433,9 +466,52 @@ apply_print_cons <- function(.NNTable, page = 1) {
   cat(gsub("\\f", "", .NNTable$output[lines]), sep = "\n")
 }
 
-apply_print_file <- function(.NNTable, file = tempfile(fileext = ".txt"),
+apply_print_txt <- function(.NNTable, file = tempfile(fileext = ".txt"),
                              verbose = TRUE) {
 
   write_encoded(.NNTable$output, file)
 }
 
+
+
+apply_print_docx <- function(.NNTable, page = 1) {
+
+  doc_1 <- officer::read_docx("inst/templates/nn_tfl_port.docx") %>% officer::body_remove()
+
+  for (i in seq_along(.NNTable$flex)) {
+
+
+    text_style <- officer::fp_text(font.size = .NNTable$font_size, font.family = "Apis For Office")
+
+    if (i == 1) {
+      doc_1 <-
+        officer::body_add_par(doc_1,
+                              paste(.NNTable$wrapping$caption, collapse = " "),
+                              style = "heading 3")
+    } else {
+      doc_1 <- officer::body_add_break(doc_1, pos = "after")
+      doc_1 <- officer::body_add_fpar(doc_1,
+                                      officer::fpar(officer::ftext(
+                                        paste(.NNTable$wrapping$caption, collapse = " "), prop = text_style
+                                      )))
+    }
+
+
+    doc_1 <- flextable::body_add_flextable(doc_1, value = .NNTable$flex[[i]])
+
+    footer <- .NNTable$wrapping$footer
+    footer[footer == ""] <- " "
+    for (foot in footer)
+      doc_1 <- officer::body_add_fpar(doc_1, officer::fpar( officer::ftext(foot, prop = text_style)))
+
+
+    sys_footnote <- .NNTable$wrapping$sys_footnote
+    sys_footnote[sys_footnote == ""] <- " "
+    par_style <- officer::fp_par(text.align = "right")
+    for (foot in sys_footnote)
+      doc_1 <- officer::body_add_fpar(doc_1, officer::fpar( officer::ftext(foot, prop = text_style), fp_p = par_style))
+
+  }
+
+  print(doc_1, target = "test_officer.docx")
+}

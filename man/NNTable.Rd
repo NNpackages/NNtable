@@ -4,7 +4,7 @@
 \alias{NNTable}
 \title{Initialise an NN table}
 \usage{
-NNTable(.data, ..., page_size = getEOTpaper("port", 8))
+NNTable(.data, ..., .font_size = 8, .orientation = "port", page_size = NULL)
 }
 \arguments{
 \item{.data}{\code{data.frame} to output as table}
@@ -12,6 +12,10 @@ NNTable(.data, ..., page_size = getEOTpaper("port", 8))
 \item{...}{Names of the columns in .data that should be included in the
 table. If none are suppied all columns are used. If named, e.g. "New name"
 = "old name" the new name will be displayed.}
+
+\item{.font_size}{\code{numeric} The font size to use. For the \code{"txt"} print it must be 8, 9, or 10.}
+
+\item{.orientation}{\code{character} The orientation of the page, \code{"port"} for portrait and \code{"land"} for landscape.}
 
 \item{page_size}{\code{list} containing page.length and page.width dictating
 the number of lines and number of characters on the page}

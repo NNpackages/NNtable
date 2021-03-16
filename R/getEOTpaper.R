@@ -3,7 +3,8 @@
 #' @param orientation The orientation of the page
 #' @param font_size the font size. Only applicable for figure
 #' @param type Should the output be character widths or figure width in cm.
-#' @param figure_size Should the size be defeault or full
+#' @param figure_size Should the size be default or full
+#' @param format \code{character} the type of output, currently \code{"txt"} or \code{"flextable"}
 #'
 #' @return list with paper size
 #' @export
@@ -12,10 +13,17 @@
 #' getEOTpaper("Port", 8, type = "Table")
 getEOTpaper <- function(orientation = c("port", "land"), font_size = 8,
                         figure_size = c("defeault", "full"),
-                        type = c("table", "listing", "figure")) {
+                        type = c("table", "listing", "figure"),
+                        format = "txt") {
 
   type <- tolower(type)
+  orientation <- tolower(orientation)
+
   type <- match.arg(type)
+
+  if (format %in% c("flextable", "word")) {
+    return(getEOTpaperWord(orientation = orientation))
+  }
 
   if (type %in% c("table", "listing"))
     return(getEOTpaperString(orientation = orientation, font_size = font_size))
@@ -24,6 +32,19 @@ getEOTpaper <- function(orientation = c("port", "land"), font_size = 8,
     return(getEOTpaperFigure(orientation = orientation,  figure_size = figure_size))
 }
 
+
+getEOTpaperWord <- function(orientation = c("port", "land")) {
+
+  orientation <- tolower(orientation)
+  orientation <- match.arg(orientation)
+
+  if (orientation == "land")
+    list(page.length = 16, page.width = 26.7)
+
+  if (orientation == "port")
+    list(page.length = 24.7, page.width = 17)
+
+}
 
 
 getEOTpaperString <- function(orientation = c("port", "land"), font_size = 8, current_margins = TRUE) {
@@ -35,7 +56,7 @@ getEOTpaperString <- function(orientation = c("port", "land"), font_size = 8, cu
 
   if (!font_size %in% 8:10) stop("font_size needs to be 8, 9, or 10")
 
-  if (!current_margins) # The old margins are kept 
+  if (!current_margins) # The old margins are kept
     EOT.paper.size <-
       data.frame(orientation = rep(c("land", "port"), each = 3),
                  font_size   = rep(c(10, 9, 8), 2),
@@ -48,14 +69,14 @@ getEOTpaperString <- function(orientation = c("port", "land"), font_size = 8, cu
   #                font_size   = rep(c(10, 9, 8), 2),
   #                page.length = c(41, 43, 52, 62, 70, 79),
   #                page.width  = c(126, 140, 157, 80, 89, 100))
-  
+
   if (current_margins)
     EOT.paper.size <-
     data.frame(orientation = rep(c("land", "port"), each = 3),
                font_size   = rep(c(10, 9, 8), 2),
                page.length = c(44, 49, 53, 67, 74, 81),
                page.width  = c(125, 140, 157, 80, 89, 100))
-  
+
   as.list(EOT.paper.size[EOT.paper.size$orientation == orientation &
                            EOT.paper.size$font_size == font_size, c("page.length", "page.width")])
 }
