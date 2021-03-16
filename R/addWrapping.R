@@ -57,7 +57,10 @@
 #'
 #' # View the final result
 #' .NNTable
-addWrapping <- function(.NNTable, title, footnote, sys_footnote, title_space = "", footer_space = "") {
+addWrapping <- function(.NNTable,
+                        title    = "",
+                        footnote = "",
+                        sys_footnote = NULL, title_space = "", footer_space = "") {
 
   .NNTable$wrapping <- list(title_orig        = title,
                             footer_orig       = footnote,
@@ -87,7 +90,7 @@ apply_width_wrapping <- function(.NNTable) {
     sys_footnote <- stringWrap(sys_footnote, width = width, font_size = .NNTable$font_size)
     auto_foot <- sys_footnote
   } else {
-    title  <- stringi::stri_wrap(title, width = width, simplify = TRUE)
+    title  <- stringi::stri_wrap(title,  width = width, simplify = TRUE)
     footer <- stringi::stri_wrap(footer, width = width, simplify = TRUE)
     sys_footnote <- stringi::stri_wrap(sys_footnote, width = width, simplify = TRUE)
     auto_foot <- alignRight(c(sys_footnote, ""), width = .NNTable$page_size$page.width)

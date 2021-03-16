@@ -206,6 +206,7 @@ NNTable <- function(.data, ...,
   .NNTable <- get_columns(.NNTable)
 
   .NNTable <- addPrinter(.NNTable)
+  .NNTable <- addWrapping(.NNTable)
 
   return(.NNTable)
 }
