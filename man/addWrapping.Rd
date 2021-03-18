@@ -6,9 +6,9 @@
 \usage{
 addWrapping(
   .NNTable,
-  title,
-  footnote,
-  sys_footnote,
+  title = "",
+  footnote = "",
+  sys_footnote = NULL,
   title_space = "",
   footer_space = ""
 )

@@ -1027,20 +1027,29 @@ apply_splitPages <- function(.NNTable) {
 apply_data_to_string <- function(.NNTable) {
   data_split <- .NNTable$data_split
 
+  title_p   <- .NNTable$wrapping$title
+  footer_p  <- .NNTable$wrapping$footer
+
+  if (identical(character(), title_p))
+    title_p   <- paste0(paste(title_p, collapse = "\n"), "\n")
+
+  if (identical(character(), footer_p))
+    footer_p  <- paste0(paste(footer_p, collapse = "\n"), "\n")
+
   # Combine header parts
-  header1 <- c(.NNTable$wrapping$title,
+  header1 <- c(title_p,
                hline(times = .NNTable$page_size$page.width),
                .NNTable$header$header,
                hline(times = .NNTable$page_size$page.width))
 
-  header_other <- c(paste0("\f", .NNTable$wrapping$title[1]), .NNTable$wrapping$title[-1],
+  header_other <- c(paste0("\f", title_p[1]), title_p[-1],
                     hline(times = .NNTable$page_size$page.width),
                     .NNTable$header$header,
                     hline(times = .NNTable$page_size$page.width))
 
   # Combine footer parts
   footer <- c(hline(times = .NNTable$page_size$page.width),
-              .NNTable$wrapping$footer,
+              footer_p,
               .NNTable$wrapping$auto_foot)
 
   # Function for adding the header and footer to the output list
