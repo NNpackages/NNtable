@@ -12,8 +12,8 @@ output_path <- file.path(nntable_dir, "tests",  "output")
 dir.create(file.path(output_path, "got"), showWarnings = FALSE)
 db_0002 <- nnaccess("0002", root = "~/training")
 
-dm_f   <- db$sdtm("dm")
-adsl_f <- db$adam("adsl")
+dm_f   <- db_0002$sdtm("dm")
+adsl_f <- db_0002$adam("adsl")
 
 
 ## *****************************************************************************

@@ -1076,14 +1076,25 @@ apply_add_string_wrapping <- function(.NNTable) {
 
   data_split <- .NNTable$data_split
 
-  header_other <- c(paste0("\f", .NNTable$wrapping$title[1]), .NNTable$wrapping$title[-1],
+  title_p   <- .NNTable$wrapping$title
+  footer_p  <- .NNTable$wrapping$footer
+
+  if (identical(character(), title_p))
+    title_p   <- paste0(paste(title_p, collapse = "\n"), "\n")
+
+  if (identical(character(), footer_p))
+    footer_p  <- paste0(paste(footer_p, collapse = "\n"), "\n")
+
+
+
+  header_other <- c(paste0("\f", title_p[1]), title_p[-1],
                     hline(times = .NNTable$page_size$page.width),
                     .NNTable$header$header,
                     hline(times = .NNTable$page_size$page.width))
 
   # Combine footer parts
   footer <- c(hline(times = .NNTable$page_size$page.width),
-              .NNTable$wrapping$footer,
+              footer_p,
               .NNTable$wrapping$auto_foot)
 
   # Function for adding the header and footer to the output list

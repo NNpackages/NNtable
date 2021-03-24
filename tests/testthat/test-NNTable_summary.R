@@ -100,8 +100,8 @@ test_that("Make summary with tran_to_long tran_to_wide one page", {
 
   print(.NNTable, file = file.path(output_path, "got", file))
 
-  expect_equal(readLines(file.path(output_path, "expected", file)),
-               readLines(file.path(output_path, "got",      file)))
+  expect_equal(read_encoded(file.path(output_path, "expected", file)),
+               read_encoded(file.path(output_path, "got",      file)))
 })
 
 test_that("Make summary with tran_to_long tran_to_wide group one page", {
