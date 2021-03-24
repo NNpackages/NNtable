@@ -34,7 +34,7 @@ steps:
 # Create R environment
 - script: |
     source /etc/profile.d/biostat.sh
-    echo "_R_CHECK_PKG_SIZES_THRESHOLD_=500" >> .Renviron
+    echo "_R_CHECK_PKG_SIZES_THRESHOLD_=1000" >> .Renviron
     echo "R_LIBS=../library/%V" >> .Renviron
     echo "R_LIBS_USER=../library/%V" >> .Renviron
     echo "ON_DEVOPS=TRUE" >> .Renviron
