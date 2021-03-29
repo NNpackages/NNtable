@@ -474,6 +474,11 @@ decimalPlaces <- function(x) {
 }
 
 guessFormat <- function(x, dec = min(3, max_dec), max_dec = decimalPlaces(x), big.mark = "", small.mark = "") {
+
+  if (!length(x)) {
+    return(character(0))
+  }
+
   if (is.numeric(x)) {
     if (all(is.na(x))) return(NA)
 
