@@ -213,10 +213,11 @@ applyExposure <- function(.NNTable) {
   }
 
   # Add the new order column to the remove columns
-  .NNTable$remove$columns <- c(.NNTable$remove$columns, "NNTable_mj_order")
+  .NNTable$remove$columns <- c(.NNTable$remove$columns, "NNTable_mj_order", "NNTable_exposure_data")
 
   # Combine the data and update .NNTable
-  .NNTable$data_str <- dplyr::bind_rows(exposure, data_str)
+  .NNTable$data_str <- dplyr::bind_rows(exposure, data_str) %>%
+    dplyr::mutate(NNTable_exposure_data = dplyr::case_when(.data$NNTable_mj_order == 0 ~ TRUE, TRUE ~ FALSE))
 
   # update collapse columns
   if (!(is.null(.NNTable$columns_to_long) || length(.NNTable$columns_to_long) == 0))
@@ -253,7 +254,7 @@ applyExposure <- function(.NNTable) {
         format_comb <- dplyr::bind_rows(format_data, .NNTable$NNFormat$format_data)
 
       } else {
-          format_comb <- dplyr::bind_cols(format_data, .NNTable$NNFormat$format_data)
+        format_comb <- dplyr::bind_cols(format_data, .NNTable$NNFormat$format_data)
       }
       .NNTable$NNFormat$format_data <- format_comb
     }

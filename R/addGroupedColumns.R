@@ -244,6 +244,8 @@ apply_groupColumns <- function(.NNTable) {
   # The groups are added in the reverse order
   seq <- rev(seq_along(group_cols)[-1])
 
+  #browser()
+  added_row <- FALSE
   for (i in seq) {
 
     # Find missing category rows
@@ -252,10 +254,13 @@ apply_groupColumns <- function(.NNTable) {
       data_str[data_str[[group_cols[i]]] %in% c("", "NNTable_Empty"), get(group_cols[i - 1])]
 
     # columns which are not empty needs to assign their value to the grouped column
-    missing3 <- !(data_str[, get(group_cols[i])] %in% c("", "NNTable_Empty") & data_str[, get("NNTable_added_blank")]  != "Y")
+    missing <- !(data_str[, get(group_cols[i])] %in% c("", "NNTable_Empty") &
+                   data_str[, get("NNTable_added_blank")]  != "Y")
 
     # Create the group name for those not curently filled in on this or previous runs
-    NNTable_current_fill <- missing3 & data_str$NNTable_grouped_name == "" & data_str$NNTable_group_level >= i - 1
+    NNTable_current_fill <- missing &
+      data_str$NNTable_grouped_name == "" &
+      data_str$NNTable_group_level >= i - 1
 
     if (any(NNTable_current_fill)) {
       # calculate number of levels for indention
@@ -289,21 +294,32 @@ apply_groupColumns <- function(.NNTable) {
 
 
     # Add the header rows ----
-
     all_empty <-
       apply(data_str[, lapply(.SD, function(x) x == "NNTable_Empty"), .SDcols = by_vars], 1, all)
 
     if (!group_cols[i] %in% add_header_row)
       all_empty[] <- TRUE
 
+    # add one empty row above exposure data
+    all_empty_cor <- all_empty
+    if (any(grepl("NNTable_sort_NNTable_mj_order", colnames(data_str))) & !added_row) {
+
+      correction <- missing_groups & missing & data_str[["NNTable_sort_NNTable_mj_order_1"]] == 0
+      if (any(correction) & group_cols[i] %in% add_header_row) {
+        added_row <- TRUE
+        all_empty_cor[correction] <- FALSE
+      }
+    }
+
+
     #Create missing data frame with blanks except for variables used for sorting
     # for those we add 0 in front so that sorting is correct
-    mis_df1 <- data_str[missing_groups & missing3 & !all_empty, lapply(.SD, add_order_val),
+    mis_df1 <- data_str[missing_groups & missing & !all_empty_cor, lapply(.SD, add_order_val),
                         by = by_vars,
                         .SDcols = setdiff(order_vars, c(group_cols))]
 
 
-    mis_df2 <- data_str[missing_groups & missing3 & !all_empty, lapply(.SD, add_order_val, group_var = TRUE),
+    mis_df2 <- data_str[missing_groups & missing & !all_empty_cor, lapply(.SD, add_order_val, group_var = TRUE),
                         by = by_vars,
                         .SDcols = intersect(order_vars, c(group_cols))]
 
@@ -380,7 +396,7 @@ apply_groupColumns <- function(.NNTable) {
     #browser()
     for (col in names(dif_class)) {
        if (data_str_class[[col]] != "factor") {
-         browser()
+         #browser()
          class(mis_df_data[, col]) <- data_str_class[[col]]
        }
     }
