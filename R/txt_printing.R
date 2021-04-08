@@ -167,16 +167,16 @@ get_column_chars <- function(.NNTable, print.warning = TRUE, font = "mono") {
     to_format <- data_str$NNTable_added_group == FALSE
     if (font == "mono") {
       count_base_1 <- rbind(apply(data_str[data_str$NNTable_added_group == FALSE,
-                                           setdiff(colnames(data_str), "NNTable_added_group")], 2, nchar, keepNA = FALSE),
+                                           setdiff(colnames(data_str), "NNTable_added_group"), drop = FALSE], 2, nchar, keepNA = FALSE),
                             apply(nchar(header.mat[n.headers, , drop = FALSE]), 2, max, na.rm = TRUE))
     } else {
       count_base_1 <- rbind(apply(data_str[data_str$NNTable_added_group == FALSE,
-                                           setdiff(colnames(data_str), "NNTable_added_group")], 2, stringWidth),
+                                           setdiff(colnames(data_str), "NNTable_added_group"), drop = FALSE], 2, stringWidth),
                             stringWidth(header.mat[n.headers, , drop = FALSE]))
     }
 
 
-    data_str <- data_str[, setdiff(colnames(data_str), "NNTable_added_group")]
+    data_str <- data_str[, setdiff(colnames(data_str), "NNTable_added_group"), drop = FALSE]
   } else {
     do_span <- FALSE
     to_format <- rep(TRUE, nrow(data_str))
@@ -390,7 +390,7 @@ apply_createHeader <- function(.NNTable) {
       if (i > 1) prev.space <- header.mat[i - 2, spacers - 1] != header.mat[i - 2, spacers + 1]
       header.mat[i, spacers[header.mat[i, spacers - 1] != header.mat[i, spacers + 1] | prev.space ]] <- ""
       if (i > 1)
-        header.mat[i - 1, spacers[header.mat[i - 1, spacers - 1] != header.mat[i -1, spacers + 1] | prev.space ]] <- ""
+        header.mat[i - 1, spacers[header.mat[i - 1, spacers - 1] != header.mat[i - 1, spacers + 1] | prev.space ]] <- ""
     }
   } else {
     for (i in seq_len(nrow(header.mat))) {
@@ -447,11 +447,9 @@ apply_createHeader <- function(.NNTable) {
     # For the last row we align as dictated unless it is a grouped header, then we centre
     split_list <- strsplit(header.mat[nrow(header.mat), ], .NNTable$cell_split$split)
 
-    apply(header.mat[seq_len(nrow(header.mat) - 1), ] != "", 2, any)
+    alignment[apply(header.mat[seq_len(nrow(header.mat) - 1), , drop = FALSE] != "", 2, any)] <- "c"
 
-    alignment[apply(header.mat[seq_len(nrow(header.mat) - 1), ] != "", 2, any)] <- "c"
-
-    split_align <- mapply(align, x = split_list, alignment)
+    split_align <- mapply(align, x = split_list, alignment, SIMPLIFY = FALSE)
 
     header.mat[nrow(header.mat), ] <-
       sapply(split_align, paste, collapse = gsub("\\\\", "", .NNTable$cell_split$split))

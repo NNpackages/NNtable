@@ -160,6 +160,7 @@ NNtable_group_add_names <- function(group_cols, invisible, add_blank_row,
 # Extra lines have been added to ensure blank space between groups
 apply_groupColumns <- function(.NNTable) {
 
+
   # Get the data
   data_str <- data.table::as.data.table(.NNTable$data_str)
 
@@ -318,10 +319,12 @@ apply_groupColumns <- function(.NNTable) {
       mis_df_group <- mis_df2
     }
 
-    mis_df_group[, setdiff(colnames(data_str), c(colnames(mis_df_group))) := ""]
+    #browser()
+    addons <- c("NNTable_added_blank", "NNTable_added_group", "NNTable_group_level")
+    mis_df_group[, setdiff(colnames(data_str), c(colnames(mis_df_group), addons)) := ""]
     mis_df_group$NNTable_added_blank = ""
     mis_df_group$NNTable_added_group <- TRUE
-    mis_df_group$NNTable_group_level <- i - 1
+    mis_df_group$NNTable_group_level <- i - 1L
 
     #mis_df_group$NNTable_added_group <- FALSE
     # add blank intersection columns between categories
@@ -357,21 +360,40 @@ apply_groupColumns <- function(.NNTable) {
         mis_df_blank <- mis_df4 # is NNTable_grouped_name missing from this when trunc has run
       }
 
-      mis_df_blank[, setdiff(colnames(data_str), c(colnames(mis_df_blank))) := ""]
+      mis_df_blank[, setdiff(colnames(data_str), c(colnames(mis_df_blank), addons)) := ""]
       mis_df_blank$NNTable_added_group <- FALSE
       mis_df_blank <- unique(mis_df_blank, by = group_cols[seq_len(i - 1)])
       mis_df_blank$NNTable_added_blank = "Y"
-      mis_df_blank$NNTable_group_level <- i - 1
+      mis_df_blank$NNTable_group_level <- i - 1L
       mis_df <- rbind(mis_df_blank, mis_df_group)
     } else {
       mis_df <- mis_df_group
     }
 
-    # bind the data together
-    data_str <- rbind(data_str, as.data.frame(mis_df))
-    data_str$NNTable_added_group <- as.logical(data_str$NNTable_added_group)
-  }
 
+
+    # In case of small datasets the classes may not end up as they began
+    mis_df_data <- as.data.frame(mis_df)
+    data_str_class <- lapply(data_str, class)
+    dif_class <- mapply(function(x,y) any(y %in% x), data_str_class, lapply(mis_df_data, class)[names(data_str_class)])
+    dif_class <- dif_class[!dif_class]
+    #browser()
+    for (col in names(dif_class)) {
+       if (data_str_class[[col]] != "factor") {
+         browser()
+         class(mis_df_data[, col]) <- data_str_class[[col]]
+       }
+    }
+
+    glue_class <- sapply(data_str_class, function(x) "glue" %in% x)
+    for (col in names(glue_class[glue_class])) {
+      class(data_str[[col]]) <- "character"
+      class(mis_df_data[, col]) <- "character"
+    }
+
+    # bind the data together
+    data_str <- rbind(data_str, mis_df_data)
+  }
 
   # correct the group column indicator
   data_str$NNTable_added_group[data_str$NNTable_grouped_name == ""] <- FALSE

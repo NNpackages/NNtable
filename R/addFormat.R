@@ -196,10 +196,11 @@ apply_format_concat <- function(.NNTable) {
     # data_str[, vars][data_str[, vars] == "" & apply(data_str[, ..vars] != "", 1, any)] <- "NA"
   }
 
+
   # create the collapsed strings
   data_str <- cbind(data_str,
-                    data.table::as.data.table(sapply(strings,
-                                                     function(string) stringr::str_glue_data(data_str, string))))
+                    data.table::as.data.table(sapply(strings, function(string)
+                      stringr::str_glue_data(data_str, string), simplify = FALSE)))
 
   for (i in seq_along(strings)) {
     vars <- .NNTable$concat$table[names(strings)[i]][[1]]
@@ -211,11 +212,18 @@ apply_format_concat <- function(.NNTable) {
     # data_str[data_all, names(strings)[i]] <- ""
   }
 
-  rename <- .NNTable$columns[.NNTable$columns %in% colnames(data_str)]
 
-  #data_str <- data.table::as.data.table(data_str)
-  #
-  data_str <- (data.table::setnames(data_str, old = rename, new = names(rename)))
+  # rename the columns in accordance with NNTable call
+  # In case of duplicates we need to construct the new columns
+
+  rename <- .NNTable$columns[.NNTable$columns %in% colnames(data_str)]
+  no_dups <- rename[!duplicated(rename)]
+  data_str <- (data.table::setnames(data_str, old = no_dups, new = names(no_dups)))
+
+  dups <- rename[duplicated(rename)]
+  for (dup in seq_along(dups))
+     data_str[, names(dups)[dup]] <- data_str[[names(no_dups[no_dups == dups[dup]])]]
+
 
   .NNTable$data_str <- data_str[, unique(c(names(.NNTable$columns),
                                            intersect(.NNTable$order_columns$sort_columns, colnames(data_str)))), with = FALSE]
@@ -369,16 +377,17 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
 
   create_format_data <- function(x, keep = character(0), cols = unlist(concat$table)) {
 
-    out_format <- data.frame(matrix(ncol = length(c(cols, keep)),
+    cols_keep <- c(cols, keep)[!duplicated(c(cols, keep))]
+
+    out_format <- data.frame(matrix(ncol = length(cols_keep),
                                     nrow = nrow(x)),
                              stringsAsFactors = FALSE)
 
 
     row.names(out_format) <- NULL
-    colnames(out_format) <- c(cols, keep)
+    colnames(out_format) <- cols_keep
 
-
-    out_format[, c(cols, keep) ] <- x[, c(cols, keep), with = FALSE]
+    out_format[, cols_keep ] <- x[, cols_keep, with = FALSE]
 
     # find the column matches as the non numeric columns in both datasets
     if (!is.null(format_data)) {

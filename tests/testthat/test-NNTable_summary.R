@@ -108,11 +108,14 @@ test_that("Make summary with tran_to_long tran_to_wide group one page", {
 
   .NNTable <- NNTable(output, "PARAM", "TRTP", "N", "Mean (SD)", "Min ; Max")
 
-  # Transpose the summary addTransLong and addFormat
+   # Transpose the summary addTransLong and addFormat
   .NNTable <- .NNTable                                    %>%
     addTransLong(SUM = c("N", "Mean (SD)" , "Min ; Max"),
                  var_name = "Called var")                 %>%
     addFormat(format_data = c(N = "%.0f"), dec = 2)
+
+
+  total_piv <- tidyr::pivot_longer(totals, cols = c("Number of subjects", "Total exposure (years)"), names_to = "Called var", values_to = "  ")
 
 
   # Add exposure, transpose to wide and ad grouping variables
