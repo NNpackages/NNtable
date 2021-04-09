@@ -1,4 +1,6 @@
-# NNtable 0.0.5
+# NNtable (development version)
+
+# NNtable 0.0.4
 
 ## Bugfixes
 
