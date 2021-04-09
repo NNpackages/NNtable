@@ -34,6 +34,7 @@ steps:
 # Create R environment
 - script: |
     source /etc/profile.d/biostat.sh
+    rm -r ../library
     echo "_R_CHECK_PKG_SIZES_THRESHOLD_=1000" >> .Renviron
     echo "R_LIBS=../library/%V" >> .Renviron
     echo "R_LIBS_USER=../library/%V" >> .Renviron
@@ -173,6 +174,7 @@ steps:
     ls
     pwd
     rm *.tar.gz
+    rm -r ../library
   displayName: 'Clean up workspace'
   workingDirectory: $(Build.SourcesDirectory)
 
