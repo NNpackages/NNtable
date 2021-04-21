@@ -876,6 +876,7 @@ apply_splitPages <- function(.NNTable) {
         wrong_break <- fromV < body_check & to > body_check & # wrong break
           to - fromV < body.lines  # check that it is breakable
 
+        #browser()
         any_wrong_break <- any(wrong_break)
 
         #a <- data.frame(fromV, to, body_check, wrong_break)
