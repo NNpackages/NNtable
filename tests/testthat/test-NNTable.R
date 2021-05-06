@@ -84,16 +84,20 @@ test_that("NNTable trapose to wide with two levels", {
     addTransWide(AGEGR2 = list(TRTA = c("N", "(%)", "E"))) %>%
     addFilling(N = 0) %>%
     addGroupedColumns("AEBODSYS", "AEDECOD") %>%
-    #addTruncation(AEBODSYS = 32, AEDECOD = "30") %>%
+    addTruncation(AEBODSYS = 32, AEDECOD = "30") %>%
     addOrder(N = -1)
 
-  flex <- .NNTable %>% addPrinter(type = "flextable")
+  # flex <- .NNTable %>% addUnderScore() %>% addPrinter(type = "flextable")
+  #
+  # print(flex, file = "../test/my_doc.docx")
 
-  doc <- read_docx(path = system.file("templates/nn_tfl_port.docx", package = "NNtable"))
-  doc <- flextable::body_add_flextable(doc, flex)
-
-  dir.create("../test/")
-  print(doc, target = "../test/my_doc.docx")
+  # flex_out <- print(.NNTable)
+  #
+  # doc <- read_docx(path = system.file("templates/nn_tfl_port.docx", package = "NNtable"))
+  # doc <- flextable::body_add_flextable(doc, flex)
+  #
+  # dir.create("../test/")
+  # print(doc, target = "../test/my_doc.docx")
 
   file <- "adae_wide_two_level_01.txt"
 

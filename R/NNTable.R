@@ -428,7 +428,11 @@ print.NNTable <- function(x, ..., page = 1, file = NULL, verbose = TRUE, check_e
     }
 
   } else {
-    apply_print_txt(.NNTable, file = file)
+    if (!is.null(.NNTable$print_method) && .NNTable$print_method$type %in% c("flextable", "docx")) {
+      apply_print_docx(.NNTable, file = file)
+    } else {
+      apply_print_txt(.NNTable, file = file)
+    }
   }
 
   return(invisible(.NNTable))
@@ -475,12 +479,14 @@ apply_print_txt <- function(.NNTable, file = tempfile(fileext = ".txt"),
 
 
 
-apply_print_docx <- function(.NNTable, page = 1) {
+apply_print_docx <- function(.NNTable,
+                             file = tempfile(fileext = ".docx"),
+                             verbose = TRUE) {
 
-  doc_1 <- officer::read_docx("inst/templates/nn_tfl_port.docx") %>% officer::body_remove()
+  doc_1 <- officer::read_docx(system.file("templates/nn_tfl_port.docx", package = "NNtable")) %>%
+    officer::body_remove()
 
   for (i in seq_along(.NNTable$flex)) {
-
 
     text_style <- officer::fp_text(font.size = .NNTable$font_size, font.family = "Apis For Office")
 
@@ -514,5 +520,5 @@ apply_print_docx <- function(.NNTable, page = 1) {
 
   }
 
-  print(doc_1, target = "test_officer.docx")
+  print(doc_1, target = file)
 }

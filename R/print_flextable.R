@@ -206,8 +206,9 @@ apply_to_flextable <- function(data_split, .NNTable, col_chars) {
   if ("NNTable_trunc_id" %in% colnames(data_split)) {
     split_ids <- data_split$NNTable_trunc_id[data_split$NNTable_trunc_id[-1] == data_split$NNTable_trunc_id[-nrow(data_split)] &
                                              data_split$NNTable_trunc_id[-1] != "" & data_split$NNTable_trunc_id[-nrow(data_split)] != ""]
+    new_splits <- split_ids[!is.na(split_ids)]
 
-    for (i in split_ids) {
+    for (i in new_splits) {
       for (j in seq_along(header)) {
         rows <- which(data_split$NNTable_trunc_id == i)
 
