@@ -1,5 +1,9 @@
 # NNtable (development version)
 
+## Features
+
+* As standard footnotes are now removed from empty outputs. Use `addWrapping()` to circumvent.  
+
 # NNtable 0.0.5
 
 ## Bugfixes
