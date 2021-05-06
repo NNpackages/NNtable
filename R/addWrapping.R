@@ -8,6 +8,7 @@
 #'   and table header
 #' @param footer_space \code{character} to be added between the footnote and
 #'   sys_footnote.
+#' @param remove_empty_footnote \code{logical} should footnote be removed from empty outputs
 #'
 #' @return An object of class \code{NNTable} with the wrapping specified
 #' @export
@@ -60,13 +61,15 @@
 addWrapping <- function(.NNTable,
                         title    = "",
                         footnote = "",
-                        sys_footnote = NULL, title_space = "", footer_space = "") {
+                        sys_footnote = NULL, title_space = "", footer_space = "",
+                        remove_empty_footnote = TRUE) {
 
   .NNTable$wrapping <- list(title_orig        = title,
                             footer_orig       = footnote,
                             sys_footnote_orig = sys_footnote,
                             title_space       = title_space,
-                            footer_space      = footer_space)
+                            footer_space      = footer_space,
+                            remove_empty_footnote = remove_empty_footnote)
   return(.NNTable)
 }
 
@@ -81,6 +84,7 @@ apply_width_wrapping <- function(.NNTable) {
 
   # Add the title
   if (.NNTable$print_method$type != "txt") {
+    #browser()
 
     caption <- stringWrap(title, width = width, font_size = 11)
     .NNTable$wrapping$caption <- caption

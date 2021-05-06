@@ -33,6 +33,10 @@ stats <- adae_f %>%
 table <- NNTable(stats, "TRTA","AESOC","N","E") %>%
   addTransWide("TRTA" = c("N","E"))
 
+table %>%
+  NNtable::addWrapping(title        = "Some title",
+                       footnote     = c("Some footnote","on two lines"),
+                       sys_footnote = "I got the date here")
 
 
 test_that("empty output", {

@@ -196,6 +196,7 @@ NNTable <- function(.data, ...,
                   font_size       = .font_size,
                   orientation     = .orientation,
                   page_size_orig  = page_size,
+                  wrapping        = list(remove_empty_footnote = TRUE),
                   order_columns   = list(columns = NULL, descending = NULL),
                   columns_to_long = list(),
                   columns_to_wide = list()

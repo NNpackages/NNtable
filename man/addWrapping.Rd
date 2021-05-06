@@ -10,7 +10,8 @@ addWrapping(
   footnote = "",
   sys_footnote = NULL,
   title_space = "",
-  footer_space = ""
+  footer_space = "",
+  remove_empty_footnote = TRUE
 )
 }
 \arguments{
@@ -27,6 +28,8 @@ and table header}
 
 \item{footer_space}{\code{character} to be added between the footnote and
 sys_footnote.}
+
+\item{remove_empty_footnote}{\code{logical} should footnote be removed from empty outputs}
 }
 \value{
 An object of class \code{NNTable} with the wrapping specified

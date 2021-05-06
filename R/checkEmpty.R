@@ -15,6 +15,9 @@ checkEmpty <- function(.NNTable){
     .NNTable <- NNTable(empty_output, " " = "value")
     if ("wrapping" %in% names(old_NNTable))
     .NNTable$wrapping <- old_NNTable$wrapping
+
+    if (isTRUE(.NNTable$wrapping$remove_empty_footnote))
+      .NNTable$wrapping$footer_orig <- character(0)
   }
 
   return(.NNTable)

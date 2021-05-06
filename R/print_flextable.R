@@ -269,6 +269,8 @@ cum_string_wrap <- function(x, width) {
 
 stringWrap <- function(text, width = 5, font_size = 8) {
 
+  if (is.null(text)) return(character(0))
+
   text_list <- lapply(strsplit(text, " "), function(x)
     structure(stringWidth(x, font_size = font_size) + c(rep(stringWidth(" ", font_size = font_size), max(length(x) - 1, 0)), 0), names = x))
 
