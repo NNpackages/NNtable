@@ -4,6 +4,12 @@
 
 * As standard footnotes are now removed from empty outputs. Use `addWrapping()` to circumvent.  
 
+## Bugfixes
+
+* 431616 When `addFilling()` was used together with `addExposure()` the filled column would be added to the exposure table even though the column was not present in the original data.
+
+* 465486 When `addTransWide()` was used to create empty columns within a nesting all would be removed. Now only the empty columns will be removed.
+
 # NNtable 0.0.5
 
 ## Bugfixes
