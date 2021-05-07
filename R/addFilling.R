@@ -89,8 +89,8 @@ apply_filling <- function(.NNTable) {
 
   filling <- .NNTable$filling
 
-  # beacuse we might have nested columns we make sure that original col names
-  # are matchd to the new col names
+  # because we might have nested columns we make sure that original col names
+  # are matched to the new col names
   missing_names <- setdiff(names(filling$columns),
                            names(.NNTable$columns))
   if (length(missing_names))
@@ -215,8 +215,17 @@ apply_filling <- function(.NNTable) {
   }
 
 
+  data_str_old <- data_str
   data_str <- completeDT(DT = data_str, cols =  by, defs = filling$columns[names(filling$columns) %in% colnames(data_str)])
 
+  # in case all used to be NA for exposure data we do not want to add a row to it
+  # So we replace the values with zero
+  if ("NNTable_mj_order" %in% colnames(data_str)) {
+    data_str_exp <- data_str_old[data_str_old$NNTable_mj_order == 0]
+    for (col in names(filling$columns[names(filling$columns) %in% colnames(data_str)]))
+      if (all(is.na(data_str_exp[[col]])))
+        data_str[data_str$NNTable_mj_order == 0, (col) := NA]
+  }
 
   if (!is.null(.NNTable$order_columns$sort_columns) &
       any(.NNTable$order_columns$sort_columns %in% colnames(data_str) &
