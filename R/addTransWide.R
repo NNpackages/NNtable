@@ -217,6 +217,7 @@ apply_tranToWide <- function(.NNTable) {
   # find space columns
   if (.NNTable$columns_to_wide$.remove_empty_columns) {
     spacers.l <- grepl("^space.column.", cols)
+    spacers.i <- which(spacers.l)
 
     acc_cols <- setdiff(cols[!spacers.l], stable.vars)
 
@@ -228,7 +229,7 @@ apply_tranToWide <- function(.NNTable) {
 
       if (.NNTable$columns_to_wide$.remove_empty_level == 1) {
         which <- match(acc_empty_names, cols)
-        data_out[, (cols[unique(c(which - 1, which, which + 1))]) := NULL]
+
       } else {
         remove_cols <- character(0)
 
@@ -255,10 +256,24 @@ apply_tranToWide <- function(.NNTable) {
           remove_cols2 <- unique(remove_cols)
 
           which <- match(remove_cols2, cols)
-          data_out[, (cols[unique(c(which - 1, which, which + 1))]) := NULL]
+          #data_out[, (cols[unique(c(which - 1, which, which + 1))]) := NULL]
         }
       }
 
+      group.min <- which[which(!c(FALSE, diff(which) == 1))]
+
+      space.remove <- integer(0)
+
+      for (group in group.min) {
+        space.min <- max(spacers.i[spacers.i < group])
+        space.max <- min(spacers.i[spacers.i > group])
+
+        if (all(seq(space.min, space.max) %in% c(space.min, which, space.max))) {
+          space.remove <- c(space.min, space.max)
+        }
+      }
+
+      data_out[, (cols[unique(c(which, space.remove))]) := NULL]
 
     }
   }
@@ -269,15 +284,14 @@ apply_tranToWide <- function(.NNTable) {
   dup.spacers <- spacers[diff(spacers) == 1]
 
   if (max(spacers) == ncol(data_out))
-    dup.spacers <- c(dup.spacers, ncol(data_out))
+    dup.spacers <- unique(c(dup.spacers, ncol(data_out)))
 
   first <- grep("^NNTable_sort", colnames(data_out), invert = TRUE)[1]
 
   if (min(spacers) == first)
-    dup.spacers <- c(first, dup.spacers)
+    dup.spacers <- unique(c(first, dup.spacers))
 
   .NNTable$data_str <- as.data.frame(data_out[, (dup.spacers) := NULL])
-
 
   return(.NNTable)
 }
