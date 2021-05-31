@@ -39,6 +39,7 @@ steps:
     echo "R_LIBS=../library/%V" >> .Renviron
     echo "R_LIBS_USER=../library/%V" >> .Renviron
     echo "ON_DEVOPS=TRUE" >> .Renviron
+    echo "RSTUDIO_PANDOC=/usr/lib/rstudio-server/bin/pandoc" >> .Renviron
     for version in $(cat /opt/sce-r/input/RVersions)
       do
       tid=$(aws ssm get-parameter --name /versions/rspm/$version/transaction-id --query Parameter.Value --output text 2>/dev/null || echo -n "")
