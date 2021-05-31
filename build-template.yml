@@ -147,6 +147,7 @@ steps:
     echo Build home page for $(pkgName)
     export HOME=$(Agent.BuildDirectory)
     if [ -f "_pkgdown.yml" ]; then
+      /opt/R/$(R_VERSION)/bin/R -e "rmarkdown::pandoc_version()"
       /opt/R/$(R_VERSION)/bin/R -e "pkgdown::build_site()"
     fi
   displayName: 'Build home page'
