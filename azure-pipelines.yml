@@ -13,8 +13,7 @@ jobs:
     maxParallel: 1
 
   pool:
-    name: Biostat_test
-    demands: Agent.Name -equals Biostat_test-prd
+    name: SCE-R-Buildserver-dev
     timeoutInMinutes: 0
 
   variables:
