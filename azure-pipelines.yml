@@ -6,10 +6,8 @@ jobs:
 
   strategy:
     matrix:
-      R_4.0.1:
-        R_VERSION: '4.0.1'
-      R_4.0.2:
-        R_VERSION: '4.0.2'
+      R_4.0.4:
+        R_VERSION: '4.0.4'
     maxParallel: 1
 
   pool:
