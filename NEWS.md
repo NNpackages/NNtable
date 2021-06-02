@@ -1,4 +1,4 @@
-# NNtable (development version)
+# NNtable 0.0.6
 
 ## Features
 
