@@ -151,7 +151,7 @@ steps:
       export PATH=/usr/lib/rstudio-server/bin/:$PATH
       export PATH=/usr/lib/rstudio-server/bin/pandoc/:$PATH
       if [ -f /etc/bashrc ]; then
-	      . /etc/bashrc
+        . /etc/bashrc
       fi
       /opt/R/$(R_VERSION)/bin/R -e "rmarkdown::pandoc_version()"
       /opt/R/$(R_VERSION)/bin/R -e "pkgdown::build_site()"
