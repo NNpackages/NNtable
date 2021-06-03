@@ -73,7 +73,7 @@ summary %>%
 ```
 And alter the appearance
 
-```{r}
+```{r, results='hold', comment=""}
 table_out <- summary %>%  
   NNTable("Age group" = "AGEGR1", Race = "RACE", "GEOGR1", "TRT30P", "SEX", "N") %>% 
   addGroupedColumns("GEOGR1", "Race") %>% 
@@ -86,7 +86,7 @@ table_out
 
 
 Save the output together with xml file
-```{r}
+```{r, results='hold', comment=""}
 sys_foot <- db$exportOutput(table_out, "NNTable_ex1")
 
 sys_foot
