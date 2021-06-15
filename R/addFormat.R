@@ -456,7 +456,7 @@ Format.NNTable <- function(x, ..., format_data = NULL, group_by = NULL, dec = 3,
     group <- apply(x[, group_by, drop = FALSE, with = FALSE], 1, function(x) paste(x, collapse = ""))
     data_split <- lapply(split(x = seq_len(nrow(x)), f = group, drop = FALSE), function(line) x[line, ])
 
-    out_format <- data.table::rbindlist(lapply(data_split, create_format_data, keep = "keep_order_xy"))
+    out_format <- data.table::rbindlist(lapply(data_split, create_format_data, keep = "keep_order_xy"), fill = TRUE)
   } else {
     out_format <- data.table::as.data.table(create_format_data(x, keep = "keep_order_xy"))
   }
